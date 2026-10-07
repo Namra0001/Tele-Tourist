@@ -39,12 +39,12 @@ function renderNavbar() {
               <i class="bi bi-plus-lg"></i> Write a story
             </a>
             ${token ? `
-              <a href="profile.html?id=1" class="avatar-circle rounded-circle d-flex align-items-center justify-content-center text-white text-decoration-none flex-shrink-0" style="width: 38px; height: 38px; background-color: var(--lagoon); font-weight: 500;">
-                ${userName.substring(0, 2).toUpperCase()}
-              </a>
+              <a href="profile.html?id=1" class="d-flex align-items-center justify-content-center text-decoration-none flex-shrink-0" style="width: 38px; height: 38px;">
+                  <img src="assets/img/profile-icon.png" alt="Profile" style="width: 32px; height: 32px; object-fit: contain;">
+                </a>
             ` : `
-              <a href="profile.html?id=1" class="avatar-circle rounded-circle d-flex align-items-center justify-content-center text-white text-decoration-none flex-shrink-0" style="width: 38px; height: 38px; background-color: var(--lagoon); font-weight: 500; font-size: 13px;">
-                AK
+              <a href="profile.html?id=1" class="d-flex align-items-center justify-content-center text-decoration-none flex-shrink-0" style="width: 38px; height: 38px;">
+                <img src="assets/img/profile-icon.png" alt="Profile" style="width: 32px; height: 32px; object-fit: contain;">
               </a>
             `}
           </div>
