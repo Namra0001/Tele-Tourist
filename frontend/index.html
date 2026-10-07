@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tele Tourist</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="css/style.css?v=5">
+  <style>
+    .hero-circle {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background-color: var(--sky);
+      z-index: 0;
+    }
+    .hero-collage {
+      position: relative;
+      height: 500px;
+      width: 100%;
+    }
+    .collage-card {
+      position: absolute;
+      width: 260px;
+      border-radius: var(--radius-card);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      background: white;
+      border: 1px solid var(--border-card);
+      overflow: hidden;
+    }
+    .card-1 { top: 70px; left: 30px; transform: rotate(-5deg); z-index: 2; }
+    .card-2 { top: -30px; right: 70px; transform: rotate(5deg); z-index: 1; width: 200px; }
+    .card-3 { top: 260px; right: 170px; transform: rotate(0deg); z-index:3; }
+    
+    .staggered-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.5rem;
+    }
+    .staggered-item {
+      transition: transform 0.2s ease;
+    }
+    .staggered-item:hover {
+      transform: translateY(-5px);
+    }
+    .staggered-item:nth-child(even) {
+      margin-top: 2.5rem;
+    }
+    .tall-tile {
+      height: 320px;
+      border-radius: var(--radius-card);
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      padding: 1.5rem;
+      color: white;
+      text-decoration: none;
+      overflow: hidden;
+    }
+    .tall-tile::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0; height: 60%;
+      background: linear-gradient(transparent, rgba(18,38,58,0.9));
+      z-index: 1;
+    }
+    .tall-tile > div { z-index: 2; position: relative; }
+    
+    .horizontal-card {
+      display: flex;
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-card);
+      background: white;
+      overflow: hidden;
+      height: 140px;
+    }
+    .horizontal-card .img-container {
+      width: 140px;
+      min-width: 140px;
+      height: 100%;
+    }
+    .featured-card {
+      position: relative;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      height: 100%;
+      min-height: 450px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      color: white;
+      text-decoration: none;
+    }
+    .featured-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0; height: 70%;
+      background: linear-gradient(transparent, rgba(18,38,58,0.9));
+      z-index: 1;
+    }
+    .featured-card .content { z-index: 2; padding: 2rem; }
+
+    /* SVG Placeholder Backgrounds */
+    .bg-mountain { background: linear-gradient(180deg, #E8F4F8 0%, #20556B 100%); }
+    .bg-beach { background: linear-gradient(#FFC98B, #2BA3B5, #0E7C86); }
+    .bg-desert { background: linear-gradient(#FDEBC8, #E7B070, #9F5B2A); }
+    .bg-fort { background: linear-gradient(180deg, #FDE8D3 0%, #7C4C24 100%); }
+    .bg-forest { background: linear-gradient(#CFE8DD, #2F7D5B, #14402F); }
+    .bg-sunset { background: linear-gradient(180deg, #F99871 0%, #392B4B 100%); }
+  </style>
+</head>
+<body>
+  <div id="navbar-placeholder"></div>
+
+  <main class="container py-5 position-relative">
+    
+    
+    <!-- Hero -->
+    <div class="row align-items-center mb-5 pb-4">
+      <div class="col-lg-5 col-xl-6 pe-lg-5">
+        <h1 class="display-3 fw-bold mb-4 text-ink" style="line-height: 1.1; letter-spacing: -0.02em; font-family: 'Bricolage Grotesque', sans-serif;">Skip the brochure.<br>Read what travelers actually did.</h1>
+        <p class="fs-5 text-secondary mb-4 pb-2" style="max-width: 90%;">Tele Tourist is where people share real trips: the detours, the costs, and the places that were worth the walk.</p>
+        
+        <div class="bg-white p-2 shadow-sm d-flex flex-column flex-md-row gap-2 align-items-center mb-4" style="border-radius: 16px; border: 1px solid var(--border-card); max-width: 650px;">
+          <div class="input-group border-0 bg-transparent flex-grow-1 px-3 py-1">
+            <span class="input-group-text border-0 bg-transparent text-muted px-0 pe-3"><i class="bi bi-geo-alt"></i></span>
+            <input type="text" class="form-control border-0 shadow-none bg-transparent px-0 text-secondary" placeholder="Where to?">
+          </div>
+          <div class="d-none d-md-block" style="background-color: #C6D3DB; width: 1.5px; height: 35px; opacity: 1; margin: 0 10px;"></div>
+          <div class="input-group border-0 bg-transparent flex-grow-1 px-3 py-1">
+            <span class="input-group-text border-0 bg-transparent text-muted px-0 pe-3"><i class="bi bi-grid"></i></span>
+            <select class="form-select border-0 shadow-none bg-transparent px-0 text-secondary" style="cursor: pointer;">
+              <option>Any category</option>
+              <option>Mountains</option>
+              <option>Beaches</option>
+            </select>
+          </div>
+          <button class="btn btn-primary px-4 py-2 text-nowrap" style="border-radius: 10px; font-weight: 500; min-width: 130px;">Find stories</button>
+        </div>
+        
+        <div class="d-flex align-items-center gap-3 mt-4">
+          <div class="d-flex">
+            <div class="rounded-circle text-white d-flex align-items-center justify-content-center border border-white" style="width: 32px; height: 32px; margin-right: -10px; background-color: var(--avatar-1); font-size: 10px; z-index: 4;">MS</div>
+            <div class="rounded-circle text-white d-flex align-items-center justify-content-center border border-white" style="width: 32px; height: 32px; margin-right: -10px; background-color: var(--avatar-2); font-size: 10px; z-index: 3;">DP</div>
+            <div class="rounded-circle text-white d-flex align-items-center justify-content-center border border-white" style="width: 32px; height: 32px; margin-right: -10px; background-color: var(--avatar-3); font-size: 10px; z-index: 2;">ZA</div>
+            <div class="rounded-circle text-white d-flex align-items-center justify-content-center border border-white" style="width: 32px; height: 32px; background-color: var(--avatar-4); font-size: 10px; z-index: 1;">NR</div>
+          </div>
+          <span class="small text-secondary"><b>3,200 travelers</b> have shared 12,480 stories</span>
+        </div>
+      </div>
+      
+      <div class="col-lg-7 col-xl-6 d-none d-lg-block position-relative">
+        <div class="hero-collage">
+          <div class="hero-circle d-none d-lg-block"></div>
+          <!-- Card 1: Hampi -->
+          <div class="collage-card card-1 d-flex flex-column text-decoration-none">
+            <div class="position-relative">
+              <div class="w-100 bg-fort" style="height: 180px;"></div>
+              <div class="position-absolute top-0 start-0 m-2">
+                <span class="chip bg-white border-0 py-1 px-2 small fw-bold" style="font-size: 10px;">Heritage</span>
+              </div>
+              <div class="position-absolute top-0 end-0 m-2">
+                <div class="bg-white rounded-circle p-1 d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;"><i class="bi bi-bookmark text-muted" style="font-size: 12px;"></i></div>
+              </div>
+            </div>
+            <div class="p-3 bg-white">
+              <h6 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;">Hampi on a rented bicycle</h6>
+              <p class="text-muted small mb-2" style="font-size: 11px;"><i class="bi bi-geo-alt"></i> Hampi, Karnataka</p>
+              <div class="d-flex align-items-center justify-content-between mt-2">
+                <div class="d-flex align-items-center gap-1">
+                  <div class="rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 16px; height: 16px; background-color: var(--avatar-2); font-size: 8px;">RM</div>
+                  <span class="text-secondary" style="font-size: 10px;">Rohan Mehta</span>
+                </div>
+                <div class="d-flex gap-2 text-muted" style="font-size: 10px;">
+                  <span><i class="bi bi-heart"></i> 204</span>
+                  <span><i class="bi bi-chat"></i> 28</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Spiti -->
+          <div class="collage-card card-2 d-flex flex-column text-decoration-none" style="width: 280px;">
+            <div class="position-relative">
+              <div class="w-100 bg-mountain" style="height: 220px;"></div>
+              <div class="position-absolute top-0 start-0 m-2">
+                <span class="chip bg-white border-0 py-1 px-2 small fw-bold" style="font-size: 10px;">Mountains</span>
+              </div>
+              <div class="position-absolute top-0 end-0 m-2">
+                <div class="bg-white rounded-circle p-1 d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;"><i class="bi bi-bookmark text-muted" style="font-size: 12px;"></i></div>
+              </div>
+            </div>
+            <div class="p-3 bg-white">
+              <h5 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;">Eleven days in Spiti without a single plan</h5>
+              <p class="text-muted small mb-2" style="font-size: 11px;"><i class="bi bi-geo-alt"></i> Spiti Valley, Himachal Pradesh</p>
+              <div class="d-flex align-items-center justify-content-between mt-2">
+                <div class="d-flex align-items-center gap-1">
+                  <div class="rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 18px; height: 18px; background-color: var(--avatar-1); font-size: 9px;">AK</div>
+                  <span class="text-secondary" style="font-size: 11px;">Aarav Kapadia</span>
+                </div>
+                <div class="d-flex gap-2 text-muted" style="font-size: 11px;">
+                  <span><i class="bi bi-heart"></i> 248</span>
+                  <span><i class="bi bi-chat"></i> 32</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Udaipur -->
+          <div class="collage-card card-3 d-flex flex-column text-decoration-none">
+            <div class="position-relative">
+              <div class="w-100 bg-sunset" style="height: 150px;"></div>
+              <div class="position-absolute top-0 start-0 m-2">
+                <span class="chip bg-white border-0 py-1 px-2 small fw-bold" style="font-size: 10px;">Heritage</span>
+              </div>
+              <div class="position-absolute top-0 end-0 m-2">
+                <div class="bg-white rounded-circle p-1 d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;"><i class="bi bi-bookmark text-muted" style="font-size: 12px;"></i></div>
+              </div>
+            </div>
+            <div class="p-3 bg-white">
+              <h6 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;">Udaipur at dusk, from a rooftop nobody mentions</h6>
+              <p class="text-muted small mb-2" style="font-size: 11px;"><i class="bi bi-geo-alt"></i> Udaipur, Rajasthan</p>
+              <div class="d-flex align-items-center justify-content-between mt-2">
+                <div class="d-flex align-items-center gap-1">
+                  <div class="rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 16px; height: 16px; background-color: var(--avatar-3); font-size: 8px;">IT</div>
+                  <span class="text-secondary" style="font-size: 10px;">Isha Trivedi</span>
+                </div>
+                <div class="d-flex gap-2 text-muted" style="font-size: 10px;">
+                  <span><i class="bi bi-heart"></i> 119</span>
+                  <span><i class="bi bi-chat"></i> 14</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Category chips -->
+    <div class="d-flex flex-wrap gap-2 mb-5 pb-3">
+      <span class="chip active">Mountains <span class="text-white-50 ms-1" style="font-size:11px">412</span></span>
+      <span class="chip">Beaches <span class="text-muted ms-1" style="font-size:11px">286</span></span>
+      <span class="chip">Heritage <span class="text-muted ms-1" style="font-size:11px">198</span></span>
+      <span class="chip">Food trails <span class="text-muted ms-1" style="font-size:11px">245</span></span>
+      <span class="chip">Road trips <span class="text-muted ms-1" style="font-size:11px">173</span></span>
+      <span class="chip">Solo & budget <span class="text-muted ms-1" style="font-size:11px">320</span></span>
+      <span class="chip">Nature <span class="text-muted ms-1" style="font-size:11px">231</span></span>
+    </div>
+
+    <!-- Fresh from the road -->
+    <div class="d-flex justify-content-between align-items-end mb-4 pt-4">
+      <h3 class="mb-0 fw-bold text-ink" style="font-family: 'Bricolage Grotesque', sans-serif;">Fresh from the road</h3>
+      <a href="explore.html" class="text-lagoon text-decoration-none fw-bold small">See all stories <i class="bi bi-arrow-right"></i></a>
+    </div>
+    
+    <div class="row g-4 mb-5 pb-4">
+      <!-- Large Featured Card -->
+      <div class="col-lg-7">
+        <a href="story.html?id=1" class="featured-card bg-mountain w-100">
+          <div class="position-absolute top-0 start-0 m-4 z-3">
+            <span class="chip bg-white bg-opacity-25 text-white border-0 py-1 px-3 small fw-bold" style="backdrop-filter: blur(4px);">Mountains</span>
+          </div>
+          <div class="content">
+            <h2 class="fw-bold mb-3" style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 2.5rem; max-width: 90%;">Eleven days in Spiti without a single plan</h2>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center gap-2">
+                <div class="rounded-circle text-lagoon bg-white d-flex align-items-center justify-content-center fw-bold" style="width: 32px; height: 32px; font-size: 12px;">AK</div>
+                <span class="text-white">Aarav Kapadia, Spiti Valley</span>
+              </div>
+              <div class="text-white"><i class="bi bi-heart"></i> 248</div>
+            </div>
+          </div>
+        </a>
+      </div>
+      
+      <!-- 3 Horizontal Cards -->
+      <div class="col-lg-5 d-flex flex-column gap-3">
+        <!-- Gokarna -->
+        <a href="story.html?id=2" class="horizontal-card text-decoration-none">
+          <div class="img-container bg-beach"></div>
+          <div class="p-3 d-flex flex-column justify-content-center flex-grow-1">
+            <span class="chip border px-2 py-0 mb-2 align-self-start text-muted bg-transparent" style="font-size: 10px;">Beaches</span>
+            <h6 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;">Gokarna, the quiet side of the Karnataka coast</h6>
+            <p class="text-muted mb-2" style="font-size: 11px;"><i class="bi bi-geo-alt"></i> Gokarna, Karnataka</p>
+            <div class="d-flex justify-content-between align-items-center mt-auto">
+              <div class="d-flex align-items-center gap-1">
+                <div class="rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 18px; height: 18px; background-color: var(--avatar-5); font-size: 9px;">MS</div>
+                <span class="text-secondary" style="font-size: 11px;">Meera Shah</span>
+              </div>
+              <span class="text-muted" style="font-size: 11px;"><i class="bi bi-heart"></i> 181</span>
+            </div>
+          </div>
+        </a>
+        <!-- Mumbai -->
+        <a href="story.html?id=3" class="horizontal-card text-decoration-none">
+          <div class="img-container" style="background: linear-gradient(#1B2B4B, #6C86B5, #14213D);"></div>
+          <div class="p-3 d-flex flex-column justify-content-center flex-grow-1">
+            <span class="chip border px-2 py-0 mb-2 align-self-start text-muted bg-transparent" style="font-size: 10px;">Food trails</span>
+            <h6 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;">Mumbai after midnight, one vada pav at a time</h6>
+            <p class="text-muted mb-2" style="font-size: 11px;"><i class="bi bi-geo-alt"></i> Mumbai, Maharashtra</p>
+            <div class="d-flex justify-content-between align-items-center mt-auto">
+              <div class="d-flex align-items-center gap-1">
+                <div class="rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 18px; height: 18px; background-color: var(--avatar-2); font-size: 9px;">ZA</div>
+                <span class="text-secondary" style="font-size: 11px;">Zoya Ansari</span>
+              </div>
+              <span class="text-muted" style="font-size: 11px;"><i class="bi bi-heart"></i> 142</span>
+            </div>
+          </div>
+        </a>
+        <!-- Hampi -->
+        <a href="story.html?id=4" class="horizontal-card text-decoration-none">
+          <div class="img-container bg-fort"></div>
+          <div class="p-3 d-flex flex-column justify-content-center flex-grow-1">
+            <span class="chip border px-2 py-0 mb-2 align-self-start text-muted bg-transparent" style="font-size: 10px;">Heritage</span>
+            <h6 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;">Hampi on a rented bicycle</h6>
+            <p class="text-muted mb-2" style="font-size: 11px;"><i class="bi bi-geo-alt"></i> Hampi, Karnataka</p>
+            <div class="d-flex justify-content-between align-items-center mt-auto">
+              <div class="d-flex align-items-center gap-1">
+                <div class="rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 18px; height: 18px; background-color: var(--avatar-4); font-size: 9px;">RM</div>
+                <span class="text-secondary" style="font-size: 11px;">Rohan Mehta</span>
+              </div>
+              <span class="text-muted" style="font-size: 11px;"><i class="bi bi-heart"></i> 204</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Places people keep writing about -->
+    <div class="d-flex justify-content-between align-items-end mb-4 pt-3">
+      <h3 class="mb-0 fw-bold text-ink" style="font-family: 'Bricolage Grotesque', sans-serif;">Places people keep writing about</h3>
+      <a href="#" class="text-lagoon text-decoration-none fw-bold small">All destinations <i class="bi bi-arrow-right"></i></a>
+    </div>
+    
+    <div class="staggered-grid mb-5 pb-5 d-none d-md-grid">
+      <a href="#" class="tall-tile staggered-item bg-mountain">
+        <div>
+          <h4 class="mb-0 text-white" style="font-family: 'Bricolage Grotesque', sans-serif;">Spiti Valley</h4>
+          <span class="small opacity-75">214 stories</span>
+        </div>
+      </a>
+      <a href="#" class="tall-tile staggered-item bg-beach">
+        <div>
+          <h4 class="mb-0 text-white" style="font-family: 'Bricolage Grotesque', sans-serif;">Gokarna</h4>
+          <span class="small opacity-75">168 stories</span>
+        </div>
+      </a>
+      <a href="#" class="tall-tile staggered-item bg-desert">
+        <div>
+          <h4 class="mb-0 text-white" style="font-family: 'Bricolage Grotesque', sans-serif;">Jaisalmer</h4>
+          <span class="small opacity-75">143 stories</span>
+        </div>
+      </a>
+      <a href="#" class="tall-tile staggered-item bg-fort">
+        <div>
+          <h4 class="mb-0 text-white" style="font-family: 'Bricolage Grotesque', sans-serif;">Hampi</h4>
+          <span class="small opacity-75">197 stories</span>
+        </div>
+      </a>
+      <a href="#" class="tall-tile staggered-item bg-forest">
+        <div>
+          <h4 class="mb-0 text-white" style="font-family: 'Bricolage Grotesque', sans-serif;">Munnar</h4>
+          <span class="small opacity-75">131 stories</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- CTA Band -->
+    <div class="cta-band rounded-4 p-5 d-flex flex-column flex-md-row align-items-center justify-content-between my-5">
+      <div class="mb-4 mb-md-0">
+        <h2 class="text-white mb-2" style="max-width: 400px; font-family: 'Bricolage Grotesque', sans-serif;">Been somewhere worth telling people about?</h2>
+        <p class="mb-0 opacity-75">Add your photos, write what happened, and help the next traveler decide.</p>
+      </div>
+      <a href="create-story.html" class="btn btn-highlight py-2 px-4 fw-bold">Write your story <i class="bi bi-arrow-right"></i></a>
+    </div>
+
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/mock-data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js?v=5"></script>
+</body>
+</html>

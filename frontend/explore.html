@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore Stories | Tele Tourist</title>
+
+  <!-- Google Fonts: Bricolage Grotesque & DM Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css?v=2">
+  
+  <style>
+    .sticky-filter {
+      position: sticky;
+      top: 80px;
+      z-index: 1000;
+      background: white;
+      padding: 15px 0;
+      border-bottom: 1px solid #eaeaea;
+    }
+    
+    #explore-grid {
+      column-count: 4;
+      column-gap: 20px;
+    }
+    #explore-grid .card {
+      break-inside: avoid;
+      margin-bottom: 20px;
+    }
+    
+    @media (max-width: 992px) {
+      #explore-grid {
+        column-count: 3;
+      }
+    }
+    @media (max-width: 768px) {
+      #explore-grid {
+        column-count: 2;
+      }
+    }
+    @media (max-width: 576px) {
+      #explore-grid {
+        column-count: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="navbar-placeholder"></div>
+
+  <main class="container my-5">
+    <h1 class="display-5 fw-bold mb-4 text-center" style="font-family: 'Bricolage Grotesque', sans-serif;">Explore Authentic Stories</h1>
+    
+    <!-- Large search box -->
+    <div class="row justify-content-center mb-5">
+      <div class="col-md-8">
+        <form class="d-flex bg-light p-2 rounded-pill shadow-sm">
+          <input class="form-control border-0 bg-transparent shadow-none form-control-lg" type="text" placeholder="Search by location, keyword, or author..." aria-label="Search">
+          <button class="btn btn-primary rounded-pill px-4" type="submit"><i class="bi bi-search"></i></button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- Sticky filter bar -->
+  <div class="sticky-filter mb-4">
+    <div class="container d-flex justify-content-between align-items-center flex-wrap gap-3">
+      <div class="d-flex gap-2 overflow-auto" id="explore-categories">
+        <span class="badge rounded-pill bg-dark text-white px-3 py-2 border">All</span>
+        <span class="badge rounded-pill bg-light text-dark px-3 py-2 border">Food</span>
+        <span class="badge rounded-pill bg-light text-dark px-3 py-2 border">Adventure</span>
+      </div>
+      <div class="d-flex gap-3 align-items-center">
+        <select class="form-select w-auto">
+          <option selected>Any Location</option>
+          <option value="europe">Europe</option>
+          <option value="asia">Asia</option>
+        </select>
+        <select class="form-select w-auto">
+          <option selected>Newest</option>
+          <option value="popular">Most Popular</option>
+          <option value="rating">Highest Rated</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mb-5">
+    <p class="text-muted mb-4" id="result-count">Showing <span class="fw-bold text-dark">0</span> stories</p>
+
+    <!-- 4-column masonry grid -->
+    <div id="explore-grid">
+      <!-- Rendered by js/explore.js -->
+    </div>
+
+    <div class="text-center mt-5">
+      <button class="btn bg-white px-4 py-2 fw-medium" id="load-more-btn" style="border: 1px solid var(--border-card); border-radius: 10px; color: var(--ink); box-shadow: 0 2px 4px rgba(0,0,0,0.02);">Load more stories</button>
+    </div>
+  </div>
+
+  <div id="footer-placeholder"></div>
+
+  <!-- jQuery -->
+  <!-- Bootstrap 5 JS -->
+  <!-- Main Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/mock-data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js?v=5"></script>
+  <script src="js/explore.js"></script>
+</body>
+</html>

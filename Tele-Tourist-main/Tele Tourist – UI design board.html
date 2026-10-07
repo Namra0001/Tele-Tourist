@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tele Tourist – UI design board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#E8EDF0;--ink:#12263A;--panel:#fff;--muted:#586C7C;--line:#CFDAE0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E1923;--ink:#E6EEF3;--panel:#16232F;--muted:#9BB0BF;--line:#2A3B49}}
+:root[data-theme="dark"]{--bg:#0E1923;--ink:#E6EEF3;--panel:#16232F;--muted:#9BB0BF;--line:#2A3B49}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;line-height:1.55}
+.wrap{max-width:1360px;margin:0 auto;padding:48px 32px 96px}
+.board-h{display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:start;margin-bottom:40px}
+.board-h h1{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(34px,5vw,56px);line-height:1.02;letter-spacing:-.03em;margin:0 0 14px;font-weight:700}
+.board-h p{color:var(--muted);max-width:60ch;margin:0 0 10px;font-size:17px}
+.tok{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px}
+.tok h3{font-family:'Bricolage Grotesque',sans-serif;margin:0 0 12px;font-size:16px}
+.sw{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.sw div{width:84px;font-size:12px;color:var(--muted)}
+.sw i{display:block;height:44px;border-radius:10px;margin-bottom:6px;border:1px solid rgba(0,0,0,.08)}
+.sw b{display:block;color:var(--ink);font-weight:600}
+.spec{display:flex;gap:28px;align-items:baseline;flex-wrap:wrap}
+.spec .a{font-family:'Bricolage Grotesque',sans-serif;font-size:34px;font-weight:700;letter-spacing:-.02em}
+.spec .b{font-size:17px}
+.jump{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 48px}
+.jump a{padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--ink);text-decoration:none;font-weight:500;font-size:14px}
+.jump a:focus-visible,.jump a:hover{border-color:#0E7C86;outline:2px solid #0E7C86;outline-offset:2px}
+.frame{margin-bottom:72px}
+.frame-h{display:flex;justify-content:space-between;gap:24px;align-items:end;margin-bottom:14px;flex-wrap:wrap}
+.frame-h h2{font-family:'Bricolage Grotesque',sans-serif;font-size:28px;letter-spacing:-.02em;margin:0}
+.frame-h p{margin:2px 0 0;color:var(--muted);font-size:14.5px;max-width:70ch}
+.frame-h .stack{font-size:13px;color:var(--muted);max-width:44ch;text-align:right}
+.browser{border-radius:16px;overflow:hidden;background:#fff;border:1px solid var(--line);box-shadow:0 18px 50px rgba(10,30,50,.16)}
+.bar{display:flex;align-items:center;gap:12px;padding:10px 16px;background:#EEF2F4;border-bottom:1px solid #DCE4E8}
+.bar span{width:11px;height:11px;border-radius:50%;background:#C6D1D8}
+.bar em{font-style:normal;margin-left:12px;background:#fff;border-radius:8px;padding:4px 14px;font-size:12.5px;color:#586C7C;flex:0 1 380px}
+.stage{overflow:hidden;position:relative}
+@media(max-width:900px){.board-h{grid-template-columns:1fr}.frame-h .stack{text-align:left}}
+
+/* ============ MOCKUP SCREEN (fixed 1280px design width) ============ */
+.screen{width:1280px;background:#F6F8F9;color:#12263A;font-family:'DM Sans',system-ui,sans-serif;font-size:15px;line-height:1.55;transform-origin:0 0}
+.screen *{box-sizing:border-box}
+.screen h1,.screen h2,.screen h3,.screen h4{font-family:'Bricolage Grotesque',sans-serif;margin:0;letter-spacing:-.02em;font-weight:700}
+.screen p{margin:0}
+.screen svg.i{flex:none}
+.nav{display:flex;align-items:center;gap:36px;padding:16px 56px;background:#fff;border-bottom:1px solid #DDE5E9}
+.logo{display:flex;align-items:center;gap:10px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:22px;letter-spacing:-.02em}
+.logo-mark{width:34px;height:34px;border-radius:11px;background:#0E7C86;display:grid;place-items:center}
+.nav-links{display:flex;gap:28px;font-weight:500;color:#4A5F70}
+.nav-links .on{color:#12263A;box-shadow:inset 0 -3px 0 #F4B13E}
+.nav-r{margin-left:auto;display:flex;align-items:center;gap:16px}
+.nsearch{display:flex;align-items:center;gap:8px;background:#EEF3F5;border-radius:999px;padding:9px 18px;width:270px;color:#62788A;font-size:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:10px;padding:11px 20px;font-weight:600;font-size:15px;border:1.5px solid transparent;white-space:nowrap}
+.btn-p{background:#0E7C86;color:#fff}
+.btn-d{background:#12263A;color:#fff}
+.btn-o{background:#fff;border-color:#BFCCD4;color:#12263A}
+.btn-y{background:#F4B13E;color:#12263A}
+.btn-lg{padding:15px 26px;font-size:16px}
+.avatar{border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:600;flex:none}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:999px;border:1px solid #C6D3DB;background:#fff;font-weight:500;font-size:14px;color:#26394B}
+.chip small{color:#6C8090;font-size:12.5px}
+.chip.on{background:#12263A;color:#fff;border-color:#12263A}.chip.on small{color:#B9C8D3}
+.loc{display:flex;gap:5px;align-items:center;color:#586C7C;font-size:13.5px}
+.m{display:inline-flex;gap:5px;align-items:center}
+/* story card */
+.sc{background:#fff;border-radius:16px;overflow:hidden;border:1px solid #DFE7EB;display:flex;flex-direction:column}
+.sc-img{position:relative;background-size:cover;background-position:center}
+.tag{position:absolute;left:12px;top:12px;background:rgba(255,255,255,.94);font-size:12.5px;font-weight:600;padding:4px 11px;border-radius:999px}
+.save{position:absolute;right:12px;top:12px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.94);display:grid;place-items:center}
+.sc-b{padding:15px 17px 17px}
+.sc-t{font-size:19px;line-height:1.25;font-weight:600!important;margin-bottom:7px!important}
+.sc-f{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:13px;color:#586C7C}
+.sc-f .sp{margin-left:auto;display:flex;gap:14px}
+.sec{padding:0 56px}
+.sec-h{display:flex;justify-content:space-between;align-items:end;margin-bottom:26px}
+.sec-h h2{font-size:36px}
+.sec-h a{font-weight:600;color:#0E7C86;display:flex;gap:6px;align-items:center}
+.foot{background:#12263A;color:#B9C8D3;padding:56px 56px 36px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;margin-top:96px}
+.foot h4{color:#fff;font-size:15px;margin-bottom:12px!important}
+.foot li{list-style:none;margin-bottom:8px;font-size:14.5px}.foot ul{margin:0;padding:0}
+.foot .cp{grid-column:1/-1;border-top:1px solid #29425A;padding-top:22px;font-size:13.5px}
+/* home */
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;padding:76px 56px 40px;position:relative}
+.hero h1{font-size:70px;line-height:1.01;letter-spacing:-.035em;max-width:640px}
+.hero .lead{font-size:19px;color:#3D5163;max-width:520px;margin:22px 0 34px}
+.hsearch{display:flex;align-items:center;background:#fff;border:1px solid #CBD7DE;border-radius:16px;padding:8px;max-width:640px;box-shadow:0 10px 30px rgba(14,60,80,.08)}
+.hsearch .f{display:flex;align-items:center;gap:10px;padding:10px 18px;flex:1;color:#62788A}
+.hsearch .f+.f{border-left:1px solid #E1E8EC}
+.proof{display:flex;align-items:center;gap:14px;margin-top:28px;color:#3D5163;font-size:14.5px}
+.stack-av{display:flex}.stack-av .avatar{border:3px solid #F6F8F9;margin-left:-10px}.stack-av .avatar:first-child{margin-left:0}
+.collage{position:relative;height:560px}
+.collage .disc{position:absolute;right:-40px;top:20px;width:520px;height:520px;border-radius:50%;background:#D6E8EE}
+.collage .sc{position:absolute;box-shadow:0 20px 40px rgba(14,50,70,.18)}
+.note{position:absolute;left:0;bottom:60px;background:#F4B13E;border-radius:14px;padding:12px 16px;font-weight:600;font-size:14px;transform:rotate(-3deg);display:flex;gap:8px;align-items:center;box-shadow:0 10px 24px rgba(180,120,20,.25)}
+.cats{display:flex;gap:10px;flex-wrap:wrap;padding:30px 56px 64px}
+.feat-grid{display:grid;grid-template-columns:1.45fr 1fr;gap:24px}
+.feat{position:relative;border-radius:22px;overflow:hidden;min-height:520px;background-size:cover;background-position:center;color:#fff;display:flex;align-items:flex-end}
+.feat .ov{padding:36px;background:linear-gradient(to top,rgba(10,22,34,.86),rgba(10,22,34,0));width:100%;padding-top:120px}
+.feat h3{font-size:38px;line-height:1.08;max-width:520px;margin:12px 0 14px!important}
+.hrow{display:flex;gap:0}
+.hcard{display:flex;background:#fff;border:1px solid #DFE7EB;border-radius:18px;overflow:hidden;margin-bottom:24px}
+.hcard .im{width:190px;flex:none;background-size:cover;background-position:center}
+.hcard .sc-b{padding:20px}
+.dest{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;align-items:start}
+.dest .t{border-radius:18px;aspect-ratio:3/4;background-size:cover;background-position:center;position:relative;color:#fff;display:flex;align-items:flex-end}
+.dest .t:nth-child(even){margin-top:36px}
+.dest .t div{padding:16px 18px;width:100%;background:linear-gradient(to top,rgba(10,22,34,.8),rgba(10,22,34,0));border-radius:0 0 18px 18px;padding-top:56px}
+.dest b{font-family:'Bricolage Grotesque',sans-serif;font-size:21px;display:block;letter-spacing:-.01em}
+.dest span{font-size:13px;opacity:.9}
+.cta{margin:96px 56px 0;background:#0A4F5C;border-radius:26px;padding:56px 64px;display:flex;justify-content:space-between;align-items:center;color:#fff}
+.cta h2{font-size:42px;max-width:620px;line-height:1.08}
+.cta p{color:#BFE0E4;margin-top:12px!important;font-size:17px}
+/* auth */
+.auth{display:grid;grid-template-columns:1.1fr 1fr;min-height:800px;background:#fff}
+.auth-l{position:relative;background-size:cover;background-position:center;color:#fff;padding:44px;display:flex;flex-direction:column;justify-content:space-between}
+.auth-l .logo{color:#fff}
+.auth-l blockquote{margin:0;font-family:'Bricolage Grotesque',sans-serif;font-size:36px;line-height:1.15;letter-spacing:-.02em;font-weight:600;max-width:520px;text-shadow:0 2px 20px rgba(0,0,0,.35)}
+.auth-l .by{margin-top:20px;display:flex;gap:12px;align-items:center;font-size:15px}
+.auth-r{display:flex;align-items:center;justify-content:center;padding:48px}
+.auth-f{width:400px}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:#EEF3F5;border-radius:12px;padding:4px;margin-bottom:34px}
+.seg div{text-align:center;padding:10px;border-radius:9px;font-weight:600;color:#586C7C}
+.seg .on{background:#fff;color:#12263A;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.fld{margin-bottom:18px}
+.fld label{display:block;font-weight:600;font-size:14px;margin-bottom:7px}
+.inp{height:48px;border:1.5px solid #C6D3DB;border-radius:10px;background:#fff;padding:0 14px;display:flex;align-items:center;gap:10px;color:#7A8E9D}
+.inp.v{color:#12263A}
+.inp.focus{border-color:#0E7C86;box-shadow:0 0 0 4px rgba(14,124,134,.15)}
+.hint{font-size:13px;color:#6C8090;margin-top:6px}
+/* explore */
+.ex-h{padding:48px 56px 0}
+.ex-h h1{font-size:54px;line-height:1.05}
+.bigsearch{display:flex;align-items:center;gap:12px;margin-top:24px;background:#fff;border:1.5px solid #C6D3DB;border-radius:16px;padding:8px 8px 8px 20px;max-width:760px;color:#62788A}
+.bigsearch span{flex:1}
+.filters{position:sticky;top:0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:22px 56px;margin-top:26px;background:#F6F8F9;border-top:1px solid #DDE5E9;border-bottom:1px solid #DDE5E9}
+.filters .sel{display:flex;align-items:center;gap:8px;border:1px solid #C6D3DB;background:#fff;border-radius:10px;padding:8px 14px;font-weight:500;font-size:14px}
+.filters .sp{margin-left:auto;display:flex;gap:10px}
+.rcount{padding:26px 56px 20px;color:#586C7C;font-size:15px}.rcount b{color:#12263A}
+.masonry{columns:4;column-gap:22px;padding:0 56px}
+.masonry .sc{break-inside:avoid;margin-bottom:22px}
+.more{display:flex;justify-content:center;margin-top:20px}
+/* story */
+.crumb{padding:28px 56px 0;color:#586C7C;font-size:14px;display:flex;gap:8px}
+.st-h{padding:18px 56px 28px;max-width:1040px}
+.st-h h1{font-size:60px;line-height:1.03;margin:14px 0 22px!important}
+.who{display:flex;align-items:center;gap:14px}
+.who .meta{color:#586C7C;font-size:14px;display:flex;gap:16px}
+.mos{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:230px 230px;gap:12px;padding:0 56px}
+.mos div{background-size:cover;background-position:center;border-radius:14px;position:relative}
+.mos div:first-child{grid-row:span 2;border-radius:22px 14px 14px 22px}
+.mos .last{border-radius:14px 22px 22px 14px}
+.mos .badge{position:absolute;right:14px;bottom:14px;background:rgba(18,38,58,.86);color:#fff;font-size:13px;font-weight:600;padding:6px 12px;border-radius:999px;display:flex;gap:6px;align-items:center}
+.st-b{display:grid;grid-template-columns:1fr 340px;gap:72px;padding:52px 56px 0}
+.art p{font-size:18px;line-height:1.75;color:#26394B;margin-bottom:22px!important;max-width:680px}
+.art blockquote{margin:34px 0;padding:6px 0 6px 24px;border-left:5px solid #F4B13E;font-family:'Bricolage Grotesque',sans-serif;font-size:29px;line-height:1.25;letter-spacing:-.015em;font-weight:600;max-width:640px}
+.side{position:sticky;top:20px;align-self:start;background:#fff;border:1px solid #DFE7EB;border-radius:20px;overflow:hidden}
+.map{height:170px;background:#E1EDF0;position:relative}
+.side-b{padding:22px}
+.side dl{margin:0 0 20px}.side dt{font-size:12.5px;color:#6C8090;margin-top:12px}.side dd{margin:0;font-weight:600}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.acts .btn{padding:11px 12px}
+.cm{padding:64px 56px 0;max-width:1040px}
+.cm h2{font-size:30px;margin-bottom:22px!important}
+.cm-i{display:flex;gap:14px;padding:20px 0;border-top:1px solid #DDE5E9}
+.cm-i b{font-size:15px}.cm-i span{color:#6C8090;font-size:13px;margin-left:8px}
+.cm-i p{margin-top:4px!important;color:#26394B}
+.cm-new{display:flex;gap:14px;align-items:flex-start;margin-bottom:22px}
+.cm-new .inp{flex:1;height:84px;align-items:flex-start;padding-top:14px}
+/* create */
+.cr-h{padding:44px 56px 8px}.cr-h h1{font-size:46px}.cr-h p{color:#586C7C;margin-top:8px!important;font-size:17px}
+.cr{display:grid;grid-template-columns:1fr 390px;gap:40px;padding:28px 56px 0;align-items:start}
+.panel{background:#fff;border:1px solid #DFE7EB;border-radius:20px;padding:34px}
+.panel h3{font-size:20px;margin-bottom:22px!important}
+.panel+.panel{margin-top:24px}
+.ta{height:170px;align-items:flex-start;padding-top:14px;line-height:1.6}
+.drop{border:2px dashed #9FB6C2;background:#F1F7F9;border-radius:16px;padding:34px;text-align:center;color:#3D5163}
+.drop b{display:block;font-size:16px;color:#12263A;margin:10px 0 2px}
+.thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+.th{aspect-ratio:1;border-radius:12px;background-size:cover;background-position:center;position:relative}
+.th .x{position:absolute;right:6px;top:6px;width:24px;height:24px;border-radius:50%;background:rgba(18,38,58,.8);display:grid;place-items:center}
+.th .cv{position:absolute;left:6px;bottom:6px;background:#F4B13E;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px}
+.th.add{border:1.5px dashed #9FB6C2;display:grid;place-items:center;color:#586C7C;background:#fff}
+.prev{position:sticky;top:20px}
+.prev h4{font-size:15px;margin-bottom:12px!important;color:#586C7C;font-weight:600!important}
+.tip{margin-top:18px;background:#FFF4DC;border-radius:14px;padding:16px 18px;font-size:14px;color:#5A4311}
+.tip b{display:block;margin-bottom:4px}
+.actions{display:flex;justify-content:flex-end;gap:12px;margin-top:26px}
+/* profile */
+.cover{height:250px;background-size:cover;background-position:center}
+.pf{padding:0 56px;display:flex;gap:32px;align-items:flex-end;margin-top:-64px}
+.pf .avatar{border:6px solid #F6F8F9;font-size:44px;font-family:'Bricolage Grotesque',sans-serif}
+.pf h1{font-size:40px}
+.pf .bio{max-width:560px;color:#3D5163;margin-top:8px!important;font-size:16.5px}
+.pf .rt{margin-left:auto;display:flex;gap:10px;padding-bottom:10px}
+.stats{display:flex;gap:56px;padding:30px 56px 0}
+.stats b{font-family:'Bricolage Grotesque',sans-serif;font-size:34px;letter-spacing:-.02em;display:block;line-height:1}
+.stats span{font-size:14px;color:#586C7C}
+.tabs{display:flex;gap:34px;padding:0 56px;margin-top:36px;border-bottom:1px solid #DDE5E9}
+.tabs div{padding:14px 0;font-weight:600;color:#586C7C}
+.tabs .on{color:#12263A;box-shadow:inset 0 -3px 0 #0E7C86}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;padding:34px 56px 0}
+.own{display:flex;gap:8px;margin-top:12px}
+.own span{font-size:13px;font-weight:600;display:inline-flex;gap:5px;align-items:center;padding:5px 11px;border-radius:8px;background:#EEF3F5}
+/* saved */
+.sv{display:grid;grid-template-columns:1fr 330px;gap:40px;padding:30px 56px 0;align-items:start}
+.row{display:flex;gap:22px;background:#fff;border:1px solid #DFE7EB;border-radius:18px;padding:14px;margin-bottom:18px}
+.row .im{width:240px;height:158px;border-radius:12px;background-size:cover;background-position:center;flex:none}
+.row .c{flex:1;padding:6px 0}
+.row h3{font-size:23px;line-height:1.2;margin:8px 0 8px!important}
+.row p{color:#3D5163;font-size:15px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.row .rm{display:flex;flex-direction:column;justify-content:space-between;align-items:flex-end;padding:6px 8px 6px 0;color:#6C8090;font-size:13px}
+.bm{width:40px;height:40px;border-radius:12px;background:#FFF4DC;display:grid;place-items:center}
+.by{margin-bottom:24px}
+.pl{display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid #E6EDF0;font-size:15px}
+.pl:first-of-type{border-top:0}
+.bar2{height:6px;border-radius:99px;background:#E6EDF0;margin-top:6px}.bar2 i{display:block;height:100%;border-radius:99px;background:#0E7C86}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="board-h">
+    <div>
+      <h1>Tele Tourist<br>interface design board</h1>
+      <p>Seven screens, one system. Navigation lives in a single top bar, so every page gets its full width, and each page has its own layout: a split screen for sign-up, a masonry wall for exploring, a photo mosaic for reading, a live preview for writing.</p>
+      <p>Everything here is plain HTML and CSS that maps onto Bootstrap's grid, navbar and modal, with jQuery handling the filters, likes and saves.</p>
+    </div>
+    <div class="tok">
+      <h3>Palette</h3>
+      <div class="sw">
+        <div><i style="background:#12263A"></i><b>Ink</b>#12263A</div>
+        <div><i style="background:#0E7C86"></i><b>Lagoon</b>#0E7C86</div>
+        <div><i style="background:#0A4F5C"></i><b>Deep sea</b>#0A4F5C</div>
+        <div><i style="background:#F4B13E"></i><b>Saffron</b>#F4B13E</div>
+        <div><i style="background:#D6E8EE"></i><b>Sky</b>#D6E8EE</div>
+        <div><i style="background:#F6F8F9"></i><b>Mist</b>#F6F8F9</div>
+      </div>
+      <h3>Type</h3>
+      <div class="spec"><span class="a">Bricolage Grotesque</span><span class="b">DM Sans for body text and forms</span></div>
+    </div>
+  </div>
+  <nav class="jump" aria-label="Screens">
+    <a href="#home">Home</a><a href="#auth">Sign up</a><a href="#explore">Explore</a><a href="#story">Story</a><a href="#create">Write a story</a><a href="#profile">Profile</a><a href="#saved">Saved stories</a>
+  </nav>
+  <div id="frames"></div>
+</div>
+
+<script>
+/* ---------- scenery (inline SVG, so no image files needed) ---------- */
+const cache = {};
+function wrap(inner, defs){return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"><defs>'+(defs||'')+'</defs>'+inner+'</svg>';}
+function lg(id, stops){return '<linearGradient id="'+id+'" x1="0" y1="0" x2="0" y2="1">'+stops.map(function(s){return '<stop offset="'+s[0]+'" stop-color="'+s[1]+'"/>';}).join('')+'</linearGradient>';}
+function build(type, v){
+  v = v || 0;
+  if(type==='mountain'){
+    var P=[{s:['#BFD9E6','#F6E3C4'],sun:'#FBE2A8',b:'#8FB0C2',m:'#4F7A8F',f:'#1E4155'},
+           {s:['#F7B267','#FBE3B8'],sun:'#FFF3D6',b:'#C98E86',m:'#7A5C7A',f:'#3A2E55'},
+           {s:['#1B2B4B','#6C86B5'],sun:'#EAF2FF',b:'#4A6590',m:'#2B4170',f:'#14213D'}][v%3];
+    return wrap('<rect width="400" height="300" fill="url(#g)"/><circle cx="'+(v===1?110:300)+'" cy="'+(v===1?130:88)+'" r="30" fill="'+P.sun+'"/>'+
+      '<polygon points="0,220 70,120 130,190 200,100 280,200 340,150 400,210 400,300 0,300" fill="'+P.b+'"/>'+
+      '<polygon points="200,100 184,130 200,122 213,132" fill="#fff" opacity=".85"/><polygon points="70,120 56,146 70,140 82,148" fill="#fff" opacity=".85"/>'+
+      '<polygon points="0,250 90,160 160,240 240,150 330,245 400,190 400,300 0,300" fill="'+P.m+'"/>'+
+      '<polygon points="0,282 120,215 220,270 320,225 400,265 400,300 0,300" fill="'+P.f+'"/>', lg('g',[[0,P.s[0]],[1,P.s[1]]]));
+  }
+  if(type==='beach'){
+    return wrap('<rect width="400" height="300" fill="url(#g)"/><circle cx="260" cy="150" r="34" fill="#FFF1C9"/>'+
+      '<rect y="150" width="400" height="90" fill="url(#w)"/><path d="M0 236 Q100 220 200 236 T400 232 V300 H0Z" fill="#F0D9A8"/>'+
+      '<path d="M20 168h60M170 180h80M300 162h70M90 196h90" stroke="#fff" stroke-opacity=".5" stroke-width="3" stroke-linecap="round"/>'+
+      '<path d="M70 300 Q80 230 105 176" stroke="#5B3A29" stroke-width="7" fill="none" stroke-linecap="round"/>'+
+      '<ellipse cx="85" cy="172" rx="42" ry="9" fill="#2F7D5B" transform="rotate(-25 105 176)"/><ellipse cx="125" cy="170" rx="42" ry="9" fill="#2F7D5B" transform="rotate(25 105 176)"/><ellipse cx="105" cy="160" rx="40" ry="9" fill="#3E9A6F" transform="rotate(-80 105 176)"/>',
+      lg('g',[[0,'#FFC98B'],[1,'#FFF1D6']])+lg('w',[[0,'#2BA3B5'],[1,'#0E7C86']]));
+  }
+  if(type==='desert'){
+    return wrap('<rect width="400" height="300" fill="url(#g)"/><circle cx="110" cy="120" r="48" fill="#FFF3D6"/>'+
+      '<path d="M0 200 Q100 140 200 190 T400 170 V300 H0Z" fill="#E7B070"/><path d="M0 245 Q120 190 240 240 T400 225 V300 H0Z" fill="#CC8444"/><path d="M0 280 Q150 245 280 275 T400 268 V300 H0Z" fill="#9F5B2A"/>'+
+      '<polygon points="300,210 312,180 324,210" fill="#6A3B1E"/><rect x="304" y="210" width="16" height="14" fill="#6A3B1E"/>',
+      lg('g',[[0,'#F9C98B'],[1,'#FDEBC8']]));
+  }
+  if(type==='city'){
+    var b=[[10,40,120],[50,34,170],[84,50,100],[134,36,190],[170,48,140],[218,34,110],[252,52,180],[304,40,130],[344,56,160]], s='';
+    b.forEach(function(x,i){s+='<rect x="'+x[0]+'" y="'+(300-x[2])+'" width="'+x[1]+'" height="'+x[2]+'" fill="'+(i%2?'#14243A':'#0F1C2E')+'"/>';
+      for(var r=0;r<Math.floor(x[2]/22);r++){for(var c=0;c<Math.floor(x[1]/14);c++){if((r*3+c*5+i)%3){s+='<rect x="'+(x[0]+6+c*13)+'" y="'+(300-x[2]+8+r*20)+'" width="5" height="7" fill="#F4B13E" opacity=".85"/>';}}}});
+    return wrap('<rect width="400" height="300" fill="url(#g)"/><circle cx="330" cy="70" r="20" fill="#FBE7C2"/>'+s, lg('g',[[0,'#1C2F4A'],[.7,'#8C5E7A'],[1,'#E58B6A']]));
+  }
+  if(type==='forest'){
+    var t='';
+    [[20,230,70],[90,250,90],[170,225,80],[250,245,95],[330,228,75]].forEach(function(p,i){t+='<polygon points="'+p[0]+','+p[1]+' '+(p[0]+p[2]/2)+','+(p[1]-p[2]*1.5)+' '+(p[0]+p[2])+','+p[1]+'" fill="'+(i%2?'#1F5C44':'#2F7D5B')+'"/>';});
+    return wrap('<rect width="400" height="300" fill="url(#g)"/><ellipse cx="200" cy="170" rx="260" ry="30" fill="#fff" opacity=".45"/>'+t+
+      '<path d="M0 235 Q100 200 200 235 T400 225 V300 H0Z" fill="#2A6B4F"/><path d="M0 270 Q120 245 240 268 T400 262 V300 H0Z" fill="#14402F"/>', lg('g',[[0,'#CFE8DD'],[1,'#F0F8F2']]));
+  }
+  if(type==='lake'){
+    return wrap('<rect width="400" height="150" fill="url(#g)"/><circle cx="200" cy="130" r="38" fill="#FFE2A1"/>'+
+      '<polygon points="0,150 60,100 110,135 170,90 240,140 300,105 400,150" fill="#3A3A66"/><rect y="150" width="400" height="150" fill="url(#r)"/>'+
+      '<path d="M120 175h160M150 195h100M170 215h60" stroke="#FFE2A1" stroke-opacity=".6" stroke-width="4" stroke-linecap="round"/>'+
+      '<polygon points="0,150 60,100 110,135 170,90 240,140 300,105 400,150 400,300 0,300" fill="#2B2B52" opacity=".28"/>',
+      lg('g',[[0,'#4B5B8C'],[.6,'#E2706B'],[1,'#F4B13E']])+lg('r',[[0,'#E58B6A'],[1,'#4B5B8C']]));
+  }
+  /* fort */
+  return wrap('<rect width="400" height="300" fill="url(#g)"/><circle cx="320" cy="70" r="26" fill="#FFF3D6"/>'+
+    '<rect x="70" y="130" width="260" height="110" fill="#C98B5B"/><rect x="70" y="112" width="26" height="22" fill="#C98B5B"/><rect x="108" y="112" width="26" height="22" fill="#C98B5B"/><rect x="146" y="112" width="26" height="22" fill="#C98B5B"/><rect x="184" y="112" width="26" height="22" fill="#C98B5B"/><rect x="222" y="112" width="26" height="22" fill="#C98B5B"/><rect x="260" y="112" width="26" height="22" fill="#C98B5B"/><rect x="298" y="112" width="32" height="22" fill="#C98B5B"/>'+
+    '<path d="M170 240v-50a30 30 0 0 1 60 0v50z" fill="#6E3F22"/><rect x="100" y="160" width="14" height="30" rx="7" fill="#8E5732"/><rect x="286" y="160" width="14" height="30" rx="7" fill="#8E5732"/>'+
+    '<rect y="240" width="400" height="60" fill="#B9854E"/><path d="M0 262 Q200 245 400 262V300H0Z" fill="#9C6A39"/>', lg('g',[[0,'#BFE3EA'],[1,'#FBEBD0']]));
+}
+function bg(type, v){var k=type+(v||0); if(!cache[k]) cache[k]="background-image:url('data:image/svg+xml,"+encodeURIComponent(build(type,v))+"')"; return cache[k];}
+
+/* ---------- icons + small helpers ---------- */
+const IC={heart:'<path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/>',bookmark:'<path d="M6 3h12v18l-6-4-6 4z"/>',comment:'<path d="M4 5h16v11H9l-5 4z"/>',pin:'<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',search:'<circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/>',plus:'<path d="M12 5v14M5 12h14"/>',share:'<path d="M12 3v12M7 8l5-5 5 5M5 14v6h14v-6"/>',upload:'<path d="M12 16V4M7 9l5-5 5 5M4 20h16"/>',image:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="1.5"/><path d="M21 17l-5-5-8 7"/>',chev:'<path d="M6 9l6 6 6-6"/>',trash:'<path d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13"/>',edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/>',arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',x:'<path d="M6 6l12 12M18 6L6 18"/>',lock:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>',check:'<path d="M5 12l5 5 9-10"/>',grid:'<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>'};
+function ic(n,s,fill,color){s=s||18;return '<svg class="i" width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="'+(fill||'none')+'" stroke="'+(color||'currentColor')+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+IC[n]+'</svg>';}
+const AVC=['#0E7C86','#B4532A','#5B6BB5','#2F7D5B','#8A5A9E','#96681C'];
+function av(name,size){var h=0;for(var i=0;i<name.length;i++)h+=name.charCodeAt(i);var ini=name.split(' ').map(function(w){return w[0];}).join('').slice(0,2);return '<span class="avatar" style="width:'+size+'px;height:'+size+'px;font-size:'+Math.round(size*.38)+'px;background:'+AVC[h%AVC.length]+'">'+ini+'</span>';}
+
+const S=[
+ {s:'mountain',v:0,t:'Eleven days in Spiti without a single plan',l:'Spiti Valley, Himachal Pradesh',c:'Mountains',a:'Aarav Kapadia',lk:248,cm:32},
+ {s:'beach',t:'Gokarna, the quiet side of the Karnataka coast',l:'Gokarna, Karnataka',c:'Beaches',a:'Meera Shah',lk:181,cm:19},
+ {s:'desert',t:'Sleeping under the Thar: what the camps never tell you',l:'Jaisalmer, Rajasthan',c:'Road trips',a:'Dev Patel',lk:163,cm:24},
+ {s:'city',t:'Mumbai after midnight, one vada pav at a time',l:'Mumbai, Maharashtra',c:'Food trails',a:'Zoya Ansari',lk:142,cm:17},
+ {s:'forest',t:'Three rainy days in Munnar tea country',l:'Munnar, Kerala',c:'Nature',a:'Nikhil Rao',lk:127,cm:11},
+ {s:'lake',t:'Udaipur at dusk, from a rooftop nobody mentions',l:'Udaipur, Rajasthan',c:'Heritage',a:'Isha Trivedi',lk:119,cm:14},
+ {s:'fort',t:'Hampi on a rented bicycle',l:'Hampi, Karnataka',c:'Heritage',a:'Rohan Mehta',lk:204,cm:28},
+ {s:'mountain',v:2,t:'Solo in Kasol: what I spent and what I would skip',l:'Kasol, Himachal Pradesh',c:'Solo & budget',a:'Tanvi Gandhi',lk:96,cm:9},
+ {s:'mountain',v:1,t:'Sunrise treks around Manali that need no guide',l:'Manali, Himachal Pradesh',c:'Mountains',a:'Kabir Soni',lk:88,cm:7}
+];
+function card(st,h,extra){
+  return '<article class="sc" '+(extra?'style="'+extra+'"':'')+'><div class="sc-img" style="height:'+h+'px;'+bg(st.s,st.v)+'"><span class="tag">'+st.c+'</span><span class="save">'+ic('bookmark',17)+'</span></div>'+
+  '<div class="sc-b"><h3 class="sc-t">'+st.t+'</h3><div class="loc">'+ic('pin',15)+st.l+'</div>'+
+  '<div class="sc-f">'+av(st.a,24)+'<span>'+st.a+'</span><span class="sp"><span class="m">'+ic('heart',16)+st.lk+'</span><span class="m">'+ic('comment',16)+st.cm+'</span></span></div></div></article>';
+}
+function nav(active,extra){
+  var L=['Explore','Destinations','Saved','Community'];
+  return '<header class="nav"><div class="logo"><span class="logo-mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M4 18c4 0 3-8 8-8s4 8 8 8"/><circle cx="12" cy="5" r="1.8" fill="#F4B13E" stroke="none"/></svg></span>Tele Tourist</div>'+
+  '<nav class="nav-links">'+L.map(function(x){return '<span class="'+(x===active?'on':'')+'">'+x+'</span>';}).join('')+'</nav>'+
+  '<div class="nav-r">'+(extra==='out'?'<span style="font-weight:600">Log in</span><span class="btn btn-p">Create account</span>':'<span class="nsearch">'+ic('search',16)+'Search stories or places</span><span class="btn btn-p">'+ic('plus',17)+'Write a story</span>'+av('Aarav Kapadia',38))+'</div></header>';
+}
+function footer(){return '<footer class="foot"><div><div class="logo" style="color:#fff;margin-bottom:14px"><span class="logo-mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M4 18c4 0 3-8 8-8s4 8 8 8"/><circle cx="12" cy="5" r="1.8" fill="#F4B13E" stroke="none"/></svg></span>Tele Tourist</div><p style="max-width:300px;font-size:14.5px">Real trips, told by the people who took them.</p></div><div><h4>Discover</h4><ul><li>Explore stories</li><li>Destinations</li><li>Categories</li></ul></div><div><h4>Community</h4><ul><li>Write a story</li><li>Top travelers</li><li>Guidelines</li></ul></div><div><h4>Account</h4><ul><li>Profile</li><li>Saved stories</li><li>Log out</li></ul></div><div class="cp">© 2026 Tele Tourist.</div></footer>';}
+
+/* ---------- screens ---------- */
+function home(){
+  var cats=[['Mountains',412],['Beaches',286],['Heritage',198],['Food trails',245],['Road trips',173],['Solo & budget',320],['Nature',231]];
+  return nav('Explore')+
+  '<section class="hero"><div><h1>Skip the brochure. Read what travelers actually did.</h1>'+
+  '<p class="lead">Tele Tourist is where people share real trips: the detours, the costs, and the places that were worth the walk.</p>'+
+  '<div class="hsearch"><div class="f">'+ic('pin',18)+'Where to?</div><div class="f">'+ic('grid',18)+'Any category'+'<span style="margin-left:auto">'+ic('chev',16)+'</span></div><span class="btn btn-p btn-lg">Find stories</span></div>'+
+  '<div class="proof"><span class="stack-av">'+['Meera Shah','Dev Patel','Zoya Ansari','Nikhil Rao'].map(function(n){return av(n,34);}).join('')+'</span><span><b>3,200 travelers</b> have shared 12,480 stories</span></div></div>'+
+  '<div class="collage"><div class="disc"></div>'+card(S[6],150,'width:290px;left:30px;top:30px;transform:rotate(-3deg)')+card(S[0],170,'width:300px;right:10px;top:0;transform:rotate(2.5deg)')+card(S[5],130,'width:290px;left:150px;top:310px;transform:rotate(1deg)')+
+  '<div class="note">'+ic('bookmark',17,'#12263A')+'Saved by 1,204 travelers</div></div></section>'+
+  '<div class="cats">'+cats.map(function(c,i){return '<span class="chip '+(i===0?'on':'')+'">'+c[0]+' <small>'+c[1]+'</small></span>';}).join('')+'</div>'+
+  '<section class="sec"><div class="sec-h"><h2>Fresh from the road</h2><a>See all stories '+ic('arrow',18)+'</a></div>'+
+  '<div class="feat-grid"><div class="feat" style="'+bg('mountain',1)+'"><div class="ov"><span class="chip" style="background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.4);color:#fff">'+'Mountains</span><h3>Eleven days in Spiti without a single plan</h3><div style="display:flex;align-items:center;gap:12px">'+av('Aarav Kapadia',38)+'<span>Aarav Kapadia, Spiti Valley</span><span class="m" style="margin-left:auto">'+ic('heart',18)+'248</span></div></div></div>'+
+  '<div>'+[S[1],S[3]].map(function(st){return '<div class="hcard"><div class="im" style="'+bg(st.s,st.v)+'"></div><div class="sc-b"><span class="chip" style="font-size:12.5px;padding:3px 10px">'+st.c+'</span><h3 class="sc-t" style="margin-top:12px!important;font-size:21px">'+st.t+'</h3><div class="loc">'+ic('pin',15)+st.l+'</div><div class="sc-f">'+av(st.a,24)+st.a+'<span class="sp"><span class="m">'+ic('heart',16)+st.lk+'</span></span></div></div></div>';}).join('')+
+  '<div class="hcard" style="margin-bottom:0"><div class="im" style="'+bg('fort')+'"></div><div class="sc-b"><span class="chip" style="font-size:12.5px;padding:3px 10px">Heritage</span><h3 class="sc-t" style="margin-top:12px!important;font-size:21px">Hampi on a rented bicycle</h3><div class="loc">'+ic('pin',15)+'Hampi, Karnataka</div></div></div></div></div></section>'+
+  '<section class="sec" style="margin-top:96px"><div class="sec-h"><h2>Places people keep writing about</h2><a>All destinations '+ic('arrow',18)+'</a></div><div class="dest">'+
+  [['Spiti Valley','214','mountain',0],['Gokarna','168','beach',0],['Jaisalmer','143','desert',0],['Hampi','197','fort',0],['Munnar','131','forest',0]].map(function(d){return '<div class="t" style="'+bg(d[2],d[3])+'"><div><b>'+d[0]+'</b><span>'+d[1]+' stories</span></div></div>';}).join('')+'</div></section>'+
+  '<section class="cta"><div><h2>Been somewhere worth telling people about?</h2><p>Add your photos, write what happened, and help the next traveler decide.</p></div><span class="btn btn-y btn-lg">Write your story '+ic('arrow',18)+'</span></section>'+footer();
+}
+function auth(){
+  return '<div class="auth"><div class="auth-l" style="'+bg('mountain',1)+'"><div class="logo"><span class="logo-mark" style="background:rgba(255,255,255,.2)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M4 18c4 0 3-8 8-8s4 8 8 8"/><circle cx="12" cy="5" r="1.8" fill="#F4B13E" stroke="none"/></svg></span>Tele Tourist</div>'+
+  '<div><blockquote>I planned nothing for Spiti except the first night. The rest came from stories I had saved.</blockquote><div class="by">'+av('Aarav Kapadia',44)+'<span><b>Aarav Kapadia</b><br>Has shared 24 stories</span></div></div></div>'+
+  '<div class="auth-r"><div class="auth-f"><div class="seg"><div>Log in</div><div class="on">Create account</div></div>'+
+  '<h2 style="font-size:34px;margin-bottom:8px">Create your account</h2><p style="color:#586C7C;margin-bottom:28px">Read, save and share trips with other travelers.</p>'+
+  '<div class="fld"><label>Full name</label><div class="inp v">'+ic('user',18)+'Aarav Kapadia</div></div>'+
+  '<div class="fld"><label>Email</label><div class="inp v focus">'+ic('mail',18)+'aarav@example.com</div></div>'+
+  '<div class="fld"><label>Password</label><div class="inp">'+ic('lock',18)+'••••••••••</div><div class="hint">Use at least 8 characters.</div></div>'+
+  '<span class="btn btn-p btn-lg" style="width:100%;margin-top:10px">Create account</span>'+
+  '<p style="text-align:center;margin-top:22px;color:#586C7C">Already have an account? <b style="color:#0E7C86">Log in</b></p></div></div></div>';
+}
+function explore(){
+  var cats=['All','Mountains','Beaches','Heritage','Food trails','Road trips','Solo & budget'];
+  var hs=[250,200,300,220,180,280,240,210,260,200,230,190];
+  var list=[S[0],S[1],S[6],S[3],S[2],S[4],S[7],S[5],S[8],S[1],S[3],S[6]];
+  return nav('Explore')+
+  '<section class="ex-h"><h1>Explore stories from the road</h1><div class="bigsearch">'+ic('search',20)+'<span>Search by title, place or traveler</span><span class="btn btn-p" style="flex:none">Search</span></div></section>'+
+  '<div class="filters">'+cats.map(function(c,i){return '<span class="chip '+(i===1?'on':'')+'">'+c+'</span>';}).join('')+
+  '<span class="sp"><span class="sel">'+ic('pin',16)+'Himachal Pradesh'+ic('chev',15)+'</span><span class="sel">Most liked'+ic('chev',15)+'</span></span></div>'+
+  '<div class="rcount"><b>128 stories</b> in Mountains, Himachal Pradesh</div>'+
+  '<div class="masonry">'+list.map(function(st,i){return card(st,hs[i]);}).join('')+'</div><div class="more"><span class="btn btn-o btn-lg">Load more stories</span></div>'+footer();
+}
+function story(){
+  var st=S[0];
+  return nav('Explore')+
+  '<div class="crumb">Explore '+ic('chev',14)+' Mountains '+ic('chev',14)+' Spiti Valley</div>'+
+  '<section class="st-h"><span class="chip">Mountains</span><h1>'+st.t+'</h1><div class="who">'+av(st.a,52)+'<div><b style="font-size:16px">'+st.a+'</b><div class="meta"><span>12 September 2026</span><span>8 min read</span></div></div></div></section>'+
+  '<section class="mos"><div style="'+bg('mountain',0)+'"></div><div style="'+bg('mountain',1)+'"></div><div style="'+bg('lake')+'"></div><div style="'+bg('mountain',2)+'"></div><div class="last" style="'+bg('desert')+'"><span class="badge">'+ic('image',15)+'See all 14 photos</span></div></section>'+
+  '<section class="st-b"><div class="art"><p>I landed in Kaza with a return bus ticket and nothing else booked. That turned out to be the best decision of the trip, because every good day began with a conversation over chai rather than a spreadsheet.</p>'+
+  '<p>The road from Kaza to Langza is short on a map and long in the body. Take it slowly for the first two days, drink more water than feels reasonable, and let the altitude decide your itinerary.</p>'+
+  '<blockquote>The best homestay of the trip had no name on the door.</blockquote>'+
+  '<p>In Komic, a family let me sit in their kitchen while the snow came down. They charged for dinner and nothing else. I have been trying to find an excuse to go back ever since.</p>'+
+  '<p>If you only have a week, skip Chandratal and spend the extra two days in the villages above Kaza. Nobody tells you how quiet they are in the evening.</p></div>'+
+  '<aside class="side"><div class="map"><svg width="100%" height="170" viewBox="0 0 340 170" preserveAspectRatio="xMidYMid slice"><path d="M-10 120 C60 90 120 140 190 100 S300 60 350 90" stroke="#9CC6D6" stroke-width="14" fill="none"/><path d="M40 0 L90 170 M0 60 L340 40 M200 0 L240 170" stroke="#fff" stroke-width="5" fill="none"/><path d="M0 140 L340 150" stroke="#fff" stroke-width="3"/></svg><div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-100%)">'+ic('pin',44,'#0E7C86','#fff')+'</div></div>'+
+  '<div class="side-b"><dl><dt>Location</dt><dd>Spiti Valley, Himachal Pradesh</dd><dt>Category</dt><dd>Mountains</dd><dt>Photos</dt><dd>14 images</dd></dl>'+
+  '<div class="acts"><span class="btn btn-o" style="color:#C2402A;border-color:#F0B8AE;background:#FFF3F0">'+ic('heart',18,'#C2402A')+'248</span><span class="btn btn-o">'+ic('bookmark',18)+'Save</span></div><span class="btn btn-o" style="width:100%;margin-top:10px">'+ic('share',17)+'Share story</span></div></aside></section>'+
+  '<section class="cm"><h2>32 comments</h2><div class="cm-new">'+av('Aarav Kapadia',42)+'<div class="inp">Add a comment…</div><span class="btn btn-p" style="margin-top:18px">Post</span></div>'+
+  [['Meera Shah','2 days ago','Komic in snow sounds unreal. Did you book the homestay in advance or just knock on doors?'],['Dev Patel','4 days ago','Saved this for March. The tip about skipping Chandratal is exactly what I needed.'],['Isha Trivedi','1 week ago','Beautiful photos, and a great reminder to leave some days empty.']].map(function(c){return '<div class="cm-i">'+av(c[0],42)+'<div><b>'+c[0]+'</b><span>'+c[1]+'</span><p>'+c[2]+'</p></div></div>';}).join('')+'</section>'+footer();
+}
+function create(){
+  var cats=['Mountains','Beaches','Heritage','Food trails','Road trips','Solo & budget','Nature'];
+  return nav('Explore')+
+  '<section class="cr-h"><h1>Write a story</h1><p>Tell other travelers what happened, what it cost you, and what you would do differently.</p></section>'+
+  '<section class="cr"><div><div class="panel"><h3>The story</h3>'+
+  '<div class="fld"><label>Title</label><div class="inp v focus">Eleven days in Spiti without a single plan</div></div>'+
+  '<div class="fld"><label>Location</label><div class="inp v">'+ic('pin',18)+'Spiti Valley, Himachal Pradesh</div></div>'+
+  '<div class="fld"><label>Category</label><div style="display:flex;gap:8px;flex-wrap:wrap">'+cats.map(function(c,i){return '<span class="chip '+(i===0?'on':'')+'">'+c+'</span>';}).join('')+'</div></div>'+
+  '<div class="fld" style="margin-bottom:0"><label>Description</label><div class="inp v ta">I landed in Kaza with a return bus ticket and nothing else booked. That turned out to be the best decision of the trip, because every good day began with…</div><div class="hint" style="text-align:right">412 / 5,000 characters</div></div></div>'+
+  '<div class="panel"><h3>Photos</h3><div class="drop">'+ic('upload',30)+'<b>Drag photos here, or browse your device</b>JPG or PNG, up to 5 MB each</div>'+
+  '<div class="thumbs"><div class="th" style="'+bg('mountain',0)+'"><span class="cv">Cover</span><span class="x">'+ic('x',13,'none','#fff')+'</span></div><div class="th" style="'+bg('mountain',1)+'"><span class="x">'+ic('x',13,'none','#fff')+'</span></div><div class="th" style="'+bg('lake')+'"><span class="x">'+ic('x',13,'none','#fff')+'</span></div><div class="th add">'+ic('plus',24)+'</div></div></div>'+
+  '<div class="actions"><span class="btn btn-o btn-lg">Cancel</span><span class="btn btn-p btn-lg">Publish story</span></div></div>'+
+  '<aside class="prev"><h4>How your story will look</h4>'+card(S[0],200)+'<div class="tip"><b>A good story answers three questions</b>What did you do, what did it cost, and what would you change?</div></aside></section>'+footer();
+}
+function profile(){
+  var l=[S[0],S[7],S[8],S[6],S[1],S[5]];
+  return nav('Community')+
+  '<div class="cover" style="'+bg('mountain',2)+'"></div>'+
+  '<section class="pf">'+av('Aarav Kapadia',150).replace('class="avatar"','class="avatar" ')+'<div><h1>Aarav Kapadia</h1><div class="loc" style="margin-top:4px">'+ic('pin',15)+'Pune, Maharashtra. Joined March 2026</div><p class="bio">Weekend trekker, slow-travel convert. I write about the places that do not make it onto the first page of search results.</p></div><div class="rt"><span class="btn btn-o">'+ic('share',17)+'Share profile</span><span class="btn btn-d">'+ic('edit',17)+'Edit profile</span></div></section>'+
+  '<div class="stats"><div><b>24</b><span>Stories</span></div><div><b>1,842</b><span>Likes received</span></div><div><b>612</b><span>Times saved</span></div></div>'+
+  '<div class="tabs"><div class="on">Stories</div><div>Saved</div><div>About</div></div>'+
+  '<div class="grid3">'+l.map(function(st,i){return card(st,210).replace('</article>',(i<2?'<div class="own" style="padding:0 17px 17px"><span>'+ic('edit',14)+'Edit</span><span>'+ic('trash',14)+'Delete</span></div>':'')+'</article>');}).join('')+'</div>'+footer();
+}
+function saved(){
+  var rows=[[S[6],'Day one starts at the Virupaksha temple at six, before the heat and the tour buses arrive. Rent the bicycle from the shop behind the bazaar.','Saved 3 days ago'],[S[1],'Skip Om Beach on weekends. Walk the cliff path to Kudle instead and eat at the shack with no menu.','Saved last week'],[S[2],'The camps all look alike online. Here is how to pick one that is not a stage set for tourists.','Saved last week'],[S[4],'Rain changes everything in the hills. What to pack, where to stay dry, and the tea estate that lets you walk in.','Saved 2 weeks ago']];
+  return nav('Saved')+
+  '<section class="cr-h"><h1>Saved stories</h1><p>14 stories you want to come back to.</p></section>'+
+  '<div style="display:flex;gap:10px;padding:18px 56px 0">'+['All','Mountains','Beaches','Heritage','Road trips'].map(function(c,i){return '<span class="chip '+(i===0?'on':'')+'">'+c+'</span>';}).join('')+'</div>'+
+  '<section class="sv"><div>'+rows.map(function(r){var st=r[0];return '<div class="row"><div class="im" style="'+bg(st.s,st.v)+'"></div><div class="c"><span class="chip" style="font-size:12.5px;padding:3px 10px">'+st.c+'</span><h3>'+st.t+'</h3><p>'+r[1]+'</p><div class="sc-f" style="margin-top:12px"><span class="loc">'+ic('pin',15)+st.l+'</span><span style="margin-left:14px;display:flex;gap:8px;align-items:center">'+av(st.a,22)+st.a+'</span></div></div><div class="rm"><span class="bm">'+ic('bookmark',20,'#F4B13E','#B07A10')+'</span><span>'+r[2]+'</span></div></div>';}).join('')+'</div>'+
+  '<aside><div class="panel" style="padding:26px"><h3 style="font-size:18px;margin-bottom:14px!important">Where you want to go</h3>'+
+  [['Karnataka',5,100],['Rajasthan',4,80],['Himachal Pradesh',3,60],['Kerala',2,40]].map(function(p){return '<div style="padding:9px 0"><div style="display:flex;justify-content:space-between;font-size:15px"><span>'+p[0]+'</span><b>'+p[1]+'</b></div><div class="bar2"><i style="width:'+p[2]+'%"></i></div></div>';}).join('')+'</div></aside></section>'+footer();
+}
+
+/* ---------- board ---------- */
+var FR=[
+ ['home','Home','A big headline and search first, then fresh stories and destinations. Cards tilt slightly in the hero to feel like postcards on a table.','Bootstrap: navbar, container, row / col. jQuery: category chips filter the story grid.',home,'teletourist.app'],
+ ['auth','Sign up and log in','Split screen. The left side shows a real traveler quote, the right side holds the form. A toggle switches between log in and create account.','Bootstrap: form controls, validation states. jQuery: toggle forms, POST to /api/auth.',auth,'teletourist.app/register'],
+ ['explore','Explore','Filters sit in a bar under the search, not in a sidebar. Results flow into a four-column masonry so tall and short photos sit together.','Bootstrap: CSS columns or row-cols. jQuery: category, location and sort call GET /api/stories.',explore,'teletourist.app/explore'],
+ ['story','Story','A photo mosaic leads, then a comfortable reading column. The right card stays in view with the location and the like and save buttons.','Bootstrap: grid, modal for the full gallery. jQuery: like and save toggles, post a comment.',story,'teletourist.app/story/spiti-eleven-days'],
+ ['create','Write a story','A form on the left and a live preview on the right, so travelers see how the card will look before publishing.','Bootstrap: forms, buttons. jQuery: preview updates while typing, image upload to Cloudinary.',create,'teletourist.app/stories/new'],
+ ['profile','Profile','A cover banner and a large avatar. The tabs switch between the traveler’s stories, saved stories and about. Owners see edit and delete on their own cards.','Bootstrap: nav tabs, card grid. jQuery: tab switching, delete confirmation.',profile,'teletourist.app/u/aarav'],
+ ['saved','Saved stories','A list view instead of a grid, because saved stories are for reading later. The right panel summarises saved places.','Bootstrap: list layout, col-lg-8 / col-lg-4. jQuery: remove from saved.',saved,'teletourist.app/saved']
+];
+var host=document.getElementById('frames');
+host.innerHTML=FR.map(function(f){return '<section class="frame" id="'+f[0]+'"><div class="frame-h"><div><h2>'+f[1]+'</h2><p>'+f[2]+'</p></div><div class="stack">'+f[3]+'</div></div><div class="browser"><div class="bar"><span></span><span></span><span></span><em>'+f[5]+'</em></div><div class="stage"><div class="screen">'+f[4]()+'</div></div></div></section>';}).join('');
+function fit(){document.querySelectorAll('.stage').forEach(function(s){var sc=s.firstElementChild;sc.style.transform='none';var k=Math.min(1,s.clientWidth/1280);sc.style.transform='scale('+k+')';s.style.height=Math.ceil(sc.offsetHeight*k)+'px';});}
+window.addEventListener('resize',fit);fit();if(document.fonts&&document.fonts.ready){document.fonts.ready.then(fit);}
+</script>
+</body>
+</html>

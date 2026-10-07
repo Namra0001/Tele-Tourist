@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destinations - Tele Tourist</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=DM+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'DM Sans', sans-serif; background-color: var(--surface-white); }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Bricolage Grotesque', sans-serif; }
+        
+        .hero-banner {
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            background: linear-gradient(135deg, #D1A773 0%, #2B2533 100%);
+            border-radius: 20px;
+            color: white;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .trending-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--border-card);
+        }
+        
+        .trending-row {
+            padding: 24px 30px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .trending-row:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 70px;
+            right: 30px;
+            height: 1px;
+            background-color: var(--border-card);
+        }
+        
+        .rank-number { font-size: 45px; font-weight: 800; color: #CBD5E1; width: 40px; }
+        
+        .trending-thumb { width: 48px; height: 48px; border-radius: 12px; margin-right: 16px; position: relative; overflow: hidden; }
+        
+        .growth-pill { background-color: #E6F4EA; color: #137333; border-radius: 50rem; padding: 4px 12px; font-size: 12px; font-weight: 600; }
+        
+        .category-chip-label { display: inline-block; padding: 6px 16px; border-radius: 50rem; border: 1px solid var(--border-card); background: white; color: var(--text-secondary); cursor: pointer; transition: all 0.2s; margin: 0 8px 8px 0; font-size: 13px; font-weight: 500; }
+        .category-chip-active { background: var(--ink); color: white; border-color: var(--ink); }
+        
+        .dest-grid {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 20px;
+            padding-bottom: 20px;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none; /* Firefox */
+        }
+        .dest-grid::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+        
+        .dest-card {
+            flex: 0 0 280px;
+            height: 380px;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            scroll-snap-align: start;
+        }
+        
+        .dest-card {
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .dest-card .chip { background: white; color: var(--ink); border-radius: 50rem; padding: 4px 12px; font-size: 10px; font-weight: 700; width: fit-content; z-index: 2; position: relative; }
+        .dest-card .content { z-index: 2; position: relative; }
+        .dest-card .bg-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        
+        .avatar-stack { display: flex; align-items: center; }
+        .avatar-stack .avatar { width: 28px; height: 28px; border-radius: 50%; border: 2px solid white; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: white; margin-left: -8px; }
+        .avatar-stack .avatar:first-child { margin-left: 0; }
+        
+        .cta-banner { background-color: #E2EFF3; border-radius: 16px; padding: 40px; }
+    </style>
+    <link rel="stylesheet" href="css/style.css?v=5">
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <div class="container py-5">
+        
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+            <div>
+                <h1 class="display-6 fw-bold text-ink mb-2">Find your next destination</h1>
+                <p class="text-secondary" style="max-width: 450px;">Every place here has been visited, photographed and written about by a real traveler.</p>
+            </div>
+            <div class="mt-3 mt-md-0">
+                <div class="input-group" style="width: 400px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border-card); background: white;">
+                    <span class="input-group-text bg-white border-0 text-muted"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control border-0 shadow-none bg-white" placeholder="Search a place or state">
+                    <button class="btn m-1 rounded px-3" style="background-color: var(--lagoon); color: white; font-weight: 500; font-size: 18px;">Search</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-banner mb-5" style="min-height: 450px; position: relative; overflow: hidden; border-radius: 20px; color: white; padding: 40px; display: flex; flex-direction: column; justify-content: flex-end; background: linear-gradient(135deg, #D1A773 0%, #2B2533 100%);">
+            <div style="position: absolute; right: 0; bottom: 0; width: 60%; height: 100%; z-index: 0; background-image: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\' preserveAspectRatio=\'none\'><polygon points=\'-10,100 20,50 60,100\' fill=\'%2396746C\' opacity=\'0.9\'/><polygon points=\'20,100 50,40 90,100\' fill=\'%23654D56\' opacity=\'0.9\'/><polygon points=\'60,100 90,60 120,100\' fill=\'%23483A46\' opacity=\'0.9\'/><polygon points=\'0,100 50,75 100,100\' fill=\'%23231D27\' opacity=\'1\'/><circle cx=\'25\' cy=\'55\' r=\'15\' fill=\'%23E2D0B1\' opacity=\'0.6\'/></svg>'); background-size: cover;"></div>
+            
+            <div class="position-relative d-flex flex-column justify-content-end h-100" style="z-index: 1;">
+                <div class="chip bg-transparent text-white border border-light border-opacity-50 py-1 px-3 mb-3 d-inline-flex align-items-center rounded-pill" style="font-size: 12px; font-weight: 500; width: fit-content;">
+                    <i class="bi bi-geo-alt-fill me-2"></i> Destination of the month
+                </div>
+                
+                <h1 class="display-4 fw-bold mb-3">Spiti Valley</h1>
+                <p class="mb-4" style="max-width: 400px; font-size: 16px;">Cold desert, mud-brick villages and the quietest evenings you will find in the Himalaya.</p>
+                
+                <div class="d-flex justify-content-between align-items-end mt-auto w-100">
+                    <div class="d-flex gap-4">
+                        <div>
+                            <h2 class="fw-bold mb-0">214</h2>
+                            <div class="small opacity-75">stories</div>
+                        </div>
+                        <div>
+                            <h2 class="fw-bold mb-0">1,310</h2>
+                            <div class="small opacity-75">photos</div>
+                        </div>
+                        <div>
+                            <h2 class="fw-bold mb-0">86</h2>
+                            <div class="small opacity-75">travelers</div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex flex-column align-items-end">
+                        <div class="avatar-stack mb-3">
+                            <div class="avatar" style="background-color: var(--lagoon); width: 36px; height: 36px; font-size: 12px; margin-left: -12px;">AK</div>
+                            <div class="avatar" style="background-color: #7B68EE; width: 36px; height: 36px; font-size: 12px; margin-left: -12px;">MS</div>
+                            <div class="avatar" style="background-color: #B8860B; width: 36px; height: 36px; font-size: 12px; margin-left: -12px;">DP</div>
+                            <div class="avatar" style="background-color: #B22222; width: 36px; height: 36px; font-size: 12px; margin-left: -12px;">ZA</div>
+                        </div>
+                        <button class="btn px-4 py-2" style="background-color: var(--saffron); color: var(--ink); border-radius: 8px; font-weight: 600;">Read Spiti stories <i class="bi bi-arrow-right ms-1"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <h3 class="fw-bold text-ink mb-0">Trending this month</h3>
+            <div class="text-secondary small fw-medium">Ranked by new stories in the last 30 days</div>
+        </div>
+
+        <div class="trending-card mb-5">
+            <div class="row g-0">
+                <div class="col-md-6">
+                    <div class="trending-row">
+                        <div class="rank-number">1</div>
+                        <div class="trending-thumb" style="background: linear-gradient(180deg, #FDE8D3 0%, #7C4C24 100%);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none"><rect x="20" y="50" width="60" height="50" fill="#B4532A"/><rect x="20" y="30" width="15" height="20" fill="#B4532A"/><rect x="42.5" y="30" width="15" height="20" fill="#B4532A"/><rect x="65" y="30" width="15" height="20" fill="#B4532A"/><path d="M40,100 A10,10 0 0,1 60,100" fill="#3D2B1F"/></svg>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="fw-bold text-ink mb-0">Hampi</h6>
+                            <div class="text-secondary" style="font-size: 11px;">Karnataka</div>
+                        </div>
+                        <div class="growth-pill">+42 stories</div>
+                    </div>
+                    <div class="trending-row">
+                        <div class="rank-number">3</div>
+                        <div class="trending-thumb" style="background: linear-gradient(180deg, #F9D4A8 0%, #F99871 100%);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none"><rect x="0" y="70" width="100" height="30" fill="#20556B"/><rect x="0" y="85" width="100" height="15" fill="#E8D3BD"/><circle cx="50" cy="50" r="15" fill="#F9D08B"/></svg>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="fw-bold text-ink mb-0">Gokarna</h6>
+                            <div class="text-secondary" style="font-size: 11px;">Karnataka</div>
+                        </div>
+                        <div class="growth-pill">+27 stories</div>
+                    </div>
+                    <div class="trending-row">
+                        <div class="rank-number">5</div>
+                        <div class="trending-thumb" style="background: linear-gradient(180deg, #2D4059 0%, #1A2639 100%);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="0,100 30,50 60,100" fill="#3A5776"/><polygon points="40,100 70,60 100,100" fill="#2A3F54"/><circle cx="80" cy="20" r="8" fill="#E8F4F8"/></svg>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="fw-bold text-ink mb-0">Kasol</h6>
+                            <div class="text-secondary" style="font-size: 11px;">Himachal Pradesh</div>
+                        </div>
+                        <div class="growth-pill">+18 stories</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="trending-row">
+                        <div class="rank-number">2</div>
+                        <div class="trending-thumb" style="background: linear-gradient(180deg, #E8F4F8 0%, #20556B 100%);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="-20,100 30,30 80,100" fill="#3A5776"/><polygon points="30,100 70,50 110,100" fill="#2A3F54"/></svg>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="fw-bold text-ink mb-0">Spiti Valley</h6>
+                            <div class="text-secondary" style="font-size: 11px;">Himachal Pradesh</div>
+                        </div>
+                        <div class="growth-pill">+38 stories</div>
+                    </div>
+                    <div class="trending-row border-bottom-0">
+                        <div class="rank-number">4</div>
+                        <div class="trending-thumb" style="background: linear-gradient(180deg, #F99871 0%, #392B4B 100%);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="0,100 50,60 100,100" fill="#2D2138"/><polygon points="20,100 60,70 100,100" fill="#1E1426"/><circle cx="70" cy="60" r="10" fill="#F9D08B"/></svg>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="fw-bold text-ink mb-0">Udaipur</h6>
+                            <div class="text-secondary" style="font-size: 11px;">Rajasthan</div>
+                        </div>
+                        <div class="growth-pill">+21 stories</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-end mb-4 mt-5">
+            <h3 class="fw-bold text-ink mb-0">Browse all destinations</h3>
+            <div class="text-secondary small fw-medium">9 of 84 places</div>
+        </div>
+
+        <div class="mb-4 d-flex flex-wrap gap-2">
+            <span class="category-chip-label category-chip-active">All</span>
+            <span class="category-chip-label">Mountains</span>
+            <span class="category-chip-label">Beaches</span>
+            <span class="category-chip-label">Heritage</span>
+            <span class="category-chip-label">Food trails</span>
+            <span class="category-chip-label">Road trips</span>
+            <span class="category-chip-label">Nature</span>
+        </div>
+
+        <div class="dest-grid mb-5">
+            <!-- Row 1 & 2 -->
+            <div class="dest-card">
+                <div class="bg-layer" style="background: linear-gradient(180deg, #E8F4F8 0%, #20556B 100%);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none"><polygon points="0,100 30,40 60,100" fill="#3A5776"/><polygon points="40,100 70,50 100,100" fill="#2A3F54"/><polygon points="-10,100 15,60 40,100" fill="#4A6A8A"/><circle cx="70" cy="30" r="15" fill="#F9D08B"/></svg>
+                </div>
+                <div class="chip">Mountains</div>
+                <div class="content d-flex justify-content-between align-items-end mt-auto">
+                    <div>
+                        <h3 class="fw-bold mb-0 text-white">Spiti Valley</h3>
+                        <div class="small opacity-75">Himachal Pradesh, 214 stories</div>
+                    </div>
+                    <div class="avatar-stack">
+                        <div class="avatar" style="background-color: var(--lagoon);">AK</div>
+                        <div class="avatar" style="background-color: #7B68EE;">MS</div>
+                        <div class="avatar" style="background-color: #B8860B;">DP</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dest-card">
+                <div class="bg-layer" style="background: linear-gradient(180deg, #F9D4A8 0%, #F99871 100%);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none"><rect x="0" y="60" width="100%" height="40" fill="#20556B"/><rect x="0" y="80" width="100%" height="20" fill="#D95A97"/><circle cx="70" cy="55" r="15" fill="#F9D08B"/></svg>
+                </div>
+                <div class="chip">Beaches</div>
+                <div class="content d-flex justify-content-between align-items-end mt-auto">
+                    <div>
+                        <h5 class="fw-bold mb-0 text-white">Gokarna</h5>
+                        <div class="small opacity-75" style="font-size: 10px;">Karnataka, 168 stories</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dest-card">
+                <div class="bg-layer" style="background: linear-gradient(180deg, #E8F4F8 0%, #20556B 100%);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none"><polygon points="-20,100 20,40 60,100" fill="#1A4D2E"/><polygon points="20,100 50,50 80,100" fill="#133C24"/><polygon points="50,100 80,30 110,100" fill="#21633B"/><rect x="0" y="85" width="100%" height="15" fill="#D95A97"/></svg>
+                </div>
+                <div class="chip">Nature</div>
+                <div class="content d-flex justify-content-between align-items-end mt-auto">
+                    <div>
+                        <h4 class="fw-bold mb-0 text-white">Munnar</h4>
+                        <div class="small opacity-75" style="font-size: 11px;">Kerala, 131 stories</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dest-card">
+                <div class="bg-layer" style="background: linear-gradient(180deg, #F9D08B 0%, #D95A97 100%);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none"><polygon points="0,100 40,50 80,100" fill="#8A4A6A"/><polygon points="40,100 70,60 100,100" fill="#6A3A5A"/><circle cx="30" cy="50" r="10" fill="#FDE8D3"/></svg>
+                </div>
+                <div class="chip">Mountains</div>
+                <div class="content d-flex justify-content-between align-items-end mt-auto">
+                    <div>
+                        <h5 class="fw-bold mb-0 text-white">Manali</h5>
+                        <div class="small opacity-75" style="font-size: 10px;">Himachal Pradesh, 122 stories</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Row 3 -->
+            <div class="dest-card">
+                <div class="bg-layer" style="background: linear-gradient(135deg, #FDE8D3 0%, #D95A97 100%);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none"><circle cx="20" cy="40" r="25" fill="#F9D08B"/><polygon points="40,100 70,70 100,100" fill="#B3467A"/><polygon points="70,100 90,80 110,100" fill="#8A3660"/></svg>
+                </div>
+                <div class="chip">Road trips</div>
+                <div class="content d-flex justify-content-between align-items-end mt-auto">
+                    <div>
+                        <h4 class="fw-bold mb-0 text-white">Jaisalmer</h4>
+                        <div class="small opacity-75" style="font-size: 11px;">Rajasthan, 140 stories</div>
+                    </div>
+                    <div class="avatar-stack">
+                        <div class="avatar" style="background-color: #B4532A;">DP</div>
+                        <div class="avatar" style="background-color: #B22222;">ZA</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dest-card">
+                <div class="bg-layer" style="background: linear-gradient(180deg, #2A3F54 0%, #4A2B48 100%);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none"><rect x="10" y="50" width="15" height="50" fill="#8A4A6A"/><rect x="35" y="40" width="15" height="60" fill="#6A3A5A"/><rect x="60" y="60" width="15" height="40" fill="#8A4A6A"/><circle cx="85" cy="30" r="8" fill="#FDE8D3"/></svg>
+                </div>
+                <div class="chip">Food trails</div>
+                <div class="content d-flex justify-content-between align-items-end mt-auto">
+                    <div>
+                        <h5 class="fw-bold mb-0 text-white">Mumbai</h5>
+                        <div class="small opacity-75" style="font-size: 10px;">Maharashtra, 175 stories</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Row 4 -->
+            <div class="dest-card">
+                <div class="bg-layer" style="background: linear-gradient(180deg, #F99871 0%, #392B4B 100%);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none"><polygon points="0,100 40,60 80,100" fill="#2D2138"/><polygon points="40,100 70,70 100,100" fill="#1E1426"/><circle cx="60" cy="50" r="10" fill="#F9D08B"/><rect x="0" y="85" width="100%" height="15" fill="#D95A97"/></svg>
+                </div>
+                <div class="chip">Heritage</div>
+                <div class="content d-flex justify-content-between align-items-end mt-auto">
+                    <div>
+                        <h5 class="fw-bold mb-0 text-white">Udaipur</h5>
+                        <div class="small opacity-75" style="font-size: 10px;">Rajasthan, 119 stories</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dest-card">
+                <div class="bg-layer" style="background: linear-gradient(180deg, #2D4059 0%, #1A2639 100%);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none"><polygon points="0,100 40,40 80,100" fill="#3A5776"/><polygon points="40,100 70,50 100,100" fill="#2A3F54"/><circle cx="75" cy="25" r="15" fill="#E8F4F8"/></svg>
+                </div>
+                <div class="chip">Solo & budget</div>
+                <div class="content d-flex justify-content-between align-items-end mt-auto">
+                    <div>
+                        <h4 class="fw-bold mb-0 text-white">Kasol</h4>
+                        <div class="small opacity-75" style="font-size: 11px;">Himachal Pradesh, 96 stories</div>
+                    </div>
+                    <div class="avatar-stack">
+                        <div class="avatar" style="background-color: #B4532A;">TG</div>
+                        <div class="avatar" style="background-color: var(--lagoon);">KS</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dest-card">
+                <div class="bg-layer" style="background: linear-gradient(180deg, #E8D3BD 0%, #D45B6B 100%);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none"><rect x="15" y="50" width="70" height="50" fill="#B4532A"/><rect x="15" y="30" width="15" height="20" fill="#B4532A"/><rect x="42.5" y="30" width="15" height="20" fill="#B4532A"/><rect x="70" y="30" width="15" height="20" fill="#B4532A"/><path d="M40,100 A10,10 0 0,1 60,100" fill="#3D2B1F"/></svg>
+                </div>
+                <div class="chip">Heritage</div>
+                <div class="content d-flex justify-content-between align-items-end mt-auto">
+                    <div>
+                        <h4 class="fw-bold mb-0 text-white">Hampi</h4>
+                        <div class="small opacity-75" style="font-size: 11px;">Karnataka, 197 stories</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-banner d-flex flex-column flex-md-row justify-content-between align-items-md-center mt-5 mb-3">
+            <div>
+                <h3 class="fw-bold text-ink mb-2">Do not see the place you visited?</h3>
+                <p class="text-secondary mb-md-0">Write the first story about it and it will appear here as a new destination.</p>
+            </div>
+            <a href="create-story.html" class="btn px-4 py-3 text-nowrap mt-4 mt-md-0" style="background-color: var(--ink); color: white; border-radius: 8px; font-weight: 500;"><i class="bi bi-plus me-1"></i> Write a story</a>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/ui.js?v=5"></script>
+  <script>
+    $(document).ready(function() {
+        if (typeof renderNavbar === 'function') {
+            $('#navbar-placeholder').html(renderNavbar());
+        }
+        if (typeof renderFooter === 'function') {
+            $('#footer-placeholder').html(renderFooter());
+        }
+        
+        // Active chip toggle
+        $('.category-chip-label').click(function() {
+            $('.category-chip-label').removeClass('category-chip-active');
+            $(this).addClass('category-chip-active');
+        });
+    });
+  </script>
+</body>
+</html>
