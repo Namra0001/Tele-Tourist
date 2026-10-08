@@ -11,8 +11,8 @@ $(document).ready(function() {
 
 async function loadExploreStories() {
     try {
-        const response = await (typeof apiCall === 'function' ? apiCall(`/stories/explore?page=${currentPage}`) : Promise.resolve({ data: null }));
-        let stories = response?.data || [];
+        const response = await (typeof apiCall === 'function' ? apiCall(`/stories?page=${currentPage}`) : Promise.resolve({ data: null }));
+        let stories = response?.stories || response?.data || [];
         
         // Mock data if no API
         if (stories.length === 0) {
@@ -21,7 +21,7 @@ async function loadExploreStories() {
                     id: i + currentPage * 10,
                     title: `Explorer Story ${i + currentPage * 10}`,
                     author: `Author ${i}`,
-                    image: `https://picsum.photos/400/${300 + (i%3)*50}?random=${i + currentPage*10}`,
+                    image: '',
                     excerpt: 'A wonderful journey full of surprises and new experiences...',
                     category: ['Food', 'Adventure', 'Culture'][i % 3]
                 });
@@ -41,7 +41,7 @@ async function loadExploreStories() {
             } else {
                 cardHtml = `
                     <div class="card shadow-sm border-0">
-                        <img src="${story.image}" class="card-img-top" alt="${story.title}">
+                        ${story.image ? `<img src="${story.image}" class="card-img-top" alt="${story.title}">` : `<div class="card-img-top bg-light" style="height: 150px;"></div>`}
                         <div class="card-body">
                             <span class="badge bg-light text-dark mb-2 border">${story.category || 'Travel'}</span>
                             <h5 class="card-title font-bricolage" style="font-family: 'Bricolage Grotesque', sans-serif;">${story.title}</h5>
