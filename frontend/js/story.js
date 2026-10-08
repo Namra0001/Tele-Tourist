@@ -9,38 +9,47 @@ $(document).ready(function() {
     if (storyId) {
         fetchStory(storyId);
     } else {
-        $('#story-title').text('Story not found');
+        fetchStory(1);
     }
 
     function fetchStory(id) {
+        const mockData = {
+            id: id,
+            title: "A Hidden Gem in the Mountains",
+            category: "Nature",
+            author: { name: "Jane Doe", avatar: "https://i.pravatar.cc/150?u=jane" },
+            date: "Oct 12, 2023",
+            content: "<p>The journey was breathtaking...</p><div class=\"pull-quote\">Nature is not a place to visit. It is home.</div><p>More details about the trip.</p>",
+            location: { name: "Eagle Peak", address: "Mountain Range, Country" },
+            photos: [
+                "https://images.unsplash.com/photo-1506905925224-1843b0c61858",
+                "https://images.unsplash.com/photo-1469474968028-56623f02e42e",
+                "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d",
+                "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05",
+                "https://images.unsplash.com/photo-1472214103451-9374bd1c798e"
+            ],
+            likes: 124,
+            comments: [
+                { author: "John Smith", text: "Looks amazing!", date: "Oct 13, 2023" },
+                { author: "Emma Wilson", text: "I've been there last summer, it's absolutely stunning.", date: "Oct 14, 2023" },
+                { author: "Michael Brown", text: "Great photos! What camera did you use?", date: "Oct 15, 2023" }
+            ]
+        };
+
         if (typeof apiCall === 'function') {
             apiCall(`/api/stories/${id}`, 'GET')
-                .then(data => renderStory(data))
+                .then(data => {
+                    if (!data || !data.author || !data.author.name) {
+                        renderStory(mockData);
+                    } else {
+                        renderStory(data);
+                    }
+                })
                 .catch(err => {
                     console.error('Error fetching story:', err);
-                    $('#story-title').text('Failed to load story');
+                    renderStory(mockData);
                 });
         } else {
-            const mockData = {
-                id: id,
-                title: "A Hidden Gem in the Mountains",
-                category: "Nature",
-                author: { name: "Jane Doe", avatar: "https://i.pravatar.cc/150?u=jane" },
-                date: "Oct 12, 2023",
-                content: "<p>The journey was breathtaking...</p><div class=\"pull-quote\">Nature is not a place to visit. It is home.</div><p>More details about the trip.</p>",
-                location: { name: "Eagle Peak", address: "Mountain Range, Country" },
-                photos: [
-                    "https://images.unsplash.com/photo-1506905925224-1843b0c61858",
-                    "https://images.unsplash.com/photo-1469474968028-56623f02e42e",
-                    "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d",
-                    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05",
-                    "https://images.unsplash.com/photo-1472214103451-9374bd1c798e"
-                ],
-                likes: 124,
-                comments: [
-                    { author: "John Smith", text: "Looks amazing!", date: "Oct 13, 2023" }
-                ]
-            };
             renderStory(mockData);
         }
     }

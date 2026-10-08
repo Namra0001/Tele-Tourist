@@ -15,9 +15,7 @@ function renderNavbar() {
     <nav class="navbar navbar-expand-lg bg-white border-bottom" style="position: sticky; top: 0; min-height: 80px; z-index: 1020;">
       <div class="container px-0">
         <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
-          <div class="logo-box text-white rounded d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background-color: var(--lagoon);">
-            <i class="bi bi-compass"></i>
-          </div>
+          <img src="assets/img/logo.png" alt="Tele Tourist Logo" style="height: 32px; width: auto; object-fit: contain;">
           <span class="logo-text text-ink fw-bold fs-5" style="color: var(--ink); font-family: 'Bricolage Grotesque', sans-serif;">Tele Tourist</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
@@ -78,9 +76,7 @@ function renderFooter() {
         <div class="row mb-4">
           <div class="col-md-3 mb-4 mb-md-0">
             <a class="navbar-brand d-flex align-items-center gap-2 mb-3 text-white text-decoration-none" href="index.html">
-              <div class="logo-box text-white rounded d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background-color: var(--lagoon);">
-                <i class="bi bi-compass"></i>
-              </div>
+              <img src="assets/img/logo.png" alt="Tele Tourist Logo" style="height: 32px; width: auto; object-fit: contain;">
               <span class="logo-text fw-bold fs-5 text-white">Tele Tourist</span>
             </a>
             <p class="small">Real trips, told by the people who took them.</p>
@@ -128,7 +124,7 @@ function createStoryCard(story) {
   return `
     <div class="card h-100 story-card text-decoration-none" style="border-radius: var(--radius-card); border: 1px solid var(--border-card);">
       <div class="position-relative">
-        <div class="story-card-img w-100" style="height: 200px; background-color: var(--sky); border-radius: var(--radius-card) var(--radius-card) 0 0; background-image: url('${imgUrl}'); background-size: cover; background-position: center;"></div>
+        <div class="story-card-img w-100" style="height: 200px; background-color: var(--sky); border-radius: var(--radius-card) var(--radius-card) 0 0; ${imgUrl ? `background-image: url('${imgUrl}');` : ''} background-size: cover; background-position: center;"></div>
         <div class="position-absolute top-0 start-0 m-3">
           <span class="chip bg-white border-0 py-1 px-2 small fw-bold" style="border-radius: var(--radius-chip);">${story.category || 'General'}</span>
         </div>

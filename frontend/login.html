@@ -8,49 +8,57 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=DM+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
     <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap');
         body { font-family: 'DM Sans', sans-serif; background-color: var(--mist); }
         h1, h2, h3, h4, h5, h6 { font-family: 'Bricolage Grotesque', sans-serif; }
         
+        
+        .auth-card a { color: #0E7C86 !important; font-weight: 600; }
+        .auth-card a:hover { color: #0A4F5C !important; }
+        .form-control::placeholder { color: #6C8090 !important; opacity: 1 !important; }
         .auth-wrapper {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-            background: linear-gradient(180deg, #E8F4F8 0%, #FDE8D3 100%);
+            padding: 40px;
+            background-image: url('assets/img/loginpage2.png');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        @media (min-width: 992px) {
+            .auth-card a { color: #0E7C86 !important; font-weight: 600; }
+        .auth-card a:hover { color: #0A4F5C !important; }
+        .form-control::placeholder { color: #6C8090 !important; opacity: 1 !important; }
+        .auth-wrapper {
+                justify-content: flex-end;
+                padding-right: 18%;
+            }
         }
         
         .auth-card {
             background-color: white;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
             width: 100%;
-            max-width: 1000px;
+            max-width: 450px;
+            min-height: 620px;
             display: flex;
-            height: 700px;
+            padding: 40px;
         }
         
         .auth-left { 
-            position: relative;
-            background-image: url('assets/img/loginpageimage.png');
-            background-size: cover;
-            background-position: center;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 50%;
+            display: none;
         }
-        .auth-left > * { z-index: 1; position: relative; }
         
         .auth-right {
-            width: 50%;
-            padding: 60px 40px;
+            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow-y: auto;
+            padding: 0;
         }
         
         .auth-form-wrapper {
@@ -111,9 +119,31 @@
         }
     </style>
     <link rel="stylesheet" href="css/style.css?v=8">
+
+  <style>
+    .custom-toast {
+      position: fixed; top: 20px; right: 20px; background-color: var(--lagoon, #0a4275); color: white;
+      padding: 15px 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 9999;
+      font-weight: 500; overflow: hidden; opacity: 0; transform: translateX(100%); transition: all 0.3s ease-in-out;
+    }
+    .custom-toast.show { opacity: 1; transform: translateX(0); }
+    .toast-progress { position: absolute; bottom: 0; left: 0; height: 4px; background-color: rgba(255, 255, 255, 0.7); width: 0%; }
+    .custom-toast.show .toast-progress { animation: progressAnim 3s linear forwards; }
+    @keyframes progressAnim { 0% { width: 0%; } 100% { width: 100%; } }
+    @keyframes blink { from, to { border-color: transparent } 50% { border-color: white; } }
+  </style>
 </head>
 <body>
     <div class="auth-wrapper">
+          <div class="logo-container d-none d-md-block" style="position: absolute; top: 120px; left: 100px; z-index: 10;">
+              <div class="d-flex align-items-center mb-3">
+                  <img src="assets/img/logo.png" alt="Logo" width="65" class="me-4">
+                  <h2 class="m-0 fw-bold text-white" style="font-family: 'Bricolage Grotesque', sans-serif; text-shadow: 0 8px 8px rgba(0,0,0,0.4); font-size: 42px; letter-spacing: -0.5px; color: #060606;">Tele Tourist</h2>
+              </div>
+              <div class="text-white" style="font-family: 'DM Sans', sans-serif; font-size: 2rem; text-shadow: 0 4px 8px rgba(0,0,0,0.6); padding-left: 10px; font-weight: 700;">
+                  <span id="typewriter"></span><span id="cursor" style="border-right: 3px solid white; animation: blink 0.75s step-end infinite; margin-left: 4px;">&nbsp;</span>
+              </div>
+          </div>
         <div class="auth-card">
             <!-- Left Side -->
             <div class="auth-left">
@@ -125,7 +155,7 @@
                     <div class="text-center">
                         <ul class="nav nav-pills auth-nav-pills" id="authTab" role="tablist">
                             <li class="nav-item flex-fill" role="presentation">
-                                <button class="nav-link w-100" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab">Log in</button>
+                                <button class="nav-link w-100" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab">Log in </button>
                             </li>
                             <li class="nav-item flex-fill" role="presentation">
                                 <button class="nav-link active w-100" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab">Create account</button>
@@ -137,24 +167,24 @@
                         <!-- Login Tab -->
                         <div class="tab-pane fade" id="login" role="tabpanel">
                             <h2 class="fw-bold text-ink mb-2">Welcome back</h2>
-                            <p class="text-secondary mb-4" style="font-size: 14px;">Log in to access your saved trips and stories.</p>
+                            <p class="text-secondary mb-4" style="font-size: 14px;">Your next trip starts with someone else's story.</p>
                             
                             <form id="loginForm" class="needs-validation" novalidate>
                                 <div class="mb-4">
                                     <label for="loginEmail" class="form-label fw-bold text-ink" style="font-size: 12px;">Email</label>
                                     <div class="custom-input-wrapper">
-                                        <i class="bi bi-envelope"></i>
+                                        <img src="assets/img/email.png" width="18" style="position: absolute; top: 50%; left: 16px; transform: translateY(-50%); z-index: 10; opacity: 0.6;">
                                         <input type="email" class="form-control custom-input shadow-none" id="loginEmail" placeholder="tourist@example.com" required>
                                     </div>
                                 </div>
                                 <div class="mb-4">
                                     <label for="loginPassword" class="form-label fw-bold text-ink" style="font-size: 12px;">Password</label>
                                     <div class="custom-input-wrapper">
-                                        <i class="bi bi-lock"></i>
-                                        <input type="password" class="form-control custom-input shadow-none" id="loginPassword" placeholder="••••••••" required>
+                                        <img src="assets/img/lock.png" width="18" style="position: absolute; top: 50%; left: 16px; transform: translateY(-50%); z-index: 10; opacity: 0.6;">
+                                        <input type="password" class="form-control custom-input shadow-none" id="loginPassword" placeholder="••••••••" required><img src="assets/img/close-eye.png" class="toggle-password" width="18" style="position: absolute; right: 16px; left: auto; top: 50%; transform: translateY(-50%); cursor: pointer; z-index: 10;">
                                     </div>
                                 </div>
-                                <button class="btn w-100 py-2 rounded-3 fw-bold mb-4" style="background-color: var(--lagoon); color: white;" type="submit">Log in</button>
+                                <button class="btn w-100 py-2 rounded-3 fw-bold mb-4" style="background-color: var(--lagoon); color: white;" type="submit">Log In   →</button>
                                 
                                 <p class="text-center text-secondary" style="font-size: 13px;">Don't have an account? <a href="#" class="text-primary text-decoration-none fw-bold" onclick="$('#register-tab').tab('show');" style="color: #0d6efd !important;">Create account</a></p>
                             </form>
@@ -163,30 +193,30 @@
                         <!-- Register Tab -->
                         <div class="tab-pane fade show active" id="register" role="tabpanel">
                             <h2 class="fw-bold text-ink mb-2">Create your account</h2>
-                            <p class="text-secondary mb-4" style="font-size: 14px;">Read, save and share trips with other travelers.</p>
+                            <p class="text-secondary mb-4" style="font-size: 14px;">Every trip has a story. Start yours.</p>
                             
                             <form id="registerForm" class="needs-validation" novalidate>
                                 <div class="mb-4">
                                     <label for="regName" class="form-label fw-bold text-ink" placeholder="Full name" style="font-size: 12px;">Full name</label>
                                     <div class="custom-input-wrapper">
-                                        <i class="bi bi-person"></i>
+                                        <img src="assets/img/user.png" width="18" style="position: absolute; top: 50%; left: 16px; transform: translateY(-50%); z-index: 10; opacity: 0.6;">
                                         <input type="text" class="form-control custom-input shadow-none" id="regName" placeholder="Full name" required>
                                     </div>
                                 </div>
                                 <div class="mb-4">
                                     <label for="regEmail" class="form-label fw-bold text-ink" style="font-size: 12px;">Email</label>
                                     <div class="custom-input-wrapper">
-                                        <i class="bi bi-envelope"></i>
+                                        <img src="assets/img/email.png" width="18" style="position: absolute; top: 50%; left: 16px; transform: translateY(-50%); z-index: 10; opacity: 0.6;">
                                         <input type="email" class="form-control custom-input shadow-none" id="regEmail" placeholder="tourist@example.com" required>
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="regPassword" class="form-label fw-bold text-ink" style="font-size: 12px;">Password</label>
                                     <div class="custom-input-wrapper mb-2">
-                                        <i class="bi bi-lock"></i>
-                                        <input type="password" class="form-control custom-input shadow-none" id="regPassword" placeholder="••••••••" required minlength="8">
+                                        <img src="assets/img/lock.png" width="18" style="position: absolute; top: 50%; left: 16px; transform: translateY(-50%); z-index: 10; opacity: 0.6;">
+                                        <input type="password" class="form-control custom-input shadow-none" id="regPassword" placeholder="••••••••" required minlength="8"><img src="assets/img/close-eye.png" class="toggle-password" width="18" style="position: absolute; right: 16px; left: auto; top: 50%; transform: translateY(-50%); cursor: pointer; z-index: 10;">
                                     </div>
-                                    <div class="text-secondary" style="font-size: 11px;">Use at least 8 characters.</div>
+                                    <div style="font-size: 13px; color: #586C7C; margin-top: 5px;">Use at least 8 characters.</div>
                                 </div>
                                 <button class="btn w-100 py-2 rounded-3 fw-bold mb-4 mt-3" style="background-color: var(--lagoon); color: white;" type="submit">Create account</button>
                                 
@@ -205,5 +235,61 @@
   <script src="js/mock-data.js"></script>
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
+  <script>
+    function showToast(message) {
+      $('.custom-toast').remove(); 
+      const toast = $('<div class="custom-toast">' + message + '<div class="toast-progress"></div></div>');
+      $('body').append(toast);
+      toast[0].offsetWidth; // reflow
+      toast.addClass('show');
+      setTimeout(() => { toast.removeClass('show'); setTimeout(() => toast.remove(), 300); }, 3000);
+    }
+
+    const text = "See where the world is going.";
+    let i = 0;
+    
+    function typeWriter() {
+      if (i <= text.length) {
+        $('#typewriter').text(text.substring(0, i));
+        i++;
+        setTimeout(typeWriter, 71);
+      }
+    }
+
+    $(document).ready(function() {
+      typeWriter();
+
+      $('#loginForm').on('submit', function(e) {
+        e.preventDefault();
+        login($('#loginEmail').val(), $('#loginPassword').val()).then(res => {
+          window.location.href = 'index.html';
+        }).catch(err => {
+          const msg = (() => { try { return err.responseJSON?.message || JSON.parse(err.responseText)?.message || err.responseText || 'Unknown error'; } catch(e) { return err.responseText || 'Unknown error'; } })();
+          showToast('Login failed: ' + msg);
+        });
+      });
+
+      $('#registerForm').on('submit', function(e) {
+        e.preventDefault();
+        register($('#regName').val(), $('#regEmail').val(), $('#regPassword').val()).then(res => {
+          window.location.href = 'index.html';
+        }).catch(err => {
+          const msg = (() => { try { return err.responseJSON?.message || JSON.parse(err.responseText)?.message || err.responseText || 'Unknown error'; } catch(e) { return err.responseText || 'Unknown error'; } })();
+          showToast('Registration failed: ' + msg);
+        });
+      });
+
+      $('.toggle-password').click(function() {
+        let src = $(this).attr('src');
+        if (src === 'assets/img/close-eye.png') {
+          $(this).attr('src', 'assets/img/open-eye.png');
+          $(this).siblings('input').attr('type', 'text');
+        } else {
+          $(this).attr('src', 'assets/img/close-eye.png');
+          $(this).siblings('input').attr('type', 'password');
+        }
+      });
+    });
+  </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-const CONFIG = {
-  API_BASE_URL: '/api',
-  USE_MOCK: true
+﻿const CONFIG = {
+  API_BASE_URL: 'http://localhost:5000/api',
+  USE_MOCK: false
 };

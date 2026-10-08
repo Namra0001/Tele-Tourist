@@ -41,11 +41,38 @@
     .card-1:hover { transform: scale(1.05) rotate(-5deg) !important; }
     .card-2:hover { transform: scale(1.05) rotate(5deg) !important; }
     .card-3:hover { transform: scale(1.05) rotate(0deg) !important; }
-    .card-1 { top: 70px; left: 30px; transform: rotate(-5deg); z-index: 2; }
-    .card-2 { top: -30px; right: 70px; transform: rotate(5deg); z-index: 1; width: 200px; }
+    .card-1 { top: 70px; left: 30px; transform: rotate(-10deg); z-index: 2; }
+    .card-2 { top: -30px; right: 70px; transform: rotate(15deg); z-index: 1; width: 200px; }
     .card-3 { top: 260px; right: 170px; transform: rotate(0deg); z-index:3; }
     
-    .staggered-grid {
+    
+      .marquee-wrapper {
+        width: 100%;
+        height: 450px;
+        overflow: hidden;
+        mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+        -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+      }
+      .marquee-content {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1.5rem;
+        animation: scroll-vertical 15s linear infinite;
+      }
+      .marquee-content:hover {
+        animation-play-state: paused;
+      }
+      @keyframes scroll-vertical {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(calc(-50% - 0.75rem)); }
+      }
+      .marquee-item {
+        transition: transform 0.2s ease;
+      }
+      .marquee-item:nth-child(5n + 2), .marquee-item:nth-child(5n + 4) {
+        margin-top: 2.5rem;
+      }
+      .staggered-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 1.5rem;
@@ -153,9 +180,9 @@
         
         <div class="d-flex align-items-center gap-3 mt-4">
           <div class="d-flex">
-            <div class="rounded-circle text-white d-flex align-items-center justify-content-center border border-white" style="width: 32px; height: 32px; margin-right: -10px; background-color: var(--avatar-1); font-size: 10px; z-index: 4;">MS</div>
+            <div class="rounded-circle text-white d-flex align-items-center justify-content-center border border-white" style="width: 32px; height: 32px; margin-right: -10px; background-color: var(--avatar-1); font-size: 10px; z-index: 4;"></div>
             <div class="rounded-circle text-white d-flex align-items-center justify-content-center border border-white" style="width: 32px; height: 32px; margin-right: -10px; background-color: var(--avatar-2); font-size: 10px; z-index: 3;">DP</div>
-            <div class="rounded-circle text-white d-flex align-items-center justify-content-center border border-white" style="width: 32px; height: 32px; margin-right: -10px; background-color: var(--avatar-3); font-size: 10px; z-index: 2;">ZA</div>
+            <div class="rounded-circle text-white d-flex align-items-center justify-content-center border border-white" style="width: 32px; height: 32px; margin-right: -10px; background-color: var(--avatar-3); font-size: 10px; z-index: 2;"></div>
             <div class="rounded-circle text-white d-flex align-items-center justify-content-center border border-white" style="width: 32px; height: 32px; background-color: var(--avatar-4); font-size: 10px; z-index: 1;">NR</div>
           </div>
           <span class="small text-secondary"><b>3,200 travelers</b> have shared 12,480 stories</span>
@@ -177,15 +204,12 @@
               </div>
             </div>
             <div class="p-3 bg-white">
-              <h6 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;">Hampi on a rented bicycle</h6>
+              <h6 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;">Hampi</h6>
               <p class="text-muted small mb-2" style="font-size: 11px;"><i class="bi bi-geo-alt"></i> Hampi, Karnataka</p>
               <div class="d-flex align-items-center justify-content-between mt-2">
-                <div class="d-flex align-items-center gap-1">
-                  <div class="rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 16px; height: 16px; background-color: var(--avatar-2); font-size: 8px;">RM</div>
-                  <span class="text-secondary" style="font-size: 10px;">Rohan Mehta</span>
-                </div>
+                
                 <div class="d-flex gap-2 text-muted" style="font-size: 10px;">
-                  <span><i class="bi bi-heart"></i> 204</span>
+                  <span><i class="bi bi-heart"></i> 0</span>
                   <span><i class="bi bi-chat"></i> 28</span>
                 </div>
               </div>
@@ -204,15 +228,11 @@
               </div>
             </div>
             <div class="p-3 bg-white">
-              <h5 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;">Eleven days in Spiti without a single plan</h5>
+              <h5 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;"></h5>
               <p class="text-muted small mb-2" style="font-size: 11px;"><i class="bi bi-geo-alt"></i> Spiti Valley, Himachal Pradesh</p>
               <div class="d-flex align-items-center justify-content-between mt-2">
-                <div class="d-flex align-items-center gap-1">
-                  <div class="rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 18px; height: 18px; background-color: var(--avatar-1); font-size: 9px;">AK</div>
-                  <span class="text-secondary" style="font-size: 11px;">Aarav Kapadia</span>
-                </div>
                 <div class="d-flex gap-2 text-muted" style="font-size: 11px;">
-                  <span><i class="bi bi-heart"></i> 248</span>
+                  <span><i class="bi bi-heart"></i> 0</span>
                   <span><i class="bi bi-chat"></i> 32</span>
                 </div>
               </div>
@@ -234,10 +254,6 @@
               <h6 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;">Udaipur at dusk, from a rooftop nobody mentions</h6>
               <p class="text-muted small mb-2" style="font-size: 11px;"><i class="bi bi-geo-alt"></i> Udaipur, Rajasthan</p>
               <div class="d-flex align-items-center justify-content-between mt-2">
-                <div class="d-flex align-items-center gap-1">
-                  <div class="rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 16px; height: 16px; background-color: var(--avatar-3); font-size: 8px;">IT</div>
-                  <span class="text-secondary" style="font-size: 10px;">Isha Trivedi</span>
-                </div>
                 <div class="d-flex gap-2 text-muted" style="font-size: 10px;">
                   <span><i class="bi bi-heart"></i> 119</span>
                   <span><i class="bi bi-chat"></i> 14</span>
@@ -251,7 +267,7 @@
     </div>
 
     <!-- Category chips -->
-    <div class="d-flex flex-wrap gap-2 mb-5 pb-3">
+    <div class="d-flex flex-wrap gap-2 mb-5 pb-3" id="category-filters">
       <span class="chip active">Mountains <span class="text-white-50 ms-1" style="font-size:11px">412</span></span>
       <span class="chip">Beaches <span class="text-muted ms-1" style="font-size:11px">286</span></span>
       <span class="chip">Heritage <span class="text-muted ms-1" style="font-size:11px">198</span></span>
@@ -263,77 +279,76 @@
 
     <!-- Fresh from the road -->
     <div class="d-flex justify-content-between align-items-end mb-4 pt-4">
-      <h3 class="mb-0 fw-bold text-ink" style="font-family: 'Bricolage Grotesque', sans-serif;">Fresh from the road</h3>
+      <h3 class="mb-0 fw-bold text-ink" style="font-family: 'Bricolage Grotesque', sans-serif;">Most Liked Stories</h3>
       <a href="explore.html" class="text-lagoon text-decoration-none fw-bold medium">See all stories <i class="bi bi-arrow-right"></i></a>
     </div>
     
     <div class="row g-4 mb-5 pb-4">
       <!-- Large Featured Card -->
-      <div class="col-lg-7">
-        <a href="story.html?id=1" class="featured-card w-100" style="background-image: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.8) 100%), url('assets/img/spiti.jpg'); background-size: cover; background-position: center;">
-          <div class="position-absolute top-0 start-0 m-4 z-3">
-            <span class="chip bg-white bg-opacity-25 text-white border-0 py-1 px-3 medium fw-bold" style="backdrop-filter: blur(4px);">Mountains</span>
-          </div>
-          <div class="content">
-            <h2 class="fw-bold mb-3" style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 2.5rem; max-width: 90%;">Eleven days in Spiti without a single plan</h2>
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="d-flex align-items-center gap-2">
-                <div class="rounded-circle text-lagoon bg-white d-flex align-items-center justify-content-center fw-bold" style="width: 32px; height: 32px; font-size: 12px;">AK</div>
-                <span class="text-white">Aarav Kapadia, Spiti Valley</span>
-              </div>
-              <div class="text-white"><i class="bi bi-heart"></i> 248</div>
+        <div class="col-lg-7">
+          <a href="#" id="featured-story" class="featured-card w-100" style="background-color: var(--mist); background-size: cover; background-position: center;">
+            <div class="position-absolute top-0 start-0 m-4 z-3">
+              <span class="chip bg-white bg-opacity-25 text-white border-0 py-1 px-3 medium fw-bold" style="backdrop-filter: blur(4px); display:none;"></span>
             </div>
-          </div>
-        </a>
-      </div>
-      
-      <!-- 3 Horizontal Cards -->
+            <div class="content">
+              <h2 class="fw-bold mb-3" style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 2.5rem; max-width: 90%;"></h2>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="rounded-circle text-lagoon bg-white d-flex align-items-center justify-content-center fw-bold" style="width: 32px; height: 32px; font-size: 12px; display:none;"></div>
+                  <span class="text-white"></span>
+                </div>
+                <div class="text-white"><i class="bi bi-heart"></i> 0</div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <!-- 3 Horizontal Cards -->
       <div class="col-lg-5 d-flex flex-column gap-3">
         <!-- Gokarna -->
-        <a href="story.html?id=2" class="horizontal-card text-decoration-none">
-          <div class="img-container bg-beach"></div>
+        <a href="story.html?id=2" id="story-card-2" class="horizontal-card text-decoration-none">
+          <div class="img-container" style="background-color: var(--mist);"></div>
           <div class="p-3 d-flex flex-column justify-content-center flex-grow-1">
             <span class="chip border px-2 py-0 mb-2 align-self-start text-muted bg-transparent" style="font-size: 10px;">Beaches</span>
-            <h6 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;">Gokarna, the quiet side of the Karnataka coast</h6>
-            <p class="text-muted mb-2" style="font-size: 11px;"><i class="bi bi-geo-alt"></i> Gokarna, Karnataka</p>
+            <h6 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;"></h6>
+            <p class="text-muted mb-2" style="font-size: 11px;"><i class="bi bi-geo-alt"></i> </p>
             <div class="d-flex justify-content-between align-items-center mt-auto">
               <div class="d-flex align-items-center gap-1">
-                <div class="rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 18px; height: 18px; background-color: var(--avatar-5); font-size: 9px;">MS</div>
-                <span class="text-secondary" style="font-size: 11px;">Meera Shah</span>
+                <div class="rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 18px; height: 18px; background-color: var(--avatar-5); font-size: 9px;"></div>
+                <span class="text-secondary" style="font-size: 11px;"></span>
               </div>
-              <span class="text-muted" style="font-size: 11px;"><i class="bi bi-heart"></i> 181</span>
+              <span class="text-muted" style="font-size: 11px;"><i class="bi bi-heart"></i> 0</span>
             </div>
           </div>
         </a>
         <!-- Mumbai -->
-        <a href="story.html?id=3" class="horizontal-card text-decoration-none">
-          <div class="img-container" style="background: linear-gradient(#1B2B4B, #6C86B5, #14213D);"></div>
+        <a href="story.html?id=3" id="story-card-3" class="horizontal-card text-decoration-none">
+          <div class="img-container" style="background-color: var(--mist);"></div>
           <div class="p-3 d-flex flex-column justify-content-center flex-grow-1">
             <span class="chip border px-2 py-0 mb-2 align-self-start text-muted bg-transparent" style="font-size: 10px;">Food trails</span>
-            <h6 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;">Mumbai after midnight, one vada pav at a time</h6>
-            <p class="text-muted mb-2" style="font-size: 11px;"><i class="bi bi-geo-alt"></i> Mumbai, Maharashtra</p>
+            <h6 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;"></h6>
+            <p class="text-muted mb-2" style="font-size: 11px;"><i class="bi bi-geo-alt"></i> </p>
             <div class="d-flex justify-content-between align-items-center mt-auto">
               <div class="d-flex align-items-center gap-1">
-                <div class="rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 18px; height: 18px; background-color: var(--avatar-2); font-size: 9px;">ZA</div>
-                <span class="text-secondary" style="font-size: 11px;">Zoya Ansari</span>
+                <div class="rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 18px; height: 18px; background-color: var(--avatar-2); font-size: 9px;"></div>
+                <span class="text-secondary" style="font-size: 11px;"></span>
               </div>
-              <span class="text-muted" style="font-size: 11px;"><i class="bi bi-heart"></i> 142</span>
+              <span class="text-muted" style="font-size: 11px;"><i class="bi bi-heart"></i> 0</span>
             </div>
           </div>
         </a>
         <!-- Hampi -->
-        <a href="story.html?id=4" class="horizontal-card text-decoration-none">
-          <div class="img-container bg-fort"></div>
+        <a href="story.html?id=4" id="story-card-4" class="horizontal-card text-decoration-none">
+          <div class="img-container" style="background-color: var(--mist);"></div>
           <div class="p-3 d-flex flex-column justify-content-center flex-grow-1">
             <span class="chip border px-2 py-0 mb-2 align-self-start text-muted bg-transparent" style="font-size: 10px;">Heritage</span>
-            <h6 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;">Hampi on a rented bicycle</h6>
-            <p class="text-muted mb-2" style="font-size: 11px;"><i class="bi bi-geo-alt"></i> Hampi, Karnataka</p>
+            <h6 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;"></h6>
+            <p class="text-muted mb-2" style="font-size: 11px;"><i class="bi bi-geo-alt"></i> </p>
             <div class="d-flex justify-content-between align-items-center mt-auto">
               <div class="d-flex align-items-center gap-1">
-                <div class="rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 18px; height: 18px; background-color: var(--avatar-4); font-size: 9px;">RM</div>
-                <span class="text-secondary" style="font-size: 11px;">Rohan Mehta</span>
+                <div class="rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 18px; height: 18px; background-color: var(--avatar-4); font-size: 9px;"></div>
+                <span class="text-secondary" style="font-size: 11px;"></span>
               </div>
-              <span class="text-muted" style="font-size: 11px;"><i class="bi bi-heart"></i> 204</span>
+              <span class="text-muted" style="font-size: 11px;"><i class="bi bi-heart"></i> 0</span>
             </div>
           </div>
         </a>
@@ -346,40 +361,13 @@
       <a href="#" class="text-lagoon text-decoration-none fw-bold small">All destinations <i class="bi bi-arrow-right"></i></a>
     </div>
     
-    <div class="staggered-grid mb-5 pb-5 d-none d-md-grid">
-      <a href="#" class="tall-tile staggered-item" style="background-image: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.8) 100%), url('assets/img/spiti.jpg'); background-size: cover; background-position: center;">
-        <div>
-          <h4 class="mb-0 text-white" style="font-family: 'Bricolage Grotesque', sans-serif;">Spiti Valley</h4>
-          <span class="small opacity-75">214 stories</span>
+    <div class="marquee-wrapper mb-5 pb-5 d-none d-md-block">
+        <div class="marquee-content" id="destinations-marquee">
+          <!-- Populated by JS -->
         </div>
-      </a>
-      <a href="#" class="tall-tile staggered-item" style="background-image: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.8) 100%), url('https://images.unsplash.com/photo-1590234720993-9c8a9ba0ae68?q=80&w=600&auto=format&fit=crop'); background-size: cover; background-position: center;">
-        <div>
-          <h4 class="mb-0 text-white" style="font-family: 'Bricolage Grotesque', sans-serif;">Gokarna</h4>
-          <span class="small opacity-75">168 stories</span>
-        </div>
-      </a>
-      <a href="#" class="tall-tile staggered-item" style="background-image: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.8) 100%), url('https://images.unsplash.com/photo-1599818815197-01314480ce27?q=80&w=600&auto=format&fit=crop'); background-size: cover; background-position: center;">
-        <div>
-          <h4 class="mb-0 text-white" style="font-family: 'Bricolage Grotesque', sans-serif;">Jaisalmer</h4>
-          <span class="small opacity-75">143 stories</span>
-        </div>
-      </a>
-      <a href="#" class="tall-tile staggered-item" style="background-image: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.8) 100%), url('assets/img/hampi.jpg'); background-size: cover; background-position: center;">
-        <div>
-          <h4 class="mb-0 text-white" style="font-family: 'Bricolage Grotesque', sans-serif;">Hampi</h4>
-          <span class="small opacity-75">197 stories</span>
-        </div>
-      </a>
-      <a href="#" class="tall-tile staggered-item" style="background-image: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.8) 100%), url('https://images.unsplash.com/photo-1626307316461-c46c7d165181?q=80&w=600&auto=format&fit=crop'); background-size: cover; background-position: center;">
-        <div>
-          <h4 class="mb-0 text-white" style="font-family: 'Bricolage Grotesque', sans-serif;">Munnar</h4>
-          <span class="small opacity-75">131 stories</span>
-        </div>
-      </a>
-    </div>
-
-    <!-- CTA Band -->
+      </div>
+  
+      <!-- CTA Band -->
     <div class="cta-band rounded-4 p-5 d-flex flex-column flex-md-row align-items-center justify-content-between my-5">
       <div class="mb-4 mb-md-0">
         <h2 class="text-white mb-2" style="max-width: 400px; font-family: 'Bricolage Grotesque', sans-serif;">Been somewhere worth telling people about?</h2>
@@ -398,6 +386,134 @@
   <script src="js/mock-data.js"></script>
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
-  <script src="js/ui.js?v=8"></script>
+  <script src="js/ui.js?v=9"></script>
+
+<script>
+  $(document).ready(function() {
+    Promise.all([
+      apiCall('/categories', 'GET').catch(() => []),
+      apiCall('/stories', 'GET').catch(() => ({ stories: [] }))
+    ]).then(([categories, storiesData]) => {
+      const stories = storiesData.stories || [];
+      
+      // Update categories with real counts
+      const catHtml = categories.map((cat, index) => {
+        const count = stories.filter(s => s.category?.name === cat.name || s.category_id === cat.id).length;
+        const activeClass = index === 0 ? 'active' : '';
+        const countClass = index === 0 ? 'text-white-50' : 'text-muted';
+        return `<span class="chip ${activeClass}">${cat.name} <span class="${countClass} ms-1" style="font-size:11px">${count}</span></span>`;
+      }).join('');
+      if (categories.length > 0) {
+        $('#category-filters').html(catHtml);
+      } else {
+        // Fallback to 0 if no categories returned
+        $('#category-filters span.chip').each(function() {
+          $(this).find('span').text('0');
+        });
+      }
+
+      // Sort stories by likes (most viral)
+      stories.sort((a, b) => (b.likes_count || 0) - (a.likes_count || 0));
+
+      // Featured Story (1st)
+      if (stories.length > 0) {
+        const s1 = stories[0];
+        $('#featured-story').attr('href', 'story.html?id=' + s1.id);
+        $('#featured-story .chip').show();
+        $('#featured-story .rounded-circle').show();
+        if (s1.images && s1.images[0]) {
+          $('#featured-story').css('background-image', `linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.8) 100%), url('${s1.images[0]}')`);
+        } else {
+          $('#featured-story').css('background-image', `linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.8) 100%)`);
+          $('#featured-story').css('background-color', `var(--mist)`);
+        }
+        $('#featured-story .chip').text(s1.category?.name || 'Category');
+        $('#featured-story h2').text(s1.title);
+        $('#featured-story .d-flex.align-items-center.gap-2 span').text(`${s1.author?.name || 'Unknown'}, ${s1.location || 'Unknown'}`);
+        $('#featured-story .d-flex.align-items-center.gap-2 .rounded-circle').text((s1.author?.name || 'U').substring(0,2).toUpperCase());
+        $('#featured-story .bi-heart').parent().html(`<i class="bi bi-heart"></i> ${s1.likes_count || 0}`);
+      } else {
+        $('#featured-story').css('background-image', 'linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.8) 100%)');
+        $('#featured-story').css('background-color', 'var(--mist)');
+        $('#featured-story h2').text('');
+        $('#featured-story .d-flex.align-items-center.gap-2 span').text('');
+        $('#featured-story .bi-heart').parent().html(`<i class="bi bi-heart"></i> 0`);
+        $('#featured-story .chip').hide();
+        $('#featured-story .rounded-circle').hide();
+      }
+
+      
+      // Destinations Marquee
+      let locationsMap = {};
+      stories.forEach(s => {
+        if (s.location) {
+          locationsMap[s.location] = (locationsMap[s.location] || 0) + 1;
+        }
+      });
+      let locations = Object.keys(locationsMap).map(loc => ({ name: loc, count: locationsMap[loc] })).sort((a,b) => b.count - a.count);
+      
+      let marqueeHtml = '';
+      if (locations.length === 0) {
+        // Render 5 empty containers if no stories
+        for (let i = 0; i < 5; i++) {
+          marqueeHtml += `<div class="tall-tile marquee-item" style="background-color: var(--mist);"></div>`;
+        }
+      } else {
+        // Render real locations
+        locations.forEach(loc => {
+          // Try to find a background image from one of the stories in this location
+          let bgImage = '';
+          const storyWithImg = stories.find(s => s.location === loc.name && s.images && s.images[0]);
+          if (storyWithImg) {
+            bgImage = `background-image: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.8) 100%), url('${storyWithImg.images[0].startsWith(\"http\") ? storyWithImg.images[0] : \"assets/img/\" + storyWithImg.images[0]}');`;
+          } else {
+            bgImage = `background-image: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.8) 100%); background-color: var(--mist);`;
+          }
+          
+          marqueeHtml += `
+            <a href="explore.html?location=${encodeURIComponent(loc.name)}" class="tall-tile marquee-item text-decoration-none" style="${bgImage} background-size: cover; background-position: center;">
+              <div>
+                <h4 class="mb-0 text-white" style="font-family: 'Bricolage Grotesque', sans-serif;">${loc.name}</h4>
+                <span class="small opacity-75 text-white">${loc.count} stories</span>
+              </div>
+            </a>
+          `;
+        });
+      }
+      
+      // Duplicate for seamless infinite scroll
+      $('#destinations-marquee').html(marqueeHtml + marqueeHtml);
+
+      // Small stories (2nd, 3rd, 4th)
+      for (let i = 1; i <= 3; i++) {
+        const el = $(`#story-card-${i + 1}`);
+        if (stories.length > i) {
+          const s = stories[i];
+          el.attr('href', 'story.html?id=' + s.id);
+          el.find('h6').text(s.title);
+          el.find('.chip').show();
+          el.find('.rounded-circle').show();
+          el.find('.chip').text(s.category?.name || 'Category');
+          el.find('p.text-muted').html(`<i class="bi bi-geo-alt"></i> ${s.location || 'Unknown'}`);
+          el.find('.text-secondary').text(s.author?.name || 'Unknown');
+          el.find('.rounded-circle').text((s.author?.name || 'U').substring(0,2).toUpperCase());
+          el.find('.bi-heart').parent().html(`<i class="bi bi-heart"></i> ${s.likes_count || 0}`);
+          if (s.images && s.images[0]) {
+            el.find('.img-container').css({'background-image': `url('${s.images[0]}')`, 'background-size': 'cover', 'background-position': 'center'});
+          }
+        } else {
+          el.find('h6').text('');
+          el.find('.chip').text('');
+          el.find('p.text-muted').text('');
+          el.find('.text-secondary').text('');
+          el.find('.bi-heart').parent().html(`<i class="bi bi-heart"></i> 0`);
+          el.find('.chip').hide();
+          el.find('.rounded-circle').hide();
+        }
+      }
+    });
+  });
+</script>
 </body>
+
 </html>
