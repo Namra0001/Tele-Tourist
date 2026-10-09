@@ -7,6 +7,21 @@ $(document).ready(function() {
         currentPage++;
         loadExploreStories();
     });
+
+    $('#toggle-reel-mode').on('click', function() {
+        const grid = $('#explore-grid');
+        const reels = $('#explore-reels');
+        const btn = $(this);
+        if (grid.hasClass('d-none')) {
+            grid.removeClass('d-none');
+            reels.addClass('d-none');
+            btn.html('<i class="bi bi-play-btn"></i> Reel Mode');
+        } else {
+            grid.addClass('d-none');
+            reels.removeClass('d-none');
+            btn.html('<i class="bi bi-grid"></i> Grid Mode');
+        }
+    });
 });
 
 async function loadExploreStories() {
@@ -28,17 +43,26 @@ async function loadExploreStories() {
             }
         }
 
+        // Sort by likes
+        stories.sort((a, b) => (b.likes_count || 0) - (a.likes_count || 0));
+
         const grid = $('#explore-grid');
         
         // Update count
         const currentCount = parseInt($('#result-count span').text());
         $('#result-count span').text(currentCount + stories.length);
 
-        stories.forEach(story => {
+        stories.forEach((story, index) => {
             let cardHtml = '';
-            if (typeof createStoryCard === 'function') {
-                cardHtml = createStoryCard(story);
+            
+            if (typeof createStoryCard === "function") {
+                const rank = (currentPage === 1 && index < 3) ? index + 1 : null;
+                cardHtml = createStoryCard(story, rank);
+                if (typeof createReelCard === "function") {
+                    $("#explore-reels").append(createReelCard(story));
+                }
             } else {
+
                 cardHtml = `
                     <div class="card shadow-sm border-0">
                         ${story.image ? `<img src="${story.image}" class="card-img-top" alt="${story.title}">` : `<div class="card-img-top bg-light" style="height: 150px;"></div>`}
@@ -53,6 +77,10 @@ async function loadExploreStories() {
             }
             grid.append(cardHtml);
         });
+
+        if (response && response.totalPages && currentPage >= response.totalPages) {
+            $('#load-more-btn').hide();
+        }
 
     } catch (error) {
         console.error("Error loading explore stories:", error);

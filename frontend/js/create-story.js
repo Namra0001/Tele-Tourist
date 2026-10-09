@@ -2,6 +2,19 @@ $(document).ready(function() {
     $('#navbar-placeholder').load('components/navbar.html');
     $('#footer-placeholder').load('components/footer.html');
 
+    // Rating logic
+    $(document).on('click', '#rating-container i', function() {
+        const val = parseInt($(this).data('val'));
+        $('#input-rating').val(val);
+        $('#rating-container i').each(function() {
+            if (parseInt($(this).data('val')) <= val) {
+                $(this).removeClass('text-muted bi-star').addClass('text-warning bi-star-fill');
+            } else {
+                $(this).removeClass('text-warning bi-star-fill').addClass('text-muted bi-star');
+            }
+        });
+    });
+
     const urlParams = new URLSearchParams(window.location.search);
     const editId = urlParams.get('id');
     
@@ -142,6 +155,7 @@ $(document).ready(function() {
         formData.append('location', location);
         formData.append('category', category);
         formData.append('description', description);
+        formData.append('rating', $('#input-rating').val());
         
         const validFiles = uploadedFiles.filter(f => f !== null);
         validFiles.forEach((file, index) => {
@@ -149,7 +163,7 @@ $(document).ready(function() {
         });
 
         const method = editId ? 'PUT' : 'POST';
-        const url = editId ? `/api/stories/${editId}` : '/api/stories';
+        const url = editId ? `/stories/${editId}` : '/stories';
 
         if (typeof apiCall === 'function') {
             // Using fetch directly to let browser set multipart/form-data boundary
@@ -165,7 +179,7 @@ $(document).ready(function() {
                 return res.json();
             })
             .then(data => {
-                window.location.href = `story.html?id=${data.id || editId || 1}`;
+                window.location.href = `story?id=${data.id || editId || 1}`;
             })
             .catch(err => {
                 console.error(err);
@@ -182,12 +196,15 @@ $(document).ready(function() {
 
     function loadStoryForEdit(id) {
         if (typeof apiCall === 'function') {
-            apiCall(`/api/stories/${id}`, 'GET')
+            apiCall(`/stories/${id}`, 'GET')
                 .then(data => {
                     $('#input-title').val(data.title).trigger('input');
                     $('#input-location').val(data.location.name || data.location).trigger('input');
                     $('#input-description').val(data.content || data.description).trigger('input');
                     $(`input[name="category"][value="${data.category}"]`).prop('checked', true).trigger('change');
+                    if (data.rating) {
+                        $(`#rating-container i[data-val="${data.rating}"]`).click();
+                    }
                 })
                 .catch(console.error);
         }

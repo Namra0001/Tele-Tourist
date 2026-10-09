@@ -1,4 +1,4 @@
-﻿<!-- story.html -->
+<!-- story.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +21,7 @@
         .mosaic-item-main { grid-column: 1; grid-row: 1 / span 2; }
         .btn-see-all { position: absolute; bottom: 15px; right: 15px; background: rgba(255,255,255,0.9); color: #000; font-weight: 500; }
         .pull-quote { font-size: 1.25rem; font-style: italic; border-left: 4px solid #f2c94c; padding-left: 1rem; margin: 2rem 0; color: #555; }
-        .sticky-card { position: sticky; top: 20px; }
+        .sticky-card { position: sticky; top: 100px; }
         .map-block { background: #e9ecef; height: 150px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #6c757d; }
         .saffron-bg { background-color: #f3c93e; color: #000; }
         .saffron-btn { background-color: #f3c93e; color: #000; border: none; font-weight: 600; }
@@ -53,6 +53,9 @@
             <div>
                 <div class="fw-bold" id="author-name">Author Name</div>
                 <div class="text-muted small" id="story-date">Date</div>
+            </div>
+            <div class="ms-4 d-flex text-warning fs-5" id="story-rating">
+                <!-- Stars will be injected here -->
             </div>
         </div>
 
@@ -99,12 +102,12 @@
             <div class="col-lg-4">
                 <div class="card border-0 shadow-sm sticky-card">
                     <div class="card-body">
-                        <div class="map-block mb-3" id="story-map">
-                            <i class="bi bi-geo-alt fs-2"></i>
+                        <div class="d-flex align-items-center mb-1">
+                            <img src="assets/img/location.png" style="width: 16px; margin-right: 8px;" alt="Location">
+                            <h5 class="fw-bold mb-0" id="story-location-name">Location Name</h5>
                         </div>
-                        <h5 class="fw-bold mb-1" id="story-location-name">Location Name</h5>
-                        <p class="text-muted small mb-3">
-                            <i class="bi bi-geo-fill me-1"></i><span id="story-location">City, Country</span>
+                        <p class="text-muted small mb-3 ms-4">
+                            <span id="story-location">City, Country</span>
                         </p>
 
                         <div class="d-flex justify-content-between mb-4 text-center">
@@ -124,13 +127,13 @@
 
                         <div class="d-grid gap-2">
                             <button class="btn btn-outline-dark" id="btn-like">
-                                <i class="bi bi-heart me-2"></i> Like
+                                <img src="assets/img/heart.png" class="me-2 action-icon" style="width: 16px;" alt="Like"> Like
                             </button>
                             <button class="btn btn-outline-dark" id="btn-save">
-                                <i class="bi bi-bookmark me-2"></i> Save
+                                <img src="assets/img/save-instagram.png" class="me-2 action-icon" style="width: 16px;" alt="Save"> Save
                             </button>
                             <button class="btn btn-outline-dark" id="btn-share">
-                                <i class="bi bi-share me-2"></i> Share
+                                <img src="assets/img/share.png" class="me-2 action-icon" style="width: 16px;" alt="Share"> Share
                             </button>
                         </div>
                     </div>
@@ -175,7 +178,7 @@
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/ui.js?v=9"></script>
-  <script src="js/story.js"></script>
+  <script src="js/story.js?v=1791543130094"></script>
 </body>
 </html>
 
