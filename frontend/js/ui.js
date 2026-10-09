@@ -115,48 +115,81 @@ function renderFooter() {
   $('#footer-placeholder').html(html);
 }
 
-function createStoryCard(story) {
+function createStoryCard(story, rank) {
   const isSaved = story.saved_by_me ? 'bi-bookmark-fill text-saffron' : 'bi-bookmark';
   const avatarCol = story.author && story.author.name ? story.author.name.charCodeAt(0) % 6 + 1 : 1;
   const imgUrl = (story.images && story.images.length > 0) ? story.images[0] : '';
   const authorName = story.author ? story.author.name : 'Unknown';
+  const bgStyle = imgUrl ? "background-image: url('" + imgUrl + "');" : '';
+  const likedFilter = story.liked_by_me ? 'filter: invert(34%) sepia(98%) saturate(1478%) hue-rotate(331deg) brightness(101%) contrast(104%);' : 'filter: brightness(0); opacity: 0.8;';
+  const likedColor = story.liked_by_me ? 'var(--like-red)' : '#222';
+  const likedClass = story.liked_by_me ? 'text-danger' : '';
+  const likeCount = story.likes_count || story.like_count || 0;
+  const commentCount = story.comments_count || story.comment_count || 0;
+  const category = story.category || 'General';
+  const initials = authorName.substring(0, 2).toUpperCase();
+  const description = story.description || 'A wonderful travel story worth exploring...';
+  const location = story.location || '';
+
+  let h = '';
+  h += '<div class="card h-100 story-card" style="border-radius: var(--radius-card); border: 1px solid var(--border-card);">';
   
-  return `
-    <div class="card h-100 story-card text-decoration-none" style="border-radius: var(--radius-card); border: 1px solid var(--border-card);">
-      <div class="position-relative">
-        <div class="story-card-img w-100" style="height: 200px; background-color: var(--sky); border-radius: var(--radius-card) var(--radius-card) 0 0; ${imgUrl ? `background-image: url('${imgUrl}');` : ''} background-size: cover; background-position: center;"></div>
-        <div class="position-absolute top-0 start-0 m-3">
-          <span class="chip bg-white border-0 py-1 px-2 small fw-bold" style="border-radius: var(--radius-chip);">${story.category || 'General'}</span>
-        </div>
-        <div class="position-absolute top-0 end-0 m-3">
-          <button class="btn btn-light bg-white rounded-circle p-2 shadow-sm d-flex align-items-center justify-content-center save-btn border-0" data-id="${story.id}" style="width: 32px; height: 32px;">
-            <i class="bi ${isSaved}"></i>
-          </button>
-        </div>
-      </div>
-      <div class="card-body p-3 d-flex flex-column">
-        <a href="story.html?id=${story.id}" class="text-decoration-none">
-          <h5 class="card-title text-ink fw-bold mb-2 story-title" style="font-family: 'Bricolage Grotesque', sans-serif; color: var(--ink);">${story.title}</h5>
-        </a>
-        <p class="text-white opacity-75 small mb-3"><i class="bi bi-geo-alt"></i> ${story.location}</p>
-        
-        <div class="mt-auto d-flex align-items-center justify-content-between pt-3 border-top" style="border-color: var(--border-divider);">
-          <div class="d-flex align-items-center gap-2">
-            <div class="rounded-circle d-flex align-items-center justify-content-center text-white small" style="width: 24px; height: 24px; background-color: var(--avatar-${avatarCol}); font-size: 10px;">
-              ${authorName.substring(0, 2).toUpperCase()}
-            </div>
-            <span class="small text-secondary">${authorName}</span>
-          </div>
-          <div class="d-flex gap-3 text-white opacity-75 small">
-            <span class="d-flex align-items-center gap-1 like-btn ${story.liked_by_me ? 'text-danger' : ''}" data-id="${story.id}" style="cursor:pointer; color: ${story.liked_by_me ? 'var(--like-red)' : ''};">
-              <i class="bi ${story.liked_by_me ? 'bi-heart-fill' : 'bi-heart'}"></i> ${story.like_count || 0}
-            </span>
-            <span class="d-flex align-items-center gap-1"><i class="bi bi-chat"></i> ${story.comment_count || 0}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
+  // Flip container
+  h += '<div class="flip-container" style="height:200px;border-radius: var(--radius-card) var(--radius-card) 0 0;overflow:hidden;">';
+  h += '<div class="flip-inner" style="height:100%;">';
+  
+  // Front face - image
+  h += '<div class="flip-front position-relative" style="height:100%;">';
+  h += '<div class="w-100 h-100" style="background-color: var(--sky); border-radius: var(--radius-card) var(--radius-card) 0 0; ' + bgStyle + ' background-size: cover; background-position: center;"></div>';
+  
+  // Top Left: Rank + Category
+  h += '<div class="position-absolute top-0 start-0 m-3 d-flex align-items-center gap-2" style="z-index:5;">';
+  if (rank) {
+      h += '<div class="badge bg-warning text-dark fw-bold rounded-circle d-flex align-items-center justify-content-center" style="width:32px;height:32px;font-size:0.85rem;">#' + rank + '</div>';
+  }
+  h += '<span class="chip bg-white border-0 py-1 px-2 small fw-bold shadow-sm" style="border-radius: var(--radius-chip);">' + category + '</span>';
+  h += '</div>';
+
+  // Top Right: Save Button
+  h += '<div class="position-absolute top-0 end-0 m-3" style="z-index:5;">';
+  h += '<button class="btn btn-light bg-white rounded-circle p-2 shadow-sm d-flex align-items-center justify-content-center save-btn border-0" data-id="' + story.id + '" style="width: 32px; height: 32px;">';
+  h += '<i class="bi ' + isSaved + '"></i>';
+  h += '</button>';
+  h += '</div>';
+
+  h += '</div>';
+  
+  // Back face - description
+  h += '<div class="flip-back d-flex align-items-center justify-content-center p-3" style="background:#fff;">';
+  h += '<p class="story-desc-flip mb-0">' + description + '</p>';
+  h += '</div>';
+  
+  h += '</div></div>'; // end flip-inner, flip-container
+
+  // Card body
+  h += '<div class="card-body p-3 d-flex flex-column">';
+  h += '<a href="story.html#id=' + story.id + '" class="text-decoration-none">';
+  h += '<h5 class="card-title text-ink fw-bold mb-1" style="font-family: Bricolage Grotesque, sans-serif; color: var(--ink);">' + story.title + '</h5>';
+  h += '</a>';
+  if (location) {
+    h += '<p class="small text-secondary mb-0 mt-1 d-flex align-items-center gap-1"><img src="assets/img/location.png" style="width:11px;opacity:0.6;"> ' + location + '</p>';
+  }
+  h += '<div class="mt-auto d-flex align-items-center justify-content-between pt-3 border-top mt-3" style="border-color: var(--border-divider);">';
+  h += '<div class="d-flex align-items-center gap-2">';
+  h += '<div class="rounded-circle d-flex align-items-center justify-content-center text-white small" style="width:24px;height:24px;background-color:var(--avatar-' + avatarCol + ');font-size:10px;">' + initials + '</div>';
+  h += '<span class="small text-secondary">' + authorName + '</span>';
+  h += '</div>';
+  h += '<div class="d-flex gap-3 text-dark small fw-medium">';
+  h += '<span class="d-flex align-items-center gap-1 like-btn ' + likedClass + '" data-id="' + story.id + '" style="cursor:pointer;color:' + likedColor + ';">';
+  h += '<img src="assets/img/heart.png" class="like-icon" style="width:14px;' + likedFilter + '">';
+  h += '<span class="like-count">' + likeCount + '</span>';
+  h += '</span>';
+  h += '<span class="d-flex align-items-center gap-1 text-dark">';
+  h += '<img src="assets/img/comment.png" style="width:14px;filter:brightness(0);opacity:0.8;"> ' + commentCount;
+  h += '</span>';
+  h += '</div></div></div></div>';
+
+  return h;
 }
 
 function formatDate(dateString) {
@@ -170,6 +203,147 @@ function showToast(message) {
 }
 
 $(document).ready(function() {
+  
+    // Delegate save button clicks for grid cards
+    $(document).on('click', '.save-btn', function(e) {
+        e.preventDefault();
+        const btn = $(this);
+        const id = btn.data('id');
+        const icon = btn.find('i');
+        
+        if (icon.hasClass('bi-bookmark-fill')) {
+            // Unsave
+            icon.removeClass('bi-bookmark-fill text-saffron').addClass('bi-bookmark');
+            if (typeof apiCall === 'function') apiCall('/stories/' + id + '/save', 'DELETE');
+        } else {
+            // Save
+            icon.removeClass('bi-bookmark').addClass('bi-bookmark-fill text-saffron');
+            if (typeof apiCall === 'function') apiCall('/stories/' + id + '/save', 'POST');
+        }
+    });
+
+    // Delegate like button clicks for grid cards
+  $(document).on('click', '.like-btn', function(e) {
+      e.preventDefault();
+      const btn = $(this);
+      const id = btn.data('id');
+      const icon = btn.find('img.like-icon');
+      const countSpan = btn.find('.like-count');
+      let count = parseInt(countSpan.text()) || 0;
+      
+      const isLiked = btn.hasClass('text-danger');
+      
+      if (isLiked) {
+          // Unlike
+          btn.removeClass('text-danger');
+          btn.css('color', '#222');
+          icon.css('filter', 'brightness(0)');
+          icon.css('opacity', '0.8');
+          count = Math.max(0, count - 1);
+          countSpan.text(count);
+          if (typeof apiCall === 'function') apiCall('/stories/' + id + '/like', 'DELETE');
+      } else {
+          // Like
+          btn.addClass('text-danger');
+          btn.css('color', 'var(--like-red)');
+          icon.css('filter', 'invert(34%) sepia(98%) saturate(1478%) hue-rotate(331deg) brightness(101%) contrast(104%)');
+          icon.css('opacity', '1');
+          count++;
+          countSpan.text(count);
+          if (typeof apiCall === 'function') apiCall('/stories/' + id + '/like', 'POST');
+      }
+  });
+
   if ($('#navbar-placeholder').length) renderNavbar();
   if ($('#footer-placeholder').length) renderFooter();
 });
+
+
+
+function createReelCard(story) {
+  const authorName = story.author ? story.author.name : 'Unknown';
+  const avatarCol = story.author && story.author.name ? story.author.name.charCodeAt(0) % 6 + 1 : 1;
+  const avatarHtml = story.author && story.author.avatar_url 
+    ? '<img src="' + story.author.avatar_url + '" class="rounded-circle me-2 border border-2 border-white" style="width: 32px; height: 32px; object-fit: cover;">'
+    : '<div class="rounded-circle bg-avatar-' + avatarCol + ' text-white d-flex align-items-center justify-content-center me-2 fw-bold border border-2 border-white" style="width: 32px; height: 32px; font-size: 0.8rem;">' + getInitials(authorName) + '</div>';
+  
+  let carouselItems = '';
+  if (story.images && story.images.length > 0) {
+      story.images.forEach((img, i) => {
+          carouselItems += '<div class="carousel-item ' + (i === 0 ? 'active' : '') + '" style="height: 100%;"><img src="' + img + '" class="d-block w-100" style="height: 100%; object-fit: cover;"></div>';
+      });
+  } else {
+      carouselItems = '<div class="carousel-item active" style="height: 100%; background: #333;"></div>';
+  }
+  
+  const likeOp = story.liked_by_me ? '' : 'opacity: 0.8;';
+  const saveOp = story.saved_by_me ? '' : 'opacity: 0.8;';
+  
+  let h = '<div class="reel-item shadow-lg position-relative" data-story-id="' + story.id + '">';
+  h += '<div class="carousel slide reel-carousel" data-bs-ride="carousel" data-bs-interval="3000" style="height: 100%;">';
+  h += '<div class="carousel-inner" style="height: 100%;">' + carouselItems + '</div></div><div class="reel-overlay"></div>';
+  
+  h += '<div class="position-absolute top-0 end-0 m-3 d-flex align-items-center bg-dark bg-opacity-50 px-2 py-1 rounded-pill" style="z-index: 10;">';
+  h += '<img src="assets/img/location.png" style="width: 14px; margin-right: 6px; filter: brightness(0) invert(1);">';
+  h += '<span class="text-white small fw-medium">' + (story.location || 'Unknown') + '</span></div>';
+  
+  h += '<div class="position-absolute bottom-0 start-0 m-4 text-white" style="z-index: 10; width: 70%;">';
+  h += '<div class="d-flex align-items-center mb-2">' + avatarHtml + '<span class="fw-bold">' + authorName + '</span></div>';
+  h += '<h5 class="fw-bold mb-1 text-white" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">' + story.title + '</h5></div>';
+  
+  h += '<div class="position-absolute bottom-0 end-0 m-4 d-flex flex-column align-items-center gap-4 text-white" style="z-index: 10;">';
+  
+  h += '<div class="text-center"><button class="btn btn-link text-white p-0 d-block reel-like-btn" onclick="toggleReelLike(\'' + story.id + '\', this)" style="text-decoration: none;">';
+  h += '<img src="assets/img/heart.png" style="width: 28px; filter: brightness(0) invert(1); ' + likeOp + '"></button>';
+  h += '<small class="d-block mt-1 fw-bold">' + (story.like_count || 0) + '</small></div>';
+  
+  h += '<div class="text-center"><a href="story.html#id=' + story.id + '" class="text-white text-decoration-none">';
+  h += '<img src="assets/img/comment.png" style="width: 28px; filter: brightness(0) invert(1); opacity: 0.8;"></a>';
+  h += '<small class="d-block mt-1 fw-bold">' + (story.comments_count || 0) + '</small></div>';
+  
+  let safeTitle = story.title.replace(/'/g, '');
+  h += '<div class="text-center"><button class="btn btn-link text-white p-0 d-block" onclick="navigator.share({title:\'' + safeTitle + '\', url: window.location.origin+\'/story.html#id=' + story.id + '\'})" style="text-decoration: none;">';
+  h += '<img src="assets/img/share.png" style="width: 28px; filter: brightness(0) invert(1); opacity: 0.8;"></button>';
+  h += '<small class="d-block mt-1 fw-bold">Share</small></div>';
+  
+  h += '<div class="text-center"><button class="btn btn-link text-white p-0 d-block reel-save-btn" onclick="toggleReelSave(\'' + story.id + '\', this)" style="text-decoration: none;">';
+  h += '<img src="assets/img/save-instagram.png" style="width: 28px; filter: brightness(0) invert(1); ' + saveOp + '"></button>';
+  h += '<small class="d-block mt-1 fw-bold">Save</small></div>';
+  
+  h += '</div></div>';
+  return h;
+}
+
+window.toggleReelLike = function(id, btn) {
+    const img = $(btn).find('img');
+    if (img.css('opacity') == '1' || img.css('opacity') === '1') {
+        img.css('opacity', '0.8');
+        if(typeof apiCall === 'function') apiCall('/stories/' + id + '/like', 'DELETE');
+    } else {
+        img.css('opacity', '1');
+        if(typeof apiCall === 'function') apiCall('/stories/' + id + '/like', 'POST');
+    }
+};
+
+window.toggleReelSave = function(id, btn) {
+    const img = $(btn).find('img');
+    if (img.css('opacity') == '1' || img.css('opacity') === '1') {
+        img.css('opacity', '0.8');
+        if(typeof apiCall === 'function') apiCall('/stories/' + id + '/save', 'DELETE');
+    } else {
+        img.css('opacity', '1');
+        if(typeof apiCall === 'function') apiCall('/stories/' + id + '/save', 'POST');
+    }
+};
+
+
+function getInitials(name) {
+  if (!name) return 'U';
+  const parts = name.trim().split(' ');
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  } else if (name.length >= 2) {
+    return name.substring(0, 2).toUpperCase();
+  }
+  return name[0].toUpperCase();
+}

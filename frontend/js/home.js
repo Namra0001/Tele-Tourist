@@ -1,89 +1,111 @@
 $(document).ready(function() {
-    loadFreshStories();
+    loadTopLikedStories();
     loadCategories();
 });
 
-async function loadFreshStories() {
+async function loadTopLikedStories() {
     try {
-        const response = await typeof apiCall === 'function' ? apiCall('/stories/fresh') : Promise.resolve({ data: null });
-        let stories = response?.data || [];
+        const response = await (typeof apiCall === 'function' ? apiCall('/stories') : Promise.resolve({ data: [] }));
         
-        // Mock data if API is not yet returning data
-        if (stories.length === 0) {
-            stories = [
-                { id: 1, title: 'Lost in Kyoto', author: 'Jane D.', image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&q=80&w=600', featured: true },
-                { id: 2, title: 'Best Pasta in Rome', author: 'Mark T.', image: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&q=80&w=300' },
-                { id: 3, title: 'Hiking the Alps', author: 'Sarah W.', image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=300' },
-                { id: 4, title: 'Midnight in Paris', author: 'Alex B.', image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&q=80&w=300' }
-            ];
+        let stories = [];
+        if (response && response.stories) {
+            stories = response.stories;
+        } else if (Array.isArray(response)) {
+            stories = response;
         }
 
-        const container = $('#fresh-stories-container');
-        container.empty();
+        // Sort by likes descending
+        stories.sort((a, b) => {
+            const likesA = a.likes_count || a.like_count || 0;
+            const likesB = b.likes_count || b.like_count || 0;
+            return likesB - likesA;
+        });
 
-        if (stories.length > 0) {
-            const featured = stories[0];
-            const featuredHtml = `
-                <div class="col-lg-6 mb-4">
-                    <div class="card text-white bg-dark h-100 border-0 overflow-hidden">
-                        <img src="${featured.image}" class="card-img h-100" style="object-fit: cover; opacity: 0.6;" alt="${featured.title}">
-                        <div class="card-img-overlay d-flex flex-column justify-content-end p-4" style="background: linear-gradient(transparent, rgba(0,0,0,0.8));">
-                            <h3 class="card-title font-bricolage">${featured.title}</h3>
-                            <p class="card-text">By ${featured.author}</p>
-                        </div>
-                    </div>
-                </div>
-            `;
+        // Top 4 stories
+        const top4 = stories.slice(0, 4);
+
+        if (top4.length > 0) {
+            // Populate #1 (Featured)
+            const featured = top4[0];
+            const fCard = $('#featured-story');
+            fCard.attr('href', 'story.html#id=' + featured.id);
+            fCard.css('background-image', `linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('${featured.images && featured.images[0] ? featured.images[0] : ''}')`);
+            fCard.find('h2').text(featured.title).addClass('text-white'); // Make description/title font colour white
+            fCard.find('.text-white:last').html(`<img src="assets/img/heart.png" style="width: 14px; filter: brightness(0) invert(1);"> ${featured.likes_count || featured.like_count || 0}`);
             
-            let sideCardsHtml = '<div class="col-lg-6 d-flex flex-column gap-3">';
-            for(let i = 1; i < Math.min(stories.length, 4); i++) {
-                const story = stories[i];
-                let cardHtml = '';
-                if (typeof createStoryCard === 'function') {
-                    // Try to use globally defined createStoryCard, maybe overriding layout
-                    try {
-                        const tempDiv = document.createElement('div');
-                        tempDiv.innerHTML = createStoryCard(story);
-                        // Convert typical card to horizontal layout roughly
-                        cardHtml = `
-                            <div class="card flex-row border-0 shadow-sm overflow-hidden" style="height: 120px;">
-                                <img src="${story.image}" style="width: 120px; object-fit: cover;" alt="${story.title}">
-                                <div class="card-body">
-                                    <h5 class="card-title">${story.title}</h5>
-                                    <p class="card-text text-muted small">By ${story.author}</p>
-                                </div>
-                            </div>
-                        `;
-                    } catch (e) {}
-                }
-                
-                if (!cardHtml) {
-                    cardHtml = `
-                        <div class="card flex-row border-0 shadow-sm overflow-hidden" style="height: 120px;">
-                            <img src="${story.image}" style="width: 120px; object-fit: cover;" alt="${story.title}">
-                            <div class="card-body">
-                                <h5 class="card-title">${story.title}</h5>
-                                <p class="card-text text-muted small">By ${story.author}</p>
-                            </div>
-                        </div>
-                    `;
-                }
-                sideCardsHtml += cardHtml;
+            const fAuthor = featured.author ? featured.author.name : 'Unknown';
+            fCard.find('.d-flex.align-items-center.gap-2 span').text(fAuthor);
+            
+            const fInitials = fAuthor.substring(0, 2).toUpperCase();
+            fCard.find('.rounded-circle').text(fInitials).removeClass('text-lagoon').addClass('text-dark').show(); // Make avatar black colour font
+            
+            if (featured.category) {
+                fCard.find('.chip').text(featured.category).show();
             }
-            sideCardsHtml += '</div>';
 
-            container.append(featuredHtml + sideCardsHtml);
+            // Add #1 Badge side-by-side with category
+            const topBadgeContainer = fCard.find('.position-absolute.top-0.start-0');
+            topBadgeContainer.removeClass('m-4').addClass('m-3 d-flex align-items-center gap-2');
+            if (topBadgeContainer.find('.rank-badge').length === 0) {
+                topBadgeContainer.prepend('<div class="rank-badge badge bg-warning text-dark fw-bold rounded-2 d-flex align-items-center justify-content-center" style="padding: 4px 10px; font-size:1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">#1</div>');
+            }
+
+            // Populate #2, #3, #4
+            for (let i = 1; i < 4; i++) {
+                if (top4[i]) {
+                    const story = top4[i];
+                    const sCard = $('#story-card-' + (i + 1));
+                    sCard.attr('href', 'story.html#id=' + story.id);
+                    
+                    const imgUrl = story.images && story.images[0] ? story.images[0] : '';
+                    const imgContainer = sCard.find('.img-container');
+                    imgContainer.css({
+                        'background-image': `url('${imgUrl}')`,
+                        'background-size': 'cover',
+                        'background-position': 'center',
+                        'position': 'relative'
+                    });
+                    
+                    if (imgContainer.find('.rank-badge').length === 0) {
+                        imgContainer.append('<div class="rank-badge position-absolute top-0 start-0 m-2 badge bg-warning text-dark fw-bold rounded-1 d-flex align-items-center justify-content-center" style="padding: 2px 8px; z-index:5;font-size:0.85rem; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">#' + (i + 1) + '</div>');
+                    }
+                    
+                    if (story.category) {
+                        sCard.find('.chip').text(story.category);
+                    }
+                    sCard.find('h6').text(story.title);
+                    
+                    const loc = story.location || 'Unknown location';
+                    sCard.find('p.text-muted').html(`<img src="assets/img/location.png" style="width: 12px; margin-top: -3px;"> ${loc}`);
+                    
+                    const sAuthor = story.author ? story.author.name : 'Unknown';
+                    
+                    // Restore user avatar
+                    const sInitials = sAuthor.substring(0, 2).toUpperCase();
+                    const badge = sCard.find('.rounded-circle');
+                    badge.text(sInitials);
+                    badge.removeClass('text-dark fw-bold').addClass('text-white');
+                    badge.css({
+                        'background-color': '', // Clear the yellow background, let the HTML class fallback take over or assign one
+                        'font-size': '9px'
+                    });
+                    
+                    // Assign a nice random background color for the avatar if it lost its class
+                    const colorIndex = (sAuthor.charCodeAt(0) % 6) + 1;
+                    badge.css('background-color', 'var(--avatar-' + colorIndex + ')');
+                    
+                    sCard.find('.text-secondary').text(sAuthor);
+                    
+                    const likes = story.likes_count || story.like_count || 0;
+                    sCard.find('span.text-muted:last').html(`<img src="assets/img/heart.png" style="width: 14px;"> ${likes}`);
+                }
+            }
         }
     } catch (error) {
-        console.error("Error loading fresh stories:", error);
+        console.error("Error loading top liked stories:", error);
     }
 }
 
 function loadCategories() {
-    const categories = ['Adventure', 'Food & Drink', 'Culture', 'Relaxation', 'Nightlife', 'Nature'];
-    const container = $('#home-categories');
-    
-    categories.forEach(cat => {
-        container.append(`<a href="#" class="category-chip">${cat}</a>`);
-    });
+    //
 }
