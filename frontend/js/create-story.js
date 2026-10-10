@@ -26,6 +26,20 @@ $(document).ready(function() {
         loadStoryForEdit(editId);
     }
 
+        // Populate author
+    const currentUserName = localStorage.getItem('user') || 'Anonymous';
+    $('#preview-author-name').text(currentUserName);
+    let initials = 'U';
+    const parts = currentUserName.trim().split(' ');
+    if (parts.length >= 2) {
+        initials = (parts[0][0] + parts[1][0]).toUpperCase();
+    } else if (currentUserName.length >= 2) {
+        initials = currentUserName.substring(0, 2).toUpperCase();
+    } else if (currentUserName.length > 0) {
+        initials = currentUserName[0].toUpperCase();
+    }
+    $('#preview-author-avatar').text(initials);
+
     // Live preview logic
     $('#input-title').on('input', function() {
         const val = $(this).val();
@@ -44,15 +58,15 @@ $(document).ready(function() {
     });
 
     $('input[name="category"]').change(function() {
-        $('#preview-category').text($(this).val());
+        $('#preview-category').text($(this).data('name'));
     });
 
     // File Upload logic
     const dropzone = $('#photo-dropzone');
     const fileInput = $('#file-input');
 
-    dropzone.click(() => fileInput.click());
-    $('#btn-add-more').click(() => fileInput.click());
+    dropzone.click(() => fileInput[0].click());
+    $('#btn-add-more').click(() => fileInput[0].click());
 
     dropzone.on('dragover', function(e) {
         e.preventDefault();
@@ -81,7 +95,7 @@ $(document).ready(function() {
         }
 
         Array.from(files).forEach(file => {
-            if (!file.type.startsWith('image/')) return;
+            if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) return;
             
             uploadedFiles.push(file);
             
@@ -89,7 +103,20 @@ $(document).ready(function() {
             reader.onload = function(e) {
                 const isFirst = uploadedFiles.length === 1;
                 if (isFirst) {
-                    $('#preview-cover').attr('src', e.target.result);
+                    const previewCover = $('#preview-cover');
+                    if (file.type.startsWith('video/')) {
+                        if (previewCover.is('img')) {
+                            previewCover.replaceWith(`<video id="preview-cover" src="${e.target.result}" style="position:absolute; width:100%; height:100%; object-fit:cover; z-index:0;" controls></video>`);
+                        } else {
+                            previewCover.attr('src', e.target.result);
+                        }
+                    } else {
+                        if (previewCover.is('video')) {
+                            previewCover.replaceWith(`<img id="preview-cover" src="${e.target.result}" style="position:absolute; width:100%; height:100%; object-fit:cover; z-index:0;" alt="cover">`);
+                        } else {
+                            previewCover.attr('src', e.target.result);
+                        }
+                    }
                 }
                 
                 const thumbHtml = `
@@ -159,7 +186,7 @@ $(document).ready(function() {
         
         const validFiles = uploadedFiles.filter(f => f !== null);
         validFiles.forEach((file, index) => {
-            formData.append(`photo_${index}`, file);
+            formData.append('images', file);
         });
 
         const method = editId ? 'PUT' : 'POST';
@@ -167,7 +194,7 @@ $(document).ready(function() {
 
         if (typeof apiCall === 'function') {
             // Using fetch directly to let browser set multipart/form-data boundary
-            fetch(url, {
+            fetch(CONFIG.API_BASE_URL + url, {
                 method: method,
                 body: formData,
                 headers: {
@@ -210,3 +237,54 @@ $(document).ready(function() {
         }
     }
 });
+
+    const ratings = {
+        people: 0,
+        food: 0,
+        cleanliness: 0,
+        safety: 0,
+        value: 0
+    };
+
+    function updateOverallRating() {
+        let total = 0;
+        let count = 0;
+        for (const key in ratings) {
+            if (ratings[key] > 0) {
+                total += ratings[key];
+                count++;
+            }
+        }
+        
+        // Always calculate mean across all 5 even if some are 0?
+        // Let's divide by 5 for the average as requested
+        const avg = total / 5;
+        $('#overall-average-text').text(avg.toFixed(1) + ' / 5.0');
+        $('#input-rating').val(avg.toFixed(1)); // for backend compatibility
+        
+        let starsHtml = '';
+        const fullStars = Math.floor(avg);
+        const emptyStars = 5 - fullStars;
+        for (let i = 0; i < fullStars; i++) starsHtml += '★';
+        for (let i = 0; i < emptyStars; i++) starsHtml += '☆';
+        $('#overall-stars').text(starsHtml);
+    }
+
+    $('.rating-category i').click(function() {
+        const val = $(this).data('val');
+        const categoryContainer = $(this).closest('.rating-category');
+        const category = categoryContainer.data('category');
+        
+        ratings[category] = val;
+        $('#input-rating-' + category).val(val);
+        
+        categoryContainer.find('i').each(function() {
+            if ($(this).data('val') <= val) {
+                $(this).removeClass('text-muted').addClass('text-warning');
+            } else {
+                $(this).removeClass('text-warning').addClass('text-muted');
+            }
+        });
+        
+        updateOverallRating();
+    });

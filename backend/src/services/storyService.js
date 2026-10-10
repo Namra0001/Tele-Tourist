@@ -39,15 +39,36 @@ exports.createStory = async (userId, body, files) => {
   validateStory(body.title, body.description, body.location, body.category);
   
   const { data: story, error: storyError } = await supabase.from('stories').insert([{
-    user_id: userId,
-    category_id: body.category,
-    title: body.title,
-    description: body.description,
-    location: body.location,
-    rating: body.rating || 5
-  }]).select().single();
-  
-  if (storyError) throw new ApiError(500, storyError.message);
+      user_id: userId,
+      category_id: body.category,
+      title: body.title,
+      description: body.description,
+      location: body.location,
+      rating: body.rating || 5
+    }]).select().single();
+    
+    if (storyError) throw new ApiError(500, storyError.message);
+    
+    if (files && files.length > 0) {
+        const fs = require('fs');
+        const path = require('path');
+        const uploadDir = path.join(__dirname, '../../../uploads');
+        if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+        
+        const imageInserts = [];
+        for (const file of files) {
+            const ext = file.mimetype.split('/')[1];
+            const filename = `story_${story.id}_${Date.now()}.${ext}`;
+            fs.writeFileSync(path.join(uploadDir, filename), file.buffer);
+            imageInserts.push({
+                story_id: story.id,
+                url: `http://localhost:5000/uploads/${filename}`
+            });
+        }
+        
+        const { error: imgError } = await supabase.from('story_images').insert(imageInserts);
+        if (imgError) console.error("Error inserting images:", imgError);
+    }
   
   return { id: story.id, title: story.title };
 };

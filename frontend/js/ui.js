@@ -23,7 +23,7 @@ function renderNavbar() {
         </button>
         <div class="collapse navbar-collapse" id="navContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-4 ms-4">
-            <li class="nav-item"><a class="nav-link text-secondary fw-medium px-0 pb-1" href="explore.html">Explore</a></li>
+            <li class="nav-item"><a class="nav-link text-secondary fw-medium px-0 pb-1" href="explore.html">Stories</a></li>
             <li class="nav-item"><a class="nav-link text-secondary fw-medium px-0 pb-1" href="destinations.html">Destinations</a></li>
             <li class="nav-item"><a class="nav-link text-secondary fw-medium px-0 pb-1" href="saved.html">Saved</a></li>
             <li class="nav-item"><a class="nav-link text-secondary fw-medium px-0 pb-1" href="community.html">Community</a></li>
@@ -118,9 +118,16 @@ function renderFooter() {
 function createStoryCard(story, rank) {
   const isSaved = story.saved_by_me ? 'bi-bookmark-fill text-saffron' : 'bi-bookmark';
   const avatarCol = story.author && story.author.name ? story.author.name.charCodeAt(0) % 6 + 1 : 1;
-  const imgUrl = (story.images && story.images.length > 0) ? story.images[0] : '';
+  let imgUrl = (story.images && story.images.length > 0) ? story.images[0] : '';
+    if (imgUrl && imgUrl.includes('sourcesplash')) {
+        const fallbacks = ['assets/img/hampi.jpg', 'assets/img/spiti.jpg', 'assets/img/udaipur.jpg'];
+        imgUrl = fallbacks[Math.floor(Math.random() * fallbacks.length)];
+    }
   const authorName = story.author ? story.author.name : 'Unknown';
-  const bgStyle = imgUrl ? "background-image: url('" + imgUrl + "');" : '';
+  
+    const isVideo = imgUrl && (imgUrl.endsWith('.mp4') || imgUrl.endsWith('.webm') || imgUrl.endsWith('.mov'));
+    const bgStyle = (!isVideo && imgUrl) ? "background-image: url('" + imgUrl + "');" : '';
+
   const likedFilter = story.liked_by_me ? 'filter: invert(34%) sepia(98%) saturate(1478%) hue-rotate(331deg) brightness(101%) contrast(104%);' : 'filter: brightness(0); opacity: 0.8;';
   const likedColor = story.liked_by_me ? 'var(--like-red)' : '#222';
   const likedClass = story.liked_by_me ? 'text-danger' : '';

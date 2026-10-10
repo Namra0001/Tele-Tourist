@@ -6,7 +6,7 @@
   <title>Tele Tourist</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="css/style.css?v=1791542466109">
+  <link rel="stylesheet" href="css/style.css?v=1791612003964">
   <style>
     .hero-circle {
       position: absolute;
@@ -50,14 +50,13 @@
         width: 100%;
         height: 450px;
         overflow: hidden;
-        mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
-        -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+        -webkit-
       }
       .marquee-content {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
         gap: 1.5rem;
-        animation: scroll-vertical 15s linear infinite;
+        animation: scroll-vertical 35s linear infinite;
       }
       .marquee-content:hover {
         animation-play-state: paused;
@@ -158,7 +157,7 @@
     <!-- Hero -->
     <div class="row align-items-center mb-5 pb-4">
       <div class="col-lg-5 col-xl-6 pe-lg-5">
-        <h1 class="display-3 fw-bold mb-4 text-ink" style="line-height: 1.1; letter-spacing: -0.02em; font-family: 'Bricolage Grotesque', sans-serif;">Skip the brochure.<br>Read what travelers actually did.</h1>
+        <h1 class="display-3 fw-bold mb-4 text-ink" style="line-height: 1.1; letter-spacing: -0.02em; font-family: 'Bricolage Grotesque', sans-serif;">Skip the brochure.<br>Read what travelers actually did</h1>
         <p class="fs-5 text-secondary mb-4 pb-2" style="max-width: 90%;">Tele Tourist is where people share real trips: Every great trip starts with someone’s story. Find yours, then add your own.</p>
         
         <div class="bg-white p-2 shadow-sm d-flex flex-column flex-md-row gap-2 align-items-center mb-4" style="border-radius: 16px; border: 1px solid var(--border-card); max-width: 650px;">
@@ -178,15 +177,12 @@
           <button class="btn btn-primary px-4 py-2 text-nowrap" style="border-radius: 10px; font-weight: 500; min-width: 130px;">Find stories</button>
         </div>
         
-        <div class="d-flex align-items-center gap-3 mt-4">
-          <div class="d-flex">
-            <div class="rounded-circle text-white d-flex align-items-center justify-content-center border border-white" style="width: 32px; height: 32px; margin-right: -10px; background-color: var(--avatar-1); font-size: 10px; z-index: 4;"></div>
-            <div class="rounded-circle text-white d-flex align-items-center justify-content-center border border-white" style="width: 32px; height: 32px; margin-right: -10px; background-color: var(--avatar-2); font-size: 10px; z-index: 3;">DP</div>
-            <div class="rounded-circle text-white d-flex align-items-center justify-content-center border border-white" style="width: 32px; height: 32px; margin-right: -10px; background-color: var(--avatar-3); font-size: 10px; z-index: 2;"></div>
-            <div class="rounded-circle text-white d-flex align-items-center justify-content-center border border-white" style="width: 32px; height: 32px; background-color: var(--avatar-4); font-size: 10px; z-index: 1;">NR</div>
+        <div class="d-flex align-items-center gap-3 mt-4" id="stats-container">
+            <div class="d-flex" id="stats-avatars">
+              <!-- JS will populate avatars -->
+            </div>
+            <span class="small text-secondary" id="stats-text"></span>
           </div>
-          <span class="small text-secondary"><b>3,200 travelers</b> have shared 12,480 stories</span>
-        </div>
       </div>
       
       <div class="col-lg-7 col-xl-6 d-none d-lg-block position-relative">
@@ -266,96 +262,20 @@
       </div>
     </div>
 
-    <!-- Category chips -->
-    <div class="d-flex flex-wrap gap-2 mb-5 pb-3" id="category-filters">
-      <span class="chip active">Mountains <span class="text-white-50 ms-1" style="font-size:11px">412</span></span>
-      <span class="chip">Beaches <span class="text-muted ms-1" style="font-size:11px">286</span></span>
-      <span class="chip">Heritage <span class="text-muted ms-1" style="font-size:11px">198</span></span>
-      <span class="chip">Food trails <span class="text-muted ms-1" style="font-size:11px">245</span></span>
-      <span class="chip">Road trips <span class="text-muted ms-1" style="font-size:11px">173</span></span>
-      <span class="chip">Solo & budget <span class="text-muted ms-1" style="font-size:11px">320</span></span>
-      <span class="chip">Nature <span class="text-muted ms-1" style="font-size:11px">231</span></span>
-    </div>
-
     <!-- Fresh from the road -->
-    <div class="d-flex justify-content-between align-items-end mb-4 pt-4">
-      <h3 class="mb-0 fw-bold text-ink" style="font-family: 'Bricolage Grotesque', sans-serif;">Most Liked Stories</h3>
-      <a href="explore.html" class="text-lagoon text-decoration-none fw-bold medium">See all stories <i class="bi bi-arrow-right"></i></a>
-    </div>
     
-    <div class="row g-4 mb-5 pb-4">
-      <!-- Large Featured Card -->
-        <div class="col-lg-7">
-          <a href="#" id="featured-story" class="featured-card w-100" style="background-color: var(--mist); background-size: cover; background-position: center;">
-            <div class="position-absolute top-0 start-0 m-4 z-3">
-              <span class="chip bg-white bg-opacity-25 text-white border-0 py-1 px-3 medium fw-bold" style="backdrop-filter: blur(4px); display:none;"></span>
-            </div>
-            <div class="content">
-              <h2 class="fw-bold mb-3" style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 2.5rem; max-width: 90%;"></h2>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center gap-2">
-                  <div class="rounded-circle text-lagoon bg-white d-flex align-items-center justify-content-center fw-bold" style="width: 32px; height: 32px; font-size: 12px; display:none;"></div>
-                  <span class="text-white"></span>
-                </div>
-                <div class="text-white"><img src="assets/img/heart.png" style="width: 14px;"> 0</div>
-              </div>
-            </div>
-          </a>
-        </div>
-        <!-- 3 Horizontal Cards -->
-      <div class="col-lg-5 d-flex flex-column gap-3">
-        <!-- Gokarna -->
-        <a href="story?id=2" id="story-card-2" class="horizontal-card text-decoration-none">
-          <div class="img-container" style="background-color: var(--mist);"></div>
-          <div class="p-3 d-flex flex-column justify-content-center flex-grow-1">
-            <span class="chip border px-2 py-0 mb-2 align-self-start text-muted bg-transparent" style="font-size: 10px;">Beaches</span>
-            <h6 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;"></h6>
-            <p class="text-muted mb-2" style="font-size: 11px;"><img src="assets/img/location.png" style="width: 12px; margin-top: -3px;"> </p>
-            <div class="d-flex justify-content-between align-items-center mt-auto">
-              <div class="d-flex align-items-center gap-1">
-                <div class="rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 18px; height: 18px; background-color: var(--avatar-5); font-size: 9px;"></div>
-                <span class="text-secondary" style="font-size: 11px;"></span>
-              </div>
-              <span class="text-muted" style="font-size: 11px;"><img src="assets/img/heart.png" style="width: 14px;"> 0</span>
-            </div>
-          </div>
-        </a>
-        <!-- Mumbai -->
-        <a href="story?id=3" id="story-card-3" class="horizontal-card text-decoration-none">
-          <div class="img-container" style="background-color: var(--mist);"></div>
-          <div class="p-3 d-flex flex-column justify-content-center flex-grow-1">
-            <span class="chip border px-2 py-0 mb-2 align-self-start text-muted bg-transparent" style="font-size: 10px;">Food trails</span>
-            <h6 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;"></h6>
-            <p class="text-muted mb-2" style="font-size: 11px;"><img src="assets/img/location.png" style="width: 12px; margin-top: -3px;"> </p>
-            <div class="d-flex justify-content-between align-items-center mt-auto">
-              <div class="d-flex align-items-center gap-1">
-                <div class="rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 18px; height: 18px; background-color: var(--avatar-2); font-size: 9px;"></div>
-                <span class="text-secondary" style="font-size: 11px;"></span>
-              </div>
-              <span class="text-muted" style="font-size: 11px;"><img src="assets/img/heart.png" style="width: 14px;"> 0</span>
-            </div>
-          </div>
-        </a>
-        <!-- Hampi -->
-        <a href="story?id=4" id="story-card-4" class="horizontal-card text-decoration-none">
-          <div class="img-container" style="background-color: var(--mist);"></div>
-          <div class="p-3 d-flex flex-column justify-content-center flex-grow-1">
-            <span class="chip border px-2 py-0 mb-2 align-self-start text-muted bg-transparent" style="font-size: 10px;">Heritage</span>
-            <h6 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;"></h6>
-            <p class="text-muted mb-2" style="font-size: 11px;"><img src="assets/img/location.png" style="width: 12px; margin-top: -3px;"> </p>
-            <div class="d-flex justify-content-between align-items-center mt-auto">
-              <div class="d-flex align-items-center gap-1">
-                <div class="rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 18px; height: 18px; background-color: var(--avatar-4); font-size: 9px;"></div>
-                <span class="text-secondary" style="font-size: 11px;"></span>
-              </div>
-              <span class="text-muted" style="font-size: 11px;"><img src="assets/img/heart.png" style="width: 14px;"> 0</span>
-            </div>
-          </div>
-        </a>
-      </div>
-    </div>
+<!-- ===================== MOST LIKED SECTION HTML ===================== -->
+<section class="ml-section" aria-labelledby="mlTitle">
+  <div class="d-flex justify-content-between align-items-end mb-4 pt-3">
+    <h3 id="mlTitle" class="mb-0 fw-bold text-dark" style="font-family: 'Bricolage Grotesque', sans-serif; color: black !important;">Most Liked Stories</h3>
+    <a href="explore.html?sort=most_liked" class="text-lagoon text-decoration-none fw-bold small">See all stories <i class="bi bi-arrow-right"></i></a>
+  </div>
+  <div class="ml-track" id="mlTrack" tabindex="-1"></div>
+  <div class="ml-dots" id="mlDots" aria-hidden="true"></div>
+</section>
+<!-- ===================== /MOST LIKED SECTION HTML ===================== -->
 
-    <!-- Places people keep writing about -->
+      <!-- Places people keep writing about -->
     <div class="d-flex justify-content-between align-items-end mb-4 pt-3">
       <h3 class="mb-0 fw-bold text-ink" style="font-family: 'Bricolage Grotesque', sans-serif;">Places people keep writing about</h3>
       <a href="#" class="text-lagoon text-decoration-none fw-bold small">All destinations <i class="bi bi-arrow-right"></i></a>
@@ -371,7 +291,7 @@
     <div class="cta-band rounded-4 p-5 d-flex flex-column flex-md-row align-items-center justify-content-between my-5">
       <div class="mb-4 mb-md-0">
         <h2 class="text-white mb-2" style="max-width: 400px; font-family: 'Bricolage Grotesque', sans-serif;">Been somewhere worth telling people about?</h2>
-        <p class="mb-0 opacity-75">Add your photos, write what happened, and help the next traveler decide.</p>
+        <p class="mb-0 opacity-75">Add your photos, write what happened and help the next traveler to decide.</p>
       </div>
       <a href="create-story.html" class="btn btn-highlight py-2 px-4 fw-bold">Write your story <i class="bi bi-arrow-right"></i></a>
     </div>
@@ -386,8 +306,8 @@
   <script src="js/mock-data.js"></script>
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
-  <script src="js/home.js?v=1791545237492"></script>
-  <script src="js/ui.js?v=1791528653562"></script>
+  <script src="js/home.js?v=1791615047936"></script>
+  <script src="js/ui.js?v=1791624485609"></script>
 
 <script>
   $(document).ready(function() {
@@ -445,42 +365,23 @@
 
       
       // Destinations Marquee
-      let locationsMap = {};
-      stories.forEach(s => {
-        if (s.location) {
-          locationsMap[s.location] = (locationsMap[s.location] || 0) + 1;
-        }
-      });
-      let locations = Object.keys(locationsMap).map(loc => ({ name: loc, count: locationsMap[loc] })).sort((a,b) => b.count - a.count);
-      
+      const hardcodedPlaces = [{"No.":1,"Tourist Place":"Taj Mahal","City":"Agra","State":"Uttar Pradesh","URL":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7FEgcfZ-YLWcHhxGaHkB3i3ImGoi0w7xoieKb0JyuLQ&s=10"},{"No.":2,"Tourist Place":"Jaipur (Pink City)","City":"Jaipur","State":"Rajasthan","URL":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdekhaXVoXe2bT4ZuKhZg965FyfBGWjCaKH98ZTPF-9w&s"},{"No.":3,"Tourist Place":"Amber Fort","City":"Jaipur","State":"Rajasthan","URL":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9mhkqfgyp2Cg9kRvKl3XthUFOtetMzkYWehVFm4mofw&s"},{"No.":4,"Tourist Place":"Hawa Mahal","City":"Jaipur","State":"Rajasthan","URL":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReJFhGTxGSAdhz4weiX_F_HIwt9LJ0jWzTYFkl8BknLw&s=10"},{"No.":5,"Tourist Place":"Red Fort","City":"Delhi","State":"Delhi","URL":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbOTVqoAK7ONEN39ey6LR8od8aMUVmvfomSSoT3XF3BQ&s=10"},{"No.":6,"Tourist Place":"Qutub Minar","City":"Delhi","State":"Delhi","URL":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdcnRGPfv_SN8PB-bKK-dA2JGBw8NB0DgxPbfgtI_K0A&s=10"},{"No.":7,"Tourist Place":"Humayun's Tomb","City":"Delhi","State":"Delhi","URL":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRh59WNwWvQiLwRsceXGKmM7XzVJ6LHocZRMbz1f1fAIQ&s=10"},{"No.":8,"Tourist Place":"Golden Temple","City":"Amritsar","State":"Punjab","URL":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHZO4KjIsiStR_jp4AGT6zqD4d8viLbrFA7FCb8J7x3A&s"},{"No.":9,"Tourist Place":"Varanasi Ghats","City":"Varanasi","State":"Uttar Pradesh","URL":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeFr0lnt4num9JATyhGIpfJu8ybEHrzfov_DVOW2TKXA&s=10"},{"No.":10,"Tourist Place":"Bodh Gaya (Mahabodhi Temple)","City":"Bodh Gaya","State":"Bihar","URL":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgqJlTMQgmu6fet4F9ZF8IdX2k6xVyRFo0Awqdah7MqA&s=10"},{"No.":11,"Tourist Place":"Khajuraho Temples","City":"Khajuraho","State":"Madhya Pradesh","URL":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNvrPpA9jSST0nXuFmm2kub9ydU8pVzW3dCmLflL1mLw&s=10"},{"No.":12,"Tourist Place":"Ajanta Caves","City":"Aurangabad region","State":"Maharashtra","URL":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRB-BudtbPEPSWC-dB0qBNgbhKpincmn6s7i1mIGQoyZw&s"},{"No.":13,"Tourist Place":"Ellora Caves","City":"Aurangabad region","State":"Maharashtra","URL":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNaBsPQztOpc81dxJKi3cRuvTSDCHzeFj4in4aMb1Ccw&s=10"},{"No.":14,"Tourist Place":"Gateway of India","City":"Mumbai","State":"Maharashtra","URL":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAJiqF55iwcUUW4jAx-FRoK3zBtIf0wIX0yQrNnOrbdA&s=10"},{"No.":15,"Tourist Place":"Goa Beaches","City":"Goa","State":"Goa","URL":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4TX0XnATgtpwL81okGXsGHff_JNtWLqKF86MKyZTwdw&s=10"},{"No.":16,"Tourist Place":"Hampi","City":"Vijayanagara","State":"Karnataka","URL":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcDfLcRjwlqBBnroO38BaTzM9pibHnpS27VevSPcRO1A&s=10"},{"No.":17,"Tourist Place":"Mysore Palace","City":"Mysuru","State":"Karnataka","URL":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-jPcnv8-ZTWZN5tGgOWGbI6tFc7UKsk3d7Mbsp4rZhw&s"},{"No.":18,"Tourist Place":"Coorg","City":"Kodagu","State":"Karnataka","URL":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9WzRqkKauIaN5OiQPCSF9W9CTTpdQXNbX4E5p7kG6AQ&s=10"},{"No.":19,"Tourist Place":"Ooty","City":"Ooty","State":"Tamil Nadu","URL":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShv2eKuNK7CZYlD5fmfNRG2-kVCMezd_hc19xzFJCefA&s=10"},{"No.":20,"Tourist Place":"Meenakshi Amman Temple","City":"Madurai","State":"Tamil Nadu","URL":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZhmvpmitLCFofeAWtQJ4McWdmgtJua_qMbwwWIk497g&s"},{"No.":21,"Tourist Place":"Mahabalipuram Shore Temple","City":"Mahabalipuram","State":"Tamil Nadu","URL":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLKZ5oDux8E8l2fxb1cWugXPxa8rXREhZvQobxmwZI3w&s=10"},{"No.":22,"Tourist Place":"Munnar","City":"Munnar","State":"Kerala","URL":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjyFbMxW4P1_XWwWvMrJWSqHjZKOIUq0i8oORI5b7v_g&s"}];
       let marqueeHtml = '';
-      if (locations.length === 0) {
-        // Render 5 empty containers if no stories
-        for (let i = 0; i < 5; i++) {
-          marqueeHtml += `<div class="tall-tile marquee-item" style="background-color: var(--mist);"></div>`;
-        }
-      } else {
-        // Render real locations
-        locations.forEach(loc => {
-          // Try to find a background image from one of the stories in this location
-          let bgImage = '';
-          const storyWithImg = stories.find(s => s.location === loc.name && s.images && s.images[0]);
-          if (storyWithImg) {
-            bgImage = `background-image: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.8) 100%), url('${storyWithImg.images[0].startsWith(\"http\") ? storyWithImg.images[0] : \"assets/img/\" + storyWithImg.images[0]}');`;
-          } else {
-            bgImage = `background-image: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.8) 100%); background-color: var(--mist);`;
-          }
-          
-          marqueeHtml += `
-            <a href="explore.html?location=${encodeURIComponent(loc.name)}" class="tall-tile marquee-item text-decoration-none" style="${bgImage} background-size: cover; background-position: center;">
-              <div>
-                <h4 class="mb-0 text-white" style="font-family: 'Bricolage Grotesque', sans-serif;">${loc.name}</h4>
-                <span class="small opacity-75 text-white">${loc.count} stories</span>
-              </div>
-            </a>
-          `;
-        });
-      }
+      
+      hardcodedPlaces.forEach(loc => {
+        const bgImage = `background-image: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.8) 100%), url('${loc.URL}');`;
+        // Randomize stories count between 5 and 50 for realistic look since it's hardcoded
+        const randomCount = Math.floor(Math.random() * 45) + 5;
+        
+        marqueeHtml += `
+          <a href="explore.html?location=${encodeURIComponent(loc['Tourist Place'])}" class="tall-tile marquee-item text-decoration-none" style="${bgImage} background-size: cover; background-position: center;">
+            <div>
+              <h4 class="mb-0 text-white" style="font-family: 'Bricolage Grotesque', sans-serif;">${loc['Tourist Place']}</h4>
+              <span class="small opacity-75 text-white">${loc['City']}, ${loc['State']}</span>
+            </div>
+          </a>
+        `;
+      });
       
       // Duplicate for seamless infinite scroll
       $('#destinations-marquee').html(marqueeHtml + marqueeHtml);

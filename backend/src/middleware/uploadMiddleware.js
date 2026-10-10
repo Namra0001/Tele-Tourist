@@ -4,16 +4,16 @@ const ApiError = require('../utils/ApiError');
 const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {
-  if (['image/jpeg', 'image/png', 'image/webp'].includes(file.mimetype)) {
+  if (['image/jpeg', 'image/png', 'image/webp', 'video/mp4', 'video/webm', 'video/quicktime'].includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new ApiError(400, 'Only JPG, PNG and WEBP images are allowed'), false);
+    cb(new ApiError(400, 'Only images and videos are allowed'), false);
   }
 };
 
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
+  limits: { fileSize: 10 * 1024 * 1024 }, // 5 MB
   fileFilter
 });
 

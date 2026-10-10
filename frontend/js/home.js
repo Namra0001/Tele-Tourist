@@ -1,18 +1,95 @@
 $(document).ready(function() {
     loadTopLikedStories();
-    loadCategories();
+    
 });
+
+function mlCard(s, i) {
+    var cover = s.images && s.images[0] ? "background-image:url('" + s.images[0] + "')" : "background-color: var(--mist);";
+    var authorName = s.author ? s.author.name : 'Admin User';
+    var avatarInitials = authorName.substring(0, 2).toUpperCase();
+    var likesCount = s.likes_count || s.like_count || 0;
+    var location = s.location || 'Unknown location';
+    var category = s.category || 'Story';
+    
+    return '<div class="ml-item">' +
+      '<span class="ml-num" aria-hidden="true">' + (i + 1) + '</span>' +
+      '<a class="ml-card" href="story.html?id=' + s.id + '" aria-label="' + s.title + ', ' + likesCount + ' likes">' +
+        '<span class="ml-img" style="' + cover + '"></span><span class="ml-shade"></span>' +
+        '<span class="ml-cat ml-glass">' + category + '</span>' +
+        // (i === 0 ? '<span class="ml-badge">&#9733; Top story</span>' : '') +
+        '<span class="ml-likes ml-glass"><svg width="15" height="15" viewBox="0 0 24 24" stroke-width="1.8" stroke-linejoin="round"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/></svg>' + likesCount + '</span>' +
+        '<span class="ml-body">' +
+          '<h3 class="ml-title">' + s.title + '</h3>' +
+          '<span class="ml-loc"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>' + location + '</span>' +
+          '<span class="ml-foot">' +
+            '<span class="ml-by"><span class="ml-av">' + avatarInitials + '</span><span class="n">' + authorName + '</span></span>' +
+            '<span class="ml-go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>' +
+          '</span>' +
+        '</span>' +
+      '</a></div>';
+}
 
 async function loadTopLikedStories() {
     try {
         const response = await (typeof apiCall === 'function' ? apiCall('/stories') : Promise.resolve({ data: [] }));
         
+
         let stories = [];
         if (response && response.stories) {
             stories = response.stories;
         } else if (Array.isArray(response)) {
             stories = response;
         }
+
+        // --- DYNAMIC STATS LOGIC ---
+        try {
+            const usersResponse = await (typeof apiCall === 'function' ? apiCall('/users') : Promise.resolve([]));
+            const users = Array.isArray(usersResponse) ? usersResponse : (usersResponse.users || []);
+            
+            const totalStories = response && response.total ? response.total : stories.length;
+            let totalUsers = users.length;
+            
+            const uniqueAuthors = new Set();
+            stories.forEach(s => {
+                if (s.author && s.author.name) uniqueAuthors.add(s.author.name);
+            });
+            
+            if (totalUsers === 0) {
+                totalUsers = uniqueAuthors.size || 1;
+                // Since users array is empty, populate it with unique authors for the avatars
+                uniqueAuthors.forEach(name => users.push({ name }));
+            }
+            
+            $('#stats-text').html(`<b>${totalUsers} travelers</b> have shared ${totalStories} stories`);
+            
+            let displayUsers = [];
+            if (users.length >= 4) {
+                // Shuffle users array and pick 4
+                displayUsers = users.sort(() => 0.5 - Math.random()).slice(0, 4);
+            } else {
+                displayUsers = [...users];
+                while (displayUsers.length < 4) {
+                    displayUsers.push({ name: 'Admin User' });
+                }
+            }
+            
+            let avatarsHtml = '';
+            displayUsers.forEach((user, idx) => {
+                const name = user.name || 'Admin User';
+                const initials = name.substring(0, 2).toUpperCase();
+                const zIndex = 4 - idx;
+                const marginRight = idx < 3 ? '-10px' : '0';
+                const colorIndex = (name.charCodeAt(0) % 6) + 1;
+                
+                avatarsHtml += `<div class="rounded-circle text-white d-flex align-items-center justify-content-center border border-white" style="width: 32px; height: 32px; margin-right: ${marginRight}; background-color: var(--avatar-${colorIndex}); font-size: 10px; z-index: ${zIndex};">${initials}</div>`;
+            });
+            $('#stats-avatars').html(avatarsHtml);
+            
+        } catch(e) {
+            console.error("Error loading stats:", e);
+        }
+        // --- END DYNAMIC STATS LOGIC ---
+
 
         // Sort by likes descending
         stories.sort((a, b) => {
@@ -21,91 +98,38 @@ async function loadTopLikedStories() {
             return likesB - likesA;
         });
 
-        // Top 4 stories
-        const top4 = stories.slice(0, 4);
+        // Top 6 stories (the snippet usually fits 6 or more for scrolling)
+        const topStories = stories.slice(0, 6);
 
-        if (top4.length > 0) {
-            // Populate #1 (Featured)
-            const featured = top4[0];
-            const fCard = $('#featured-story');
-            fCard.attr('href', 'story.html#id=' + featured.id);
-            fCard.css('background-image', `linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('${featured.images && featured.images[0] ? featured.images[0] : ''}')`);
-            fCard.find('h2').text(featured.title).addClass('text-white'); // Make description/title font colour white
-            fCard.find('.text-white:last').html(`<img src="assets/img/heart.png" style="width: 14px; filter: brightness(0) invert(1);"> ${featured.likes_count || featured.like_count || 0}`);
+        if (topStories.length > 0) {
+            var $track = $('#mlTrack');
+            $track.html(topStories.map(mlCard).join(''));
+            $('#mlDots').html(topStories.map(function(){ return '<i></i>'; }).join(''));
             
-            const fAuthor = featured.author ? featured.author.name : 'Unknown';
-            fCard.find('.d-flex.align-items-center.gap-2 span').text(fAuthor);
-            
-            const fInitials = fAuthor.substring(0, 2).toUpperCase();
-            fCard.find('.rounded-circle').text(fInitials).removeClass('text-lagoon').addClass('text-dark').show(); // Make avatar black colour font
-            
-            if (featured.category) {
-                fCard.find('.chip').text(featured.category).show();
-            }
-
-            // Add #1 Badge side-by-side with category
-            const topBadgeContainer = fCard.find('.position-absolute.top-0.start-0');
-            topBadgeContainer.removeClass('m-4').addClass('m-3 d-flex align-items-center gap-2');
-            if (topBadgeContainer.find('.rank-badge').length === 0) {
-                topBadgeContainer.prepend('<div class="rank-badge badge bg-warning text-dark fw-bold rounded-2 d-flex align-items-center justify-content-center" style="padding: 4px 10px; font-size:1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">#1</div>');
-            }
-
-            // Populate #2, #3, #4
-            for (let i = 1; i < 4; i++) {
-                if (top4[i]) {
-                    const story = top4[i];
-                    const sCard = $('#story-card-' + (i + 1));
-                    sCard.attr('href', 'story.html#id=' + story.id);
-                    
-                    const imgUrl = story.images && story.images[0] ? story.images[0] : '';
-                    const imgContainer = sCard.find('.img-container');
-                    imgContainer.css({
-                        'background-image': `url('${imgUrl}')`,
-                        'background-size': 'cover',
-                        'background-position': 'center',
-                        'position': 'relative'
-                    });
-                    
-                    if (imgContainer.find('.rank-badge').length === 0) {
-                        imgContainer.append('<div class="rank-badge position-absolute top-0 start-0 m-2 badge bg-warning text-dark fw-bold rounded-1 d-flex align-items-center justify-content-center" style="padding: 2px 8px; z-index:5;font-size:0.85rem; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">#' + (i + 1) + '</div>');
-                    }
-                    
-                    if (story.category) {
-                        sCard.find('.chip').text(story.category);
-                    }
-                    sCard.find('h6').text(story.title);
-                    
-                    const loc = story.location || 'Unknown location';
-                    sCard.find('p.text-muted').html(`<img src="assets/img/location.png" style="width: 12px; margin-top: -3px;"> ${loc}`);
-                    
-                    const sAuthor = story.author ? story.author.name : 'Unknown';
-                    
-                    // Restore user avatar
-                    const sInitials = sAuthor.substring(0, 2).toUpperCase();
-                    const badge = sCard.find('.rounded-circle');
-                    badge.text(sInitials);
-                    badge.removeClass('text-dark fw-bold').addClass('text-white');
-                    badge.css({
-                        'background-color': '', // Clear the yellow background, let the HTML class fallback take over or assign one
-                        'font-size': '9px'
-                    });
-                    
-                    // Assign a nice random background color for the avatar if it lost its class
-                    const colorIndex = (sAuthor.charCodeAt(0) % 6) + 1;
-                    badge.css('background-color', 'var(--avatar-' + colorIndex + ')');
-                    
-                    sCard.find('.text-secondary').text(sAuthor);
-                    
-                    const likes = story.likes_count || story.like_count || 0;
-                    sCard.find('span.text-muted:last').html(`<img src="assets/img/heart.png" style="width: 14px;"> ${likes}`);
+            function update(){
+                if (!$track[0]) return;
+                var el = $track[0], max = el.scrollWidth - el.clientWidth;
+                $('#mlPrev').prop('disabled', el.scrollLeft <= 4);
+                $('#mlNext').prop('disabled', el.scrollLeft >= max - 4);
+                var step = $track.find('.ml-item').first().outerWidth(true) || 0;
+                if (step > 0) {
+                    var active = Math.min(topStories.length - 1, Math.round(el.scrollLeft / step));
+                    $('#mlDots i').removeClass('on').eq(active).addClass('on');
                 }
             }
+            function scrollByCards(dir){
+                var step = $track.find('.ml-item').first().outerWidth(true) + 18;
+                var visible = Math.max(1, Math.floor($track[0].clientWidth / step));
+                $track[0].scrollBy({ left: dir * step * visible, behavior: 'smooth' });
+            }
+            $('#mlPrev').off('click').on('click', function(){ scrollByCards(-1); });
+            $('#mlNext').off('click').on('click', function(){ scrollByCards(1); });
+            $track.off('scroll').on('scroll', update);
+            $(window).off('resize').on('resize', update);
+            setTimeout(update, 100); // initial update
         }
     } catch (error) {
         console.error("Error loading top liked stories:", error);
     }
 }
 
-function loadCategories() {
-    //
-}

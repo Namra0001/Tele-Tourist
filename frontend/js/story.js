@@ -188,13 +188,22 @@ $(document).ready(function() {
             story.photos.forEach((photo, index) => {
                 if (index < 5) {
                     let mainClass = (index === 0 && (len === 3 || len >= 5)) ? 'mosaic-item-main' : '';
-                    mosaicHtml += `<img src="${photo}" class="mosaic-item ${mainClass}" alt="Photo ${index + 1}">`;
+                    
+                    let mediaSrc = photo.includes('sourcesplash') ? 'assets/img/spiti.jpg' : photo;
+                    let isVid = mediaSrc.endsWith('.mp4') || mediaSrc.endsWith('.webm') || mediaSrc.endsWith('.mov');
+                    if (isVid) {
+                        mosaicHtml += `<video src="${mediaSrc}" class="mosaic-item ${mainClass}" style="object-fit:cover;width:100%;height:100%;" autoplay muted loop></video>`;
+                    } else {
+                        mosaicHtml += `<img src="${mediaSrc}" class="mosaic-item ${mainClass}" alt="Photo ${index + 1}">`;
+                    }
                 }
                 
                 let activeClass = index === 0 ? 'active' : '';
                 galleryHtml += `
                     <div class="carousel-item ${activeClass}">
-                        <img src="${photo}" class="d-block w-100" alt="Gallery Photo ${index + 1}" style="max-height: 80vh; object-fit: contain;">
+                        ${(photo.endsWith('.mp4') || photo.endsWith('.webm') || photo.endsWith('.mov')) ? 
+                            `<video src="${photo}" class="d-block w-100" style="max-height: 80vh; object-fit: contain;" controls autoplay></video>` : 
+                            `<img src="${photo.includes('sourcesplash') ? 'assets/img/spiti.jpg' : photo}" class="d-block w-100" alt="Gallery Photo ${index + 1}" style="max-height: 80vh; object-fit: contain;">`}
                     </div>
                 `;
             });

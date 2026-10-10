@@ -30,7 +30,7 @@
         .badge-cover { position: absolute; bottom: 4px; left: 4px; background: var(--saffron); color: var(--ink); font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px; }
         .add-tile { width: 100px; height: 100px; border: 1px dashed var(--border-dashed); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; color: var(--text-muted); cursor: pointer; background: white; vertical-align: top; }
         
-        .sticky-preview { position: sticky; top: 100px; }
+        
         .preview-card { border: 1px solid var(--border-card); border-radius: 16px; overflow: hidden; box-shadow: none; background: white; }
         .preview-img { width: 100%; height: 180px; object-fit: cover; background: linear-gradient(180deg, #E8F4F8 0%, #20556B 100%); position: relative; }
         
@@ -42,12 +42,12 @@
     <div id="navbar-placeholder"></div>
 
     <div class="container py-5">
+        <div class="mb-5">
+            <h1 class="display-6 fw-bold text-ink mb-2" id="page-title">Write a story</h1>
+            <p class="text-secondary fs-6">Tell other travelers what happened, what it cost you, and what you would do differently.</p>
+        </div>
         <div class="row">
             <div class="col-lg-7 pe-lg-5">
-                <div class="mb-5">
-                    <h1 class="display-6 fw-bold text-ink mb-2">Write a story</h1>
-                    <p class="text-secondary fs-6">Tell other travelers what happened, what it cost you, and what you would do differently.</p>
-                </div>
 
                 <div class="card card-custom mb-4">
                     <div class="card-body p-4">
@@ -69,25 +69,25 @@
                         <div class="mb-4">
                             <label class="form-label d-block">Category</label>
                             <div id="category-chips">
-                                <input type="radio" name="category" id="cat-mountains" value="Mountains" class="category-chip-input" checked>
+                                <input type="radio" name="category" id="cat-mountains" value="72254303-b176-4089-96e3-7e3233b9b174" data-name="Mountains" class="category-chip-input" checked>
                                 <label for="cat-mountains" class="category-chip-label">Mountains</label>
 
-                                <input type="radio" name="category" id="cat-beaches" value="Beaches" class="category-chip-input">
+                                <input type="radio" name="category" id="cat-beaches" value="2f30d4a9-9d81-48bc-87f8-26aff9aa5cee" data-name="Beaches" class="category-chip-input">
                                 <label for="cat-beaches" class="category-chip-label">Beaches</label>
 
-                                <input type="radio" name="category" id="cat-heritage" value="Heritage" class="category-chip-input">
+                                <input type="radio" name="category" id="cat-heritage" value="8670bc01-be7f-41a4-918b-0697fd3e1fbd" data-name="Heritage" class="category-chip-input">
                                 <label for="cat-heritage" class="category-chip-label">Heritage</label>
 
-                                <input type="radio" name="category" id="cat-food" value="Food trails" class="category-chip-input">
+                                <input type="radio" name="category" id="cat-food" value="aefbd6bc-dbf9-4238-9077-3d098622e5e3" data-name="Food trails" class="category-chip-input">
                                 <label for="cat-food" class="category-chip-label">Food trails</label>
                                 
-                                <input type="radio" name="category" id="cat-road" value="Road trips" class="category-chip-input">
+                                <input type="radio" name="category" id="cat-road" value="1f58f33e-de36-4d4c-803e-cdddeaad267a" data-name="Road trips" class="category-chip-input">
                                 <label for="cat-road" class="category-chip-label">Road trips</label>
                                 
-                                <input type="radio" name="category" id="cat-solo" value="Solo & budget" class="category-chip-input">
+                                <input type="radio" name="category" id="cat-solo" value="44754aa3-aae3-412e-a37b-f149deb333c2" data-name="Solo & budget" class="category-chip-input">
                                 <label for="cat-solo" class="category-chip-label">Solo & budget</label>
                                 
-                                <input type="radio" name="category" id="cat-nature" value="Nature" class="category-chip-input">
+                                <input type="radio" name="category" id="cat-nature" value="cb134918-e842-4ca6-aadb-f2d41ec56d75" data-name="Nature" class="category-chip-input">
                                 <label for="cat-nature" class="category-chip-label">Nature</label>
                             </div>
                         </div>
@@ -100,19 +100,7 @@
                             <div class="text-end text-muted small mt-2"><span id="char-count">0</span> / 5,000 characters</div>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label d-flex justify-content-between">
-                                <span>Rating</span>
-                            </label>
-                            <div class="star-rating fs-3" id="rating-container" style="color: #ccc; cursor: pointer;">
-                                <i class="bi bi-star-fill text-warning" data-val="1"></i>
-                                <i class="bi bi-star-fill text-warning" data-val="2"></i>
-                                <i class="bi bi-star-fill text-warning" data-val="3"></i>
-                                <i class="bi bi-star-fill text-warning" data-val="4"></i>
-                                <i class="bi bi-star-fill text-warning" data-val="5"></i>
-                            </div>
-                            <input type="hidden" id="input-rating" value="5">
-                        </div>
+                        
                     </div>
                 </div>
 
@@ -122,9 +110,9 @@
                         
                         <div class="dropzone" id="photo-dropzone">
                             <i class="bi bi-upload fs-4 text-secondary mb-2 d-block"></i>
-                            <h6 class="mb-1 text-ink fw-medium">Drag photos here, or browse your device</h6>
-                            <p class="text-muted small mb-0">JPG or PNG, up to 5 MB each</p>
-                            <input type="file" id="file-input" multiple accept="image/*" class="d-none">
+                            <h6 class="mb-1 text-ink fw-medium">Drag photos or videos here, or browse your device</h6>
+                            <p class="text-muted small mb-0">JPG, PNG, MP4, up to 10 MB each</p>
+                            <input type="file" id="file-input" multiple accept="image/*,video/*" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;">
                         </div>
 
                         <div class="photo-thumbnails" id="thumbnail-container">
@@ -136,26 +124,24 @@
                     </div>
                 </div>
                 
+                
+                
                 <div class="d-flex justify-content-end gap-3 mt-4 mb-5">
                     <a href="index.html" class="btn bg-white" style="border: 1px solid var(--border-input); border-radius: 10px; font-weight: 500; padding: 10px 24px;">Cancel</a>
                     <button class="btn" id="btn-publish" style="background-color: var(--lagoon); color: white; border-radius: 10px; font-weight: 500; padding: 10px 24px;">Publish story</button>
                 </div>
             </div>
 
+            
             <div class="col-lg-5 ps-lg-4">
-                <div class="sticky-preview">
-                    <p class="mb-3 text-secondary" style="font-size: 14px;">How your story will look</p>
+                <div>
                     
                     <div class="preview-card mb-4 text-decoration-none d-block">
                         <div class="preview-img"><img id="preview-cover" src="https://via.placeholder.com/400x200?text=No+Photo" style="position:absolute; width:100%; height:100%; object-fit:cover; z-index:0;"><img id="preview-cover" src="" style="position:absolute; width:100%; height:100%; object-fit:cover; z-index:0; opacity:0;">
                             <div class="position-absolute top-0 start-0 m-2" style="z-index: 1;">
                                 <span id="preview-category" class="chip bg-white border-0 py-1 px-3 fw-bold text-ink" style="font-size: 11px; border-radius: 50rem;">Mountains</span>
                             </div>
-                            <div class="position-absolute top-0 end-0 m-2" style="z-index: 1;">
-                                <div class="bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;">
-                                    <i class="bi bi-bookmark text-muted" style="font-size: 14px;"></i>
-                                </div>
-                            </div>
+                            
                         </div>
                         <div class="p-3 bg-white">
                             <span id="preview-desc" class="d-none"></span>
@@ -164,8 +150,8 @@
                             
                             <div class="d-flex align-items-center justify-content-between mt-2">
                                 <div class="d-flex align-items-center gap-2">
-                                    <div class="avatar-circle rounded-circle d-flex align-items-center justify-content-center text-white" style="width: 24px; height: 24px; background-color: var(--lagoon); font-size: 10px; font-weight: 500;">AK</div>
-                                    <span class="text-secondary small">Aarav Kapadia</span>
+                                    <div id="preview-author-avatar" class="avatar-circle rounded-circle d-flex align-items-center justify-content-center text-white" style="width: 24px; height: 24px; background-color: var(--lagoon); font-size: 10px; font-weight: 500;">U</div>
+                                    <span id="preview-author-name" class="text-secondary small">User</span>
                                 </div>
                                 <div class="d-flex gap-3 text-muted small">
                                     <span><i class="bi bi-heart"></i> 248</span>
@@ -175,10 +161,86 @@
                         </div>
                     </div>
 
-                    <div class="saffron-tip">
-                        <h6 class="fw-bold mb-2 text-ink">A good story answers three questions</h6>
-                        <p class="small mb-0" style="color: var(--feedback-tip-text);">What did you do, what did it cost, and what would you change?</p>
+                    <div class="card card-custom mb-4" id="detailed-ratings-card">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-4 text-ink">Detailed Ratings</h5>
+                            
+                            <div class="mb-3 d-flex justify-content-between align-items-center">
+                                <span><img src="assets/img/user.png" style="width: 20px; height: 20px; margin-right: 8px;"> People Review</span>
+                                <div class="star-rating fs-5 rating-category" data-category="people" style="color: #ccc; cursor: pointer;">
+                                    <i class="bi bi-star-fill text-muted" data-val="1"></i>
+                                    <i class="bi bi-star-fill text-muted" data-val="2"></i>
+                                    <i class="bi bi-star-fill text-muted" data-val="3"></i>
+                                    <i class="bi bi-star-fill text-muted" data-val="4"></i>
+                                    <i class="bi bi-star-fill text-muted" data-val="5"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3 d-flex justify-content-between align-items-center">
+                                <span><img src="assets/img/food.png" style="width: 20px; height: 20px; margin-right: 8px;"> Food Review</span>
+                                <div class="star-rating fs-5 rating-category" data-category="food" style="color: #ccc; cursor: pointer;">
+                                    <i class="bi bi-star-fill text-muted" data-val="1"></i>
+                                    <i class="bi bi-star-fill text-muted" data-val="2"></i>
+                                    <i class="bi bi-star-fill text-muted" data-val="3"></i>
+                                    <i class="bi bi-star-fill text-muted" data-val="4"></i>
+                                    <i class="bi bi-star-fill text-muted" data-val="5"></i>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 d-flex justify-content-between align-items-center">
+                                <span><img src="assets/img/cleaness.png" style="width: 20px; height: 20px; margin-right: 8px;"> Cleanliness</span>
+                                <div class="star-rating fs-5 rating-category" data-category="cleanliness" style="color: #ccc; cursor: pointer;">
+                                    <i class="bi bi-star-fill text-muted" data-val="1"></i>
+                                    <i class="bi bi-star-fill text-muted" data-val="2"></i>
+                                    <i class="bi bi-star-fill text-muted" data-val="3"></i>
+                                    <i class="bi bi-star-fill text-muted" data-val="4"></i>
+                                    <i class="bi bi-star-fill text-muted" data-val="5"></i>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 d-flex justify-content-between align-items-center">
+                                <span><img src="assets/img/safety.png" style="width: 20px; height: 20px; margin-right: 8px;"> Safety</span>
+                                <div class="star-rating fs-5 rating-category" data-category="safety" style="color: #ccc; cursor: pointer;">
+                                    <i class="bi bi-star-fill text-muted" data-val="1"></i>
+                                    <i class="bi bi-star-fill text-muted" data-val="2"></i>
+                                    <i class="bi bi-star-fill text-muted" data-val="3"></i>
+                                    <i class="bi bi-star-fill text-muted" data-val="4"></i>
+                                    <i class="bi bi-star-fill text-muted" data-val="5"></i>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 d-flex justify-content-between align-items-center">
+                                <span><img src="assets/img/value.png" style="width: 20px; height: 20px; margin-right: 8px;"> Value for Money</span>
+                                <div class="star-rating fs-5 rating-category" data-category="value" style="color: #ccc; cursor: pointer;">
+                                    <i class="bi bi-star-fill text-muted" data-val="1"></i>
+                                    <i class="bi bi-star-fill text-muted" data-val="2"></i>
+                                    <i class="bi bi-star-fill text-muted" data-val="3"></i>
+                                    <i class="bi bi-star-fill text-muted" data-val="4"></i>
+                                    <i class="bi bi-star-fill text-muted" data-val="5"></i>
+                                </div>
+                            </div>
+                            
+                            <hr class="my-4">
+                            
+                            <div class="d-flex justify-content-between align-items-center fw-bold text-ink">
+                                <span><i class="bi bi-star-fill text-warning me-2"></i> Average</span>
+                                <span id="overall-average-text">0.0 / 5.0</span>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="fw-bold text-ink">Stars</span>
+                                <span id="overall-stars" class="text-warning fs-4">☆☆☆☆☆</span>
+                            </div>
+                            
+                            <input type="hidden" id="input-rating-people" value="0">
+                            <input type="hidden" id="input-rating-food" value="0">
+                            <input type="hidden" id="input-rating-cleanliness" value="0">
+                            <input type="hidden" id="input-rating-safety" value="0">
+                            <input type="hidden" id="input-rating-value" value="0">
+                            <input type="hidden" id="input-rating" value="0">
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -192,7 +254,7 @@
   <script src="js/mock-data.js"></script>
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
-  <script src="js/ui.js?v=9"></script>
-  <script src="js/create-story.js?v=1791526813845"></script>
+  <script src="js/ui.js?v=1791624485610"></script>
+  <script src="js/create-story.js?v=1791628079016"></script>
 </body>
 </html>
