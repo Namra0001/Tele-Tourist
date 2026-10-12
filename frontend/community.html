@@ -47,244 +47,37 @@
     <div class="container pb-5">
         <div class="hero-section">
             <h1 class="display-4 fw-bold text-ink mb-3" style="max-width: 600px;">The people behind the stories</h1>
-            <p class="text-secondary mb-5" style="max-width: 500px; font-size: 16px; line-height: 1.6;">Follow what travelers are writing, see who is exploring where, and join the conversation under any story.</p>
             
             <div class="d-flex flex-column flex-md-row gap-3 align-items-md-center">
                 <div class="input-group" style="width: 320px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border-card); background: white;">
                     <span class="input-group-text bg-white border-0 text-muted"><i class="bi bi-search"></i></span>
-                    <input type="text" class="form-control border-0 shadow-none bg-white" placeholder="Search travelers...">
-                    <button class="btn m-1 rounded px-3" style="background-color: var(--lagoon); color: white; font-weight: 500; font-size: 14px;">Search</button>
+                    <input type="text" id="community-search-input" class="form-control border-0 shadow-none bg-white" placeholder="Search travelers...">
+                    <button id="community-search-btn" class="btn m-2 rounded px-3" style="background-color: var(--lagoon); color: white; font-weight: 500; font-size: 14px;">Search</button>
                 </div>
                 
-                <div class="d-flex gap-2 flex-wrap mt-3 mt-md-0">
-                    <button class="filter-btn active">Most stories</button>
-                    <button class="filter-btn">Most liked</button>
-                    <button class="filter-btn">Newest</button>
+                <div class="d-flex gap-2 flex-wrap mt-3 mt-md-0" id="community-filters">
+                    <button class="filter-btn active" data-filter="most_stories">Most stories</button>
+                    <button class="filter-btn" data-filter="most_liked">Most liked</button>
+                    <button class="filter-btn" data-filter="newest">Newest</button>
                 </div>
             </div>
         </div>
 
-        <h2 class="fw-bold text-ink mb-4 mt-2">Top travelers this month</h2>
+        <h2 class="fw-bold text-ink mb-4 mt-2" id="top-travelers-heading">Top travelers this month</h2>
         
-        <div class="row g-4 mb-5">
-            <!-- Card 1 -->
-            <div class="col-md-4">
-                <div class="traveler-card">
-                    <div class="tc-cover" style="background: linear-gradient(180deg, #2D4059 0%, #1A2639 100%);">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none"><polygon points="0,100 30,50 60,100" fill="#3A5776"/><polygon points="40,100 70,60 100,100" fill="#2A3F54"/><circle cx="80" cy="20" r="8" fill="#E8F4F8"/></svg>
-                        <div class="tc-rank-pill">#1 this month</div>
-                        <div class="tc-avatar" style="background-color: var(--lagoon);">AK</div>
-                    </div>
-                    <div class="tc-body">
-                        <h4 class="fw-bold text-ink mb-1">Aarav Kapadia</h4>
-                        <p class="text-secondary small mb-3"><i class="bi bi-geo-alt"></i> Pune, Maharashtra</p>
-                        <p class="text-secondary" style="font-size: 14px; line-height: 1.5;">Weekend trekker and slow-travel convert. Writes about places that never reach page one.</p>
-                        
-                        <div class="tc-stats">
-                            <div>
-                                <h4 class="fw-bold text-ink mb-0">24</h4>
-                                <div class="text-secondary small">Stories</div>
-                            </div>
-                            <div>
-                                <h4 class="fw-bold text-ink mb-0">1,842</h4>
-                                <div class="text-secondary small">Likes received</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tc-footer">
-                        <div class="thumb-sq" style="background: linear-gradient(180deg, #E8F4F8 0%, #20556B 100%);">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none"><polygon points="0,100 25,40 50,100" fill="#3A5776"/><polygon points="30,100 60,50 90,100" fill="#2A3F54"/><circle cx="75" cy="25" r="10" fill="#F9D08B"/></svg>
-                        </div>
-                        <div>
-                            <div class="text-muted" style="font-size: 11px;">Latest story</div>
-                            <h6 class="fw-bold text-ink mb-0" style="font-size: 13px; line-height: 1.3;">Eleven days in Spiti without a single plan</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Card 2 -->
-            <div class="col-md-4">
-                <div class="traveler-card">
-                    <div class="tc-cover" style="background: linear-gradient(180deg, #F9D4A8 0%, #3B7A57 100%);">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none"><rect x="0" y="60" width="100%" height="40" fill="#20556B"/><rect x="0" y="80" width="100%" height="20" fill="#E8D3BD"/><circle cx="70" cy="50" r="15" fill="#F9D08B"/><polygon points="10,100 20,40 30,100" fill="#133C24"/><polygon points="10,60 30,60 20,40" fill="#21633B"/></svg>
-                        <div class="tc-rank-pill">#2 this month</div>
-                        <div class="tc-avatar" style="background-color: #7B68EE;">MS</div>
-                    </div>
-                    <div class="tc-body">
-                        <h4 class="fw-bold text-ink mb-1">Meera Shah</h4>
-                        <p class="text-secondary small mb-3"><i class="bi bi-geo-alt"></i> Bengaluru, Karnataka</p>
-                        <p class="text-secondary" style="font-size: 14px; line-height: 1.5;">Coastlines, cheap buses and long walks. Always carries a notebook.</p>
-                        
-                        <div class="tc-stats">
-                            <div>
-                                <h4 class="fw-bold text-ink mb-0">18</h4>
-                                <div class="text-secondary small">Stories</div>
-                            </div>
-                            <div>
-                                <h4 class="fw-bold text-ink mb-0">1,320</h4>
-                                <div class="text-secondary small">Likes received</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tc-footer">
-                        <div class="thumb-sq" style="background: linear-gradient(180deg, #F9D4A8 0%, #3B7A57 100%);">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none"><rect x="0" y="60" width="100%" height="40" fill="#20556B"/><rect x="0" y="80" width="100%" height="20" fill="#E8D3BD"/><circle cx="70" cy="50" r="15" fill="#F9D08B"/><polygon points="10,100 20,40 30,100" fill="#133C24"/></svg>
-                        </div>
-                        <div>
-                            <div class="text-muted" style="font-size: 11px;">Latest story</div>
-                            <h6 class="fw-bold text-ink mb-0" style="font-size: 13px; line-height: 1.3;">Gokarna, the quiet side of the Karnataka coast</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Card 3 -->
-            <div class="col-md-4">
-                <div class="traveler-card">
-                    <div class="tc-cover" style="background: linear-gradient(180deg, #FDE8D3 0%, #D95A97 100%);">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none"><circle cx="20" cy="40" r="25" fill="#F9D08B"/><polygon points="0,100 40,70 80,100" fill="#B4532A"/><polygon points="50,100 80,80 110,100" fill="#7C4C24"/></svg>
-                        <div class="tc-rank-pill">#3 this month</div>
-                        <div class="tc-avatar" style="background-color: #8B6508;">DP</div>
-                    </div>
-                    <div class="tc-body">
-                        <h4 class="fw-bold text-ink mb-1">Dev Patel</h4>
-                        <p class="text-secondary small mb-3"><i class="bi bi-geo-alt"></i> Ahmedabad, Gujarat</p>
-                        <p class="text-secondary" style="font-size: 14px; line-height: 1.5;">Desert nights, road trips and honest reviews of camps and homestays.</p>
-                        
-                        <div class="tc-stats">
-                            <div>
-                                <h4 class="fw-bold text-ink mb-0">15</h4>
-                                <div class="text-secondary small">Stories</div>
-                            </div>
-                            <div>
-                                <h4 class="fw-bold text-ink mb-0">1,104</h4>
-                                <div class="text-secondary small">Likes received</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tc-footer">
-                        <div class="thumb-sq" style="background: linear-gradient(180deg, #FDE8D3 0%, #D95A97 100%);">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none"><circle cx="20" cy="40" r="25" fill="#F9D08B"/><polygon points="0,100 40,70 80,100" fill="#B4532A"/><polygon points="50,100 80,80 110,100" fill="#7C4C24"/></svg>
-                        </div>
-                        <div>
-                            <div class="text-muted" style="font-size: 11px;">Latest story</div>
-                            <h6 class="fw-bold text-ink mb-0" style="font-size: 13px; line-height: 1.3;">Sleeping under the Thar: what the camps never tell you</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="row g-4 mb-5" id="top-travelers-grid">
+            <!-- Dynamic top travelers rendered via js/community.js -->
         </div>
 
         <div class="row g-5">
             <!-- Left Column: More Travelers Grid -->
             <div class="col-lg-8">
-                <div class="row g-4 mb-4">
-                    <div class="col-md-6">
-                        <div class="small-traveler-card">
-                            <div class="d-flex align-items-center gap-3 mb-3">
-                                <div class="stc-avatar" style="background-color: #B22222;">ZA</div>
-                                <div>
-                                    <h5 class="fw-bold text-ink mb-0" style="font-size: 16px;">Zoya Ansari</h5>
-                                    <div class="text-secondary small">Mumbai, Maharashtra</div>
-                                </div>
-                            </div>
-                            <div class="chip-small mb-3">Food trails</div>
-                            <div class="d-flex justify-content-between align-items-center text-ink fw-bold" style="font-size: 13px;">
-                                <span>12 stories</span>
-                                <span><i class="bi bi-heart text-secondary me-1"></i> 980</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <div class="small-traveler-card">
-                            <div class="d-flex align-items-center gap-3 mb-3">
-                                <div class="stc-avatar" style="background-color: #9C6615;">RM</div>
-                                <div>
-                                    <h5 class="fw-bold text-ink mb-0" style="font-size: 16px;">Rohan Mehta</h5>
-                                    <div class="text-secondary small">Hyderabad, Telangana</div>
-                                </div>
-                            </div>
-                            <div class="chip-small mb-3">Heritage</div>
-                            <div class="d-flex justify-content-between align-items-center text-ink fw-bold" style="font-size: 13px;">
-                                <span>14 stories</span>
-                                <span><i class="bi bi-heart text-secondary me-1"></i> 910</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <div class="small-traveler-card">
-                            <div class="d-flex align-items-center gap-3 mb-3">
-                                <div class="stc-avatar" style="background-color: #5C7A99;">IT</div>
-                                <div>
-                                    <h5 class="fw-bold text-ink mb-0" style="font-size: 16px;">Isha Trivedi</h5>
-                                    <div class="text-secondary small">Udaipur, Rajasthan</div>
-                                </div>
-                            </div>
-                            <div class="chip-small mb-3">Heritage</div>
-                            <div class="d-flex justify-content-between align-items-center text-ink fw-bold" style="font-size: 13px;">
-                                <span>9 stories</span>
-                                <span><i class="bi bi-heart text-secondary me-1"></i> 640</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <div class="small-traveler-card">
-                            <div class="d-flex align-items-center gap-3 mb-3">
-                                <div class="stc-avatar" style="background-color: #B4532A;">TG</div>
-                                <div>
-                                    <h5 class="fw-bold text-ink mb-0" style="font-size: 16px;">Tanvi Gandhi</h5>
-                                    <div class="text-secondary small">Jaipur, Rajasthan</div>
-                                </div>
-                            </div>
-                            <div class="chip-small mb-3">Solo & budget</div>
-                            <div class="d-flex justify-content-between align-items-center text-ink fw-bold" style="font-size: 13px;">
-                                <span>7 stories</span>
-                                <span><i class="bi bi-heart text-secondary me-1"></i> 420</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <div class="small-traveler-card">
-                            <div class="d-flex align-items-center gap-3 mb-3">
-                                <div class="stc-avatar" style="background-color: #A0522D;">NR</div>
-                                <div>
-                                    <h5 class="fw-bold text-ink mb-0" style="font-size: 16px;">Nikhil Rao</h5>
-                                    <div class="text-secondary small">Kochi, Kerala</div>
-                                </div>
-                            </div>
-                            <div class="chip-small mb-3">Nature</div>
-                            <div class="d-flex justify-content-between align-items-center text-ink fw-bold" style="font-size: 13px;">
-                                <span>11 stories</span>
-                                <span><i class="bi bi-heart text-secondary me-1"></i> 760</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <div class="small-traveler-card">
-                            <div class="d-flex align-items-center gap-3 mb-3">
-                                <div class="stc-avatar" style="background-color: var(--lagoon);">KS</div>
-                                <div>
-                                    <h5 class="fw-bold text-ink mb-0" style="font-size: 16px;">Kabir Soni</h5>
-                                    <div class="text-secondary small">Delhi</div>
-                                </div>
-                            </div>
-                            <div class="chip-small mb-3">Mountains</div>
-                            <div class="d-flex justify-content-between align-items-center text-ink fw-bold" style="font-size: 13px;">
-                                <span>6 stories</span>
-                                <span><i class="bi bi-heart text-secondary me-1"></i> 310</span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="row g-4 mb-4" id="more-travelers-grid">
+                    <!-- Dynamic secondary travelers rendered via js/community.js -->
                 </div>
                 
-                <div class="text-center">
-                    <button class="btn bg-white" style="border: 1px solid var(--border-card); border-radius: 8px; font-weight: 600; color: var(--ink); padding: 10px 24px;">Show more travelers</button>
+                <div class="text-center" id="show-more-container" style="display: none;">
+                    <button id="show-more-btn" class="btn bg-white" style="border: 1px solid var(--border-card); border-radius: 8px; font-weight: 600; color: var(--ink); padding: 10px 24px;">Show more travelers</button>
                 </div>
             </div>
             
@@ -327,40 +120,7 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="widget-card">
-                    <h5 class="fw-bold text-ink mb-4">Most loved this week</h5>
-                    
-                    <div class="widget-item d-flex align-items-center gap-3">
-                        <div class="thumb-sq" style="background: linear-gradient(180deg, #FDE8D3 0%, #7C4C24 100%);">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none"><rect x="20" y="50" width="60" height="50" fill="#B4532A"/><rect x="20" y="30" width="15" height="20" fill="#B4532A"/><rect x="42.5" y="30" width="15" height="20" fill="#B4532A"/><rect x="65" y="30" width="15" height="20" fill="#B4532A"/><path d="M40,100 A10,10 0 0,1 60,100" fill="#3D2B1F"/></svg>
-                        </div>
-                        <div>
-                            <h6 class="fw-bold text-ink mb-0" style="font-size: 13px;">Hampi on a rented bicycle</h6>
-                            <div class="text-secondary" style="font-size: 11px;">Rohan Mehta, 204 likes</div>
-                        </div>
-                    </div>
-                    
-                    <div class="widget-item d-flex align-items-center gap-3">
-                        <div class="thumb-sq" style="background: linear-gradient(180deg, #E8F4F8 0%, #20556B 100%);">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none"><polygon points="-20,100 30,30 80,100" fill="#3A5776"/><polygon points="30,100 70,50 110,100" fill="#2A3F54"/><circle cx="75" cy="25" r="10" fill="#F9D08B"/></svg>
-                        </div>
-                        <div>
-                            <h6 class="fw-bold text-ink mb-0" style="font-size: 13px;">Eleven days in Spiti without a single plan</h6>
-                            <div class="text-secondary" style="font-size: 11px;">Aarav Kapadia, 248 likes</div>
-                        </div>
-                    </div>
-                    
-                    <div class="widget-item d-flex align-items-center gap-3">
-                        <div class="thumb-sq" style="background: linear-gradient(180deg, #F9D4A8 0%, #F99871 100%);">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none"><rect x="0" y="60" width="100%" height="40" fill="#20556B"/><rect x="0" y="80" width="100%" height="20" fill="#E8D3BD"/><circle cx="70" cy="50" r="15" fill="#F9D08B"/><polygon points="10,100 20,40 30,100" fill="#133C24"/></svg>
-                        </div>
-                        <div>
-                            <h6 class="fw-bold text-ink mb-0" style="font-size: 13px;">Gokarna, the quiet side of the Karnataka coast</h6>
-                            <div class="text-secondary" style="font-size: 11px;">Meera Shah, 181 likes</div>
-                        </div>
-                    </div>
-                </div>
+
             </div>
         </div>
     </div>
@@ -370,7 +130,9 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/config.js"></script>
-  <script src="js/ui.js?v=9"></script>
+  <script src="js/api.js"></script>
+  <script src="js/ui.js?v=20261012_v4"></script>
+  <script src="js/community.js?v=3"></script>
   <script>
     $(document).ready(function() {
         if (typeof renderNavbar === 'function') {
@@ -379,11 +141,6 @@
         if (typeof renderFooter === 'function') {
             $('#footer-placeholder').html(renderFooter());
         }
-        
-        $('.filter-btn').click(function() {
-            $('.filter-btn').removeClass('active');
-            $(this).addClass('active');
-        });
     });
   </script>
 </body>

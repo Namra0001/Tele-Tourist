@@ -27,6 +27,8 @@
         .saffron-btn { background-color: #f3c93e; color: #000; border: none; font-weight: 600; }
         .saffron-btn:hover { background-color: #e0b830; }
         .chip { display: inline-block; padding: 4px 12px; border-radius: 20px; background: #e9ecef; font-size: 0.85rem; font-weight: 500; }
+        #author-profile-link:hover #author-name { color: var(--lagoon) !important; text-decoration: underline; }
+        #author-profile-link:hover #author-avatar { transform: scale(1.08); }
     </style>
     <link rel="stylesheet" href="css/style.css?v=3">
 </head>
@@ -49,11 +51,13 @@
         <h1 class="display-5 fw-bold mb-3" id="story-title">Loading Story...</h1>
         
         <div class="d-flex align-items-center mb-4">
-            <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="Author" id="author-avatar" style="width: 40px; height: 40px; object-fit: cover;">
-            <div>
-                <div class="fw-bold" id="author-name">Author Name</div>
-                <div class="text-muted small" id="story-date">Date</div>
-            </div>
+            <a href="#" id="author-profile-link" class="d-flex align-items-center text-decoration-none text-reset" title="View traveler profile" style="cursor: pointer;">
+                <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="Author" id="author-avatar" style="width: 40px; height: 40px; object-fit: cover; transition: transform 0.2s;">
+                <div>
+                    <div class="fw-bold text-ink" id="author-name" style="transition: color 0.2s;">Author Name</div>
+                    <div class="text-muted small" id="story-date">Date</div>
+                </div>
+            </a>
             <div class="ms-4 d-flex text-warning fs-5" id="story-rating">
                 <!-- Stars will be injected here -->
             </div>
@@ -100,7 +104,7 @@
             </div>
             
             <div class="col-lg-4">
-                <div class="card border-0 shadow-sm sticky-card">
+                <div class="card border-0 shadow-sm" style="border-radius: 12px; background: white;">
                     <div class="card-body">
                         <div class="d-flex align-items-center mb-1">
                             <img src="assets/img/location.png" style="width: 16px; margin-right: 8px;" alt="Location">
@@ -135,6 +139,48 @@
                             <button class="btn btn-outline-dark" id="btn-share">
                                 <img src="assets/img/share.png" class="me-2 action-icon" style="width: 16px;" alt="Share"> Share
                             </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- All 4 Ratings Card -->
+                <div class="card border-0 shadow-sm mt-4" id="ratings-card" style="border-radius: 12px; background: white;">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-3 brand-font text-ink" style="font-family: 'Bricolage Grotesque', sans-serif;">Ratings</h5>
+                        
+                        <div class="mb-3 d-flex justify-content-between align-items-center">
+                            <span class="small fw-medium text-secondary d-flex align-items-center"><img src="assets/img/user.png" style="width: 18px; height: 18px; margin-right: 8px;" alt="People"> People</span>
+                            <div class="star-rating text-warning" id="rating-stars-people">
+                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3 d-flex justify-content-between align-items-center">
+                            <span class="small fw-medium text-secondary d-flex align-items-center"><img src="assets/img/food.png" style="width: 18px; height: 18px; margin-right: 8px;" alt="Food"> Food</span>
+                            <div class="star-rating text-warning" id="rating-stars-food">
+                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 d-flex justify-content-between align-items-center">
+                            <span class="small fw-medium text-secondary d-flex align-items-center"><img src="assets/img/cleaness.png" style="width: 18px; height: 18px; margin-right: 8px;" alt="Cleanliness"> Cleanliness</span>
+                            <div class="star-rating text-warning" id="rating-stars-cleanliness">
+                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 d-flex justify-content-between align-items-center">
+                            <span class="small fw-medium text-secondary d-flex align-items-center"><img src="assets/img/safety.png" style="width: 18px; height: 18px; margin-right: 8px;" alt="Safety"> Safety</span>
+                            <div class="star-rating text-warning" id="rating-stars-safety">
+                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                            </div>
+                        </div>
+
+                        <hr class="my-3">
+
+                        <div class="d-flex justify-content-between align-items-center fw-bold text-ink">
+                            <span class="small"><i class="bi bi-star-fill text-warning me-1"></i> Overall</span>
+                            <span id="rating-overall-score" class="text-warning fw-bold">5.0 / 5.0</span>
                         </div>
                     </div>
                 </div>
@@ -177,8 +223,8 @@
   <script src="js/mock-data.js"></script>
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
-  <script src="js/ui.js?v=1791624485610"></script>
-  <script src="js/story.js?v=1791624485610"></script>
+  <script src="js/ui.js?v=20261012_v4"></script>
+  <script src="js/story.js?v=20261012_v4"></script>
 </body>
 </html>
 

@@ -60,6 +60,17 @@ function renderStories() {
     const catVal = $('#explore-category-select').val();
     let filtered = [...allStories];
     
+    const urlParams = new URLSearchParams(window.location.search);
+    const locParam = urlParams.get('location') || urlParams.get('search');
+    if (locParam) {
+        filtered = filtered.filter(s => {
+            const loc = (s.location || '').toLowerCase();
+            const tit = (s.title || '').toLowerCase();
+            const target = locParam.toLowerCase();
+            return loc.includes(target) || tit.includes(target);
+        });
+    }
+
     if (catVal !== 'All Categories') {
         filtered = filtered.filter(s => {
              let catName = '';

@@ -48,33 +48,35 @@
     <div class="container position-relative mb-5" style="margin-top: -70px;">
         <div class="d-flex flex-column flex-md-row gap-4 mb-4">
             <div class="flex-shrink-0">
-                <div class="rounded-circle d-flex align-items-center justify-content-center text-white" id="profileAvatar" style="width: 140px; height: 140px; border: 4px solid white; background-color: var(--lagoon); font-size: 48px; font-weight: bold; position: relative; z-index: 2;">AK</div>
+                <div class="rounded-circle d-flex align-items-center justify-content-center text-white" id="profileAvatar" style="width: 140px; height: 140px; border: 4px solid white; background-color: var(--lagoon); font-size: 32px; font-weight: bold; position: relative; z-index: 2;">
+                    <div class="spinner-border spinner-border-sm text-light" role="status"></div>
+                </div>
             </div>
-            
             <div class="flex-grow-1">
-                <h2 class="fw-bold text-ink" id="profileName" style="font-size: 32px; margin-top: 15px; margin-bottom: 40px;">Aarav Kapadia</h2>
-                <p class="text-muted small mb-3"><i class="bi bi-geo-alt"></i> <span id="profileLocation">Pune, Maharashtra. Joined March 2026</span></p>
-                <p class="text-secondary" style="max-width: 650px; font-size: 15px;" id="profileBio">Weekend trekker, slow-travel convert. I write about the places that do not make it onto the first page of search results.</p>
+                <h2 class="fw-bold" id="profileName" style="font-size: 32px; margin-top: 15px; margin-bottom: 40px; color: #ffffff !important;"></h2>
+                <p class="text-muted small mb-3"><i class="bi bi-geo-alt"></i> <span id="profileLocation"><span class="placeholder-glow"><span class="placeholder col-4 bg-light opacity-50"></span></span></span></p>
+                <p class="text-secondary" style="max-width: 650px; font-size: 15px;" id="profileBio"><span class="placeholder-glow"><span class="placeholder col-8 bg-light opacity-50"></span></span></p>
                 
                 <div class="d-flex gap-5 mt-4">
                     <div>
-                        <h3 class="fw-bold text-ink mb-0" id="statStories">24</h3>
+                        <h3 class="fw-bold text-ink mb-0" id="statStories">-</h3>
                         <div class="text-muted small">Stories</div>
                     </div>
                     <div>
-                        <h3 class="fw-bold text-ink mb-0" id="statLikes">1,842</h3>
+                        <h3 class="fw-bold text-ink mb-0" id="statLikes">-</h3>
                         <div class="text-muted small">Likes received</div>
                     </div>
                     <div>
-                        <h3 class="fw-bold text-ink mb-0" id="statSaved">612</h3>
+                        <h3 class="fw-bold text-ink mb-0" id="statSaved">-</h3>
                         <div class="text-muted small">Times saved</div>
                     </div>
                 </div>
             </div>
             
             <div class="d-flex gap-2 flex-shrink-0" style="margin-top: 80px;">
-                <button class="btn bg-white px-3 py-2 text-nowrap" style="border: 1px solid var(--border-input); border-radius: 8px; font-weight: 500; height: fit-content; font-size: 14px;"><i class="bi bi-upload me-2"></i> Share profile</button>
-                <button class="btn px-3 py-2 text-nowrap" id="btnEditProfile" style="background-color: var(--ink); color: white; border-radius: 8px; font-weight: 500; height: fit-content; font-size: 14px;"><i class="bi bi-pencil me-2"></i> Edit profile</button>
+                <button class="btn text-white px-3 py-2 text-nowrap" id="btnChatUser" style="display: none; background-color: var(--lagoon); border-radius: 8px; font-weight: 500; height: fit-content; font-size: 14px;"><i class="bi bi-chat-dots me-2"></i> Chat</button>
+                <button class="btn bg-white px-3 py-2 text-nowrap" id="btnShareProfile" style="border: 1px solid var(--border-input); border-radius: 8px; font-weight: 500; height: fit-content; font-size: 14px;"><i class="bi bi-upload me-2"></i> Copy profile</button>
+                <button class="btn px-3 py-2 text-nowrap" id="btnEditProfile" style="display: none; background-color: var(--ink); color: white; border-radius: 8px; font-weight: 500; height: fit-content; font-size: 14px;"><i class="bi bi-pencil me-2"></i> Edit profile</button>
             </div>
         </div>
 
@@ -82,7 +84,7 @@
             <li class="nav-item" role="presentation">
                 <button class="nav-link active px-0 pb-2" id="stories-tab" data-bs-toggle="tab" data-bs-target="#stories" type="button" role="tab">Stories</button>
             </li>
-            <li class="nav-item" role="presentation">
+            <li class="nav-item" role="presentation" id="saved-tab-li">
                 <button class="nav-link px-0 pb-2" id="saved-tab" data-bs-toggle="tab" data-bs-target="#saved" type="button" role="tab">Saved</button>
             </li>
             <li class="nav-item" role="presentation">
@@ -93,118 +95,93 @@
         <div class="tab-content" id="profileTabsContent">
             <div class="tab-pane fade show active" id="stories" role="tabpanel">
                 <div class="row g-4" id="storiesGrid">
-
-<div class="col-md-4">
-    <div class="card border-0 preview-card h-100 text-decoration-none d-block">
-        <div class="preview-img">
-            <div style="position:absolute; width:100%; height:100%; background: linear-gradient(180deg, #E8F4F8 0%, #20556B 100%);"></div>
-            <div class="position-absolute top-0 start-0 m-2">
-                <span class="chip bg-white border-0 py-1 px-3 fw-bold text-ink" style="font-size: 11px; border-radius: 50rem;">Mountains</span>
-            </div>
-            <div class="position-absolute top-0 end-0 m-2">
-                <div class="bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;">
-                    <i class="bi bi-bookmark text-muted" style="font-size: 14px;"></i>
-                </div>
-            </div>
-        </div>
-        <div class="p-3 bg-white d-flex flex-column" style="flex: 1;">
-            <h5 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;">Eleven days in Spiti without a single plan</h5>
-            <p class="text-muted small mb-3"><i class="bi bi-geo-alt"></i> Spiti Valley, Himachal Pradesh</p>
-            
-            <div class="d-flex align-items-center justify-content-between mt-auto mb-3">
-                <div class="d-flex align-items-center gap-2">
-                    <div class="avatar-circle rounded-circle d-flex align-items-center justify-content-center text-white" style="width: 24px; height: 24px; background-color: var(--lagoon); font-size: 10px; font-weight: 500;">AK</div>
-                    <span class="text-secondary small">Aarav Kapadia</span>
-                </div>
-                <div class="d-flex gap-3 text-muted small">
-                    <span><i class="bi bi-heart"></i> 248</span>
-                    <span><i class="bi bi-chat"></i> 32</span>
-                </div>
-            </div>
-            
-            <div class="d-flex gap-2">
-                <button class="btn btn-sm" style="background-color: var(--surface-field); border-radius: 6px; font-size: 12px; font-weight: 600; color: var(--ink);"><i class="bi bi-pencil me-1"></i> Edit</button>
-                <button class="btn btn-sm" style="background-color: var(--surface-field); border-radius: 6px; font-size: 12px; font-weight: 600; color: var(--ink);"><i class="bi bi-trash me-1"></i> Delete</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="col-md-4">
-    <div class="card border-0 preview-card h-100 text-decoration-none d-block">
-        <div class="preview-img">
-            <div style="position:absolute; width:100%; height:100%; background: linear-gradient(180deg, #2D4059 0%, #1A2639 100%);"></div>
-            <div class="position-absolute top-0 start-0 m-2">
-                <span class="chip bg-white border-0 py-1 px-3 fw-bold text-ink" style="font-size: 11px; border-radius: 50rem;">Solo & budget</span>
-            </div>
-            <div class="position-absolute top-0 end-0 m-2">
-                <div class="bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;">
-                    <i class="bi bi-bookmark text-muted" style="font-size: 14px;"></i>
-                </div>
-            </div>
-        </div>
-        <div class="p-3 bg-white d-flex flex-column" style="flex: 1;">
-            <h5 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;">Solo in Kasol: what I spent and what I would skip</h5>
-            <p class="text-muted small mb-3"><i class="bi bi-geo-alt"></i> Kasol, Himachal Pradesh</p>
-            
-            <div class="d-flex align-items-center justify-content-between mt-auto mb-3">
-                <div class="d-flex align-items-center gap-2">
-                    <div class="avatar-circle rounded-circle d-flex align-items-center justify-content-center text-white" style="width: 24px; height: 24px; background-color: #B4532A; font-size: 10px; font-weight: 500;">TG</div>
-                    <span class="text-secondary small">Tanvi Gandhi</span>
-                </div>
-                <div class="d-flex gap-3 text-muted small">
-                    <span><i class="bi bi-heart"></i> 96</span>
-                    <span><i class="bi bi-chat"></i> 9</span>
-                </div>
-            </div>
-            
-            <div class="d-flex gap-2">
-                <button class="btn btn-sm" style="background-color: var(--surface-field); border-radius: 6px; font-size: 12px; font-weight: 600; color: var(--ink);"><i class="bi bi-pencil me-1"></i> Edit</button>
-                <button class="btn btn-sm" style="background-color: var(--surface-field); border-radius: 6px; font-size: 12px; font-weight: 600; color: var(--ink);"><i class="bi bi-trash me-1"></i> Delete</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="col-md-4">
-    <div class="card border-0 preview-card h-100 text-decoration-none d-block">
-        <div class="preview-img">
-            <div style="position:absolute; width:100%; height:100%; background: linear-gradient(180deg, #F9D08B 0%, #3A2B48 100%);"></div>
-            <div class="position-absolute top-0 start-0 m-2">
-                <span class="chip bg-white border-0 py-1 px-3 fw-bold text-ink" style="font-size: 11px; border-radius: 50rem;">Mountains</span>
-            </div>
-            <div class="position-absolute top-0 end-0 m-2">
-                <div class="bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;">
-                    <i class="bi bi-bookmark text-muted" style="font-size: 14px;"></i>
-                </div>
-            </div>
-        </div>
-        <div class="p-3 bg-white d-flex flex-column" style="flex: 1;">
-            <h5 class="fw-bold text-ink mb-1" style="font-family: 'Bricolage Grotesque', sans-serif;">Sunrise treks around Manali that need no guide</h5>
-            <p class="text-muted small mb-3"><i class="bi bi-geo-alt"></i> Manali, Himachal Pradesh</p>
-            
-            <div class="d-flex align-items-center justify-content-between mt-auto">
-                <div class="d-flex align-items-center gap-2">
-                    <div class="avatar-circle rounded-circle d-flex align-items-center justify-content-center text-white" style="width: 24px; height: 24px; background-color: var(--lagoon); font-size: 10px; font-weight: 500;">KS</div>
-                    <span class="text-secondary small">Kabir Soni</span>
-                </div>
-                <div class="d-flex gap-3 text-muted small">
-                    <span><i class="bi bi-heart"></i> 88</span>
-                    <span><i class="bi bi-chat"></i> 7</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
+                    <!-- Dynamic user stories loaded via profile.js -->
+                    <div class="col-12 py-5 text-center text-muted">Loading stories...</div>
                 </div>
             </div>
             <div class="tab-pane fade" id="saved" role="tabpanel">
-                <div class="text-muted">Saved items will appear here.</div>
+                <div class="row g-4" id="savedGrid">
+                    <!-- Dynamic saved stories loaded via profile.js -->
+                    <div class="col-12 py-5 text-center text-muted">Loading saved stories...</div>
+                </div>
             </div>
             <div class="tab-pane fade" id="about" role="tabpanel">
-                <div class="card card-body border-0 shadow-sm" id="aboutContent">
+                <div class="card card-body border-0 shadow-sm p-4" style="border-radius: 16px; background-color: white;" id="aboutContent">
                     Loading about info...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 16px; border: 1px solid var(--border-card);">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold text-ink" id="editProfileModalLabel" style="font-family: 'Bricolage Grotesque', sans-serif;">Edit Profile</h5>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="editProfileForm">
+                    <div class="modal-body pt-3">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-ink">Full Name</label>
+                            <input type="text" class="form-control" id="editProfileName" required style="border-radius: 8px; border-color: var(--border-input);">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-ink">Location</label>
+                            <input type="text" class="form-control" id="editProfileLocation" placeholder="e.g. Manali, Himachal Pradesh" style="border-radius: 8px; border-color: var(--border-input);">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-ink">Bio</label>
+                            <textarea class="form-control" id="editProfileBio" rows="3" placeholder="Tell travelers about yourself..." style="border-radius: 8px; border-color: var(--border-input);"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-ink">Avatar Image (optional file)</label>
+                            <input type="file" class="form-control" id="editProfileAvatarFile" accept="image/*" style="border-radius: 8px; border-color: var(--border-input);">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-ink">Banner Image (optional file)</label>
+                            <input type="file" class="form-control" id="editProfileBannerFile" accept="image/*" style="border-radius: 8px; border-color: var(--border-input);">
+                        </div>
+                        <div id="editProfileError" class="text-danger small mb-2 d-none"></div>
+                    </div>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border-radius: 8px; font-weight: 500;">Cancel</button>
+                        <button type="submit" class="btn text-white" id="btnSaveProfile" style="background-color: var(--lagoon); border-radius: 8px; font-weight: 600;">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Modal -->
+    <div class="modal fade" id="chatModal" tabindex="-1" aria-labelledby="chatModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 480px;">
+            <div class="modal-content border-0 shadow" style="border-radius: 20px; overflow: hidden;">
+                <div class="modal-header border-bottom py-3 px-4" style="background-color: var(--sand-light);">
+                    <div class="d-flex align-items-center gap-3">
+                        <div id="chatRecipientAvatar" class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold overflow-hidden" style="width: 42px; height: 42px; background-color: var(--lagoon); font-size: 14px;">
+                            AK
+                        </div>
+                        <div>
+                            <h6 class="fw-bold text-ink mb-0" id="chatRecipientName" style="font-size: 15px;">Aarav Kapadia</h6>
+                            <span class="text-success d-flex align-items-center gap-1" style="font-size: 11px; font-weight: 500;">
+                                <span style="width: 7px; height: 7px; background-color: #28a745; border-radius: 50%; display: inline-block;"></span> Active now
+                            </span>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3 d-flex flex-column gap-3" id="chatMessagesContainer" style="height: 380px; overflow-y: auto; background-color: #f8fafc;">
+                    <!-- Messages render dynamically here -->
+                </div>
+                <div class="modal-footer border-top p-2 bg-white">
+                    <form id="chatForm" class="d-flex gap-2 w-100 align-items-center m-0">
+                        <input type="text" id="chatInput" class="form-control border shadow-none" placeholder="Write a message to start conversation..." style="border-radius: 24px; font-size: 14px; padding: 10px 16px;" autocomplete="off" required>
+                        <button type="submit" class="btn text-white rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px; background-color: var(--lagoon); border: none;">
+                            <i class="bi bi-send-fill" style="font-size: 14px; margin-left: 2px;"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -218,7 +195,7 @@
   <script src="js/mock-data.js"></script>
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
-  <script src="js/ui.js?v=9"></script>
-  <!-- <script src="js/profile.js"></script> -->
+  <script src="js/ui.js?v=20261012_v4"></script>
+  <script src="js/profile.js?v=20261012_loc1"></script>
 </body>
 </html>

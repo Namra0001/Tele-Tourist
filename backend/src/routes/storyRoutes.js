@@ -8,7 +8,7 @@ const upload = require('../middleware/uploadMiddleware');
 router.get('/', optionalAuth, storyController.getStories);
 router.post('/', auth, upload.array('images', 10), storyController.createStory);
 router.get('/:id', optionalAuth, storyController.getStory);
-router.put('/:id', auth, storyController.updateStory);
+router.put('/:id', auth, upload.array('images', 10), storyController.updateStory);
 router.delete('/:id', auth, storyController.deleteStory);
 
 router.post('/:id/like', auth, storyController.likeStory);

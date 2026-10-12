@@ -23,17 +23,42 @@ $(document).ready(function() {
         $('#story-content').html('<div class="alert alert-warning m-4">Story not found. Please go back to <a href="explore.html">Explore</a> and select a story.</div>');
     }
 
+    function formatDescriptionToParagraphs(text) {
+        if (!text) return '<p class="text-muted">No description provided.</p>';
+        const clean = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+        const paragraphs = clean.split(/\n\s*\n/);
+        return paragraphs
+            .map(p => p.trim())
+            .filter(p => p.length > 0)
+            .map(p => `<p class="mb-4" style="line-height: 1.85; font-size: 1.05rem; color: #222;">${p.replace(/\n/g, '<br>')}</p>`)
+            .join('');
+    }
+
+    function renderStarIcons(val) {
+        let html = '';
+        const rounded = Math.round(val || 5);
+        for (let i = 1; i <= 5; i++) {
+            if (i <= rounded) {
+                html += '<i class="bi bi-star-fill me-1"></i>';
+            } else {
+                html += '<i class="bi bi-star me-1 text-muted opacity-50"></i>';
+            }
+        }
+        return html;
+    }
+
     function mapBackendStory(data) {
         return {
             id: data.id,
             title: data.title,
             category: data.category || "Uncategorized",
             author: { 
+                id: data.author?.id || data.user_id,
                 name: data.author?.name || "Unknown", 
                 avatar: data.author?.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(data.author?.name || 'U')}` 
             },
             date: new Date(data.created_at).toLocaleDateString(),
-            content: data.description ? `<p>${data.description}</p>` : "",
+            content: formatDescriptionToParagraphs(data.description),
             location: { name: data.location || "Unknown Location", address: "" },
             rating: data.rating || 5,
             photos: data.images || [],
@@ -133,6 +158,16 @@ $(document).ready(function() {
         $('#story-category').text(story.category);
         $('#author-name').text(story.author.name);
         $('#author-avatar').attr('src', story.author.avatar);
+
+        if (story.author && story.author.id) {
+            const authorHref = `profile?id=${story.author.id}#id=${story.author.id}`;
+            $('#author-profile-link')
+                .attr('href', authorHref)
+                .attr('data-id', story.author.id);
+        } else {
+            $('#author-profile-link').attr('href', '#');
+        }
+
         $('#story-date').text(story.date);
         $('#story-content').html(story.content);
         
@@ -146,6 +181,14 @@ $(document).ready(function() {
             }
         }
         $('#story-rating').html(starsHtml);
+
+        // Populate all 4 ratings card
+        const overallRating = parseFloat(story.rating) || 5;
+        $('#rating-stars-people').html(renderStarIcons(overallRating));
+        $('#rating-stars-food').html(renderStarIcons(overallRating));
+        $('#rating-stars-cleanliness').html(renderStarIcons(overallRating));
+        $('#rating-stars-safety').html(renderStarIcons(overallRating));
+        $('#rating-overall-score').text(overallRating.toFixed(1) + ' / 5.0');
 
         $('#story-location-name').text(story.location.name);
         $('#story-location').text(story.location.address);
@@ -318,6 +361,14 @@ $(document).ready(function() {
             currentStory.comments.unshift(newComment);
             renderComments(currentStory.comments);
             $('#comment-text').val('');
+        }
+    });
+
+    // Author profile navigation handler
+    $(document).on('click', '#author-profile-link', function() {
+        const uid = $(this).attr('data-id');
+        if (uid) {
+            sessionStorage.setItem('viewProfileId', uid);
         }
     });
 });

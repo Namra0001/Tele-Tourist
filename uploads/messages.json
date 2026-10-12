@@ -1,0 +1,26 @@
+[
+  {
+    "id": "8c6d9e7d-f508-42b2-a30d-85edbc6057c9",
+    "sender_id": "fe49557e-d271-4ec8-bf76-36608bf2c37b",
+    "recipient_id": "bd327182-ce1d-43b0-a201-a729070cbf6b",
+    "content": "hi!",
+    "created_at": "2026-10-12T08:40:00.264Z",
+    "read_at": null
+  },
+  {
+    "id": "6176be5e-5570-4844-88a1-e6403500db36",
+    "sender_id": "fe49557e-d271-4ec8-bf76-36608bf2c37b",
+    "recipient_id": "a4608179-982d-4308-b1a8-d8d0757bd3b4",
+    "content": "hi!",
+    "created_at": "2026-10-12T08:40:43.383Z",
+    "read_at": "2026-10-12T08:41:10.211Z"
+  },
+  {
+    "id": "249df463-c48a-469c-abad-fcd0fbc9f5b0",
+    "sender_id": "a4608179-982d-4308-b1a8-d8d0757bd3b4",
+    "recipient_id": "fe49557e-d271-4ec8-bf76-36608bf2c37b",
+    "content": "hi, how can i help you/",
+    "created_at": "2026-10-12T08:41:21.713Z",
+    "read_at": null
+  }
+]

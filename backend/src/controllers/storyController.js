@@ -23,7 +23,7 @@ exports.createStory = async (req, res, next) => {
 
 exports.updateStory = async (req, res, next) => {
   try {
-    const story = await storyService.updateStory(req.user.id, req.params.id, req.body);
+    const story = await storyService.updateStory(req.user.id, req.params.id, req.body, req.files);
     res.json(story);
   } catch (error) { next(error); }
 };

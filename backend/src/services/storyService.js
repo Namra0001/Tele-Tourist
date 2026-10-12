@@ -73,8 +73,64 @@ exports.createStory = async (userId, body, files) => {
   return { id: story.id, title: story.title };
 };
 
-exports.updateStory = async () => { return {}; };
-exports.deleteStory = async () => { return {}; };
+exports.updateStory = async (userId, storyId, body, files) => {
+  const { data: story, error: findError } = await supabase.from('stories').select('id, user_id').eq('id', storyId).single();
+  if (findError || !story) throw new ApiError(404, 'Story not found');
+  if (story.user_id !== userId) throw new ApiError(403, 'Unauthorized to edit this story');
+
+  const updates = {};
+  if (body.title && body.title.trim()) updates.title = body.title.trim();
+  if (body.description && body.description.trim()) updates.description = body.description.trim();
+  if (body.location && body.location.trim()) updates.location = body.location.trim();
+  if (body.category) updates.category_id = body.category;
+  if (body.rating !== undefined) updates.rating = parseFloat(body.rating) || 5;
+
+  const { data: updatedStory, error: updateError } = await supabase
+    .from('stories')
+    .update(updates)
+    .eq('id', storyId)
+    .select('id, title')
+    .single();
+
+  if (updateError) throw new ApiError(500, updateError.message);
+
+  if (files && files.length > 0) {
+    const fs = require('fs');
+    const path = require('path');
+    const uploadDir = path.join(__dirname, '../../../uploads');
+    if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+
+    const imageInserts = [];
+    for (const file of files) {
+      const ext = file.mimetype.split('/')[1] || 'jpg';
+      const filename = `story_${storyId}_${Date.now()}_${Math.floor(Math.random() * 1000)}.${ext}`;
+      fs.writeFileSync(path.join(uploadDir, filename), file.buffer);
+      imageInserts.push({
+        story_id: storyId,
+        url: `http://localhost:5000/uploads/${filename}`
+      });
+    }
+
+    const { error: imgError } = await supabase.from('story_images').insert(imageInserts);
+    if (imgError) console.error("Error inserting images during update:", imgError);
+  }
+
+  return { id: updatedStory.id, title: updatedStory.title };
+};
+
+exports.deleteStory = async (userId, storyId) => {
+  const { data: story, error: findError } = await supabase.from('stories').select('id, user_id').eq('id', storyId).single();
+  if (findError || !story) throw new ApiError(404, 'Story not found');
+  if (story.user_id !== userId) throw new ApiError(403, 'Unauthorized to delete this story');
+
+  await supabase.from('likes').delete().eq('story_id', storyId);
+  await supabase.from('saved_stories').delete().eq('story_id', storyId);
+  await supabase.from('comments').delete().eq('story_id', storyId);
+  await supabase.from('story_images').delete().eq('story_id', storyId);
+  const { error } = await supabase.from('stories').delete().eq('id', storyId);
+  if (error) throw new ApiError(500, error.message);
+  return { message: 'Story deleted successfully' };
+};
 
 exports.likeStory = async (userId, storyId) => {
   const { error } = await supabase.from('likes').insert([{ user_id: userId, story_id: storyId }]);

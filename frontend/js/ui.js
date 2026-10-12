@@ -30,27 +30,31 @@ function renderNavbar() {
           </ul>
           <div class="d-flex align-items-center gap-3 flex-nowrap">
             <div class="input-group search-pill bg-field rounded-pill px-3 py-2 align-items-center" style="background-color: var(--surface-field); border: none; width: 320px;">
-              <i class="bi bi-search text-muted me-2 small"></i>
+              <i class="bi bi-search text-muted me-3 small"></i>
               <input type="text" class="form-control border-0 bg-transparent shadow-none p-0 small" placeholder="Search stories or places" style="font-size: 14px;">
             </div>
             <a href="create-story.html" class="btn btn-primary d-flex align-items-center gap-2 px-3 py-2 text-nowrap" style="background-color: var(--lagoon); color: white; border-radius: 8px; font-weight: 500;">
               <i class="bi bi-plus-lg"></i> Write a story
             </a>
-            ${token ? `
-              <a href="profile.html?id=1" class="d-flex align-items-center justify-content-center text-decoration-none flex-shrink-0" style="width: 38px; height: 38px;">
-                  <img src="assets/img/profile-icon.png" alt="Profile" style="width: 32px; height: 32px; object-fit: contain;">
-                </a>
-            ` : `
-              <a href="profile.html?id=1" class="d-flex align-items-center justify-content-center text-decoration-none flex-shrink-0" style="width: 38px; height: 38px;">
-                <img src="assets/img/profile-icon.png" alt="Profile" style="width: 32px; height: 32px; object-fit: contain;">
-              </a>
-            `}
+            <button type="button" id="navChatBtn" class="btn position-relative d-flex align-items-center justify-content-center p-0 rounded-circle flex-shrink-0" style="width: 38px; height: 38px; background-color: var(--surface-field); border: 1px solid rgba(32, 85, 107, 0.25); color: var(--lagoon);" title="Messages">
+              <i class="bi bi-chat-dots fs-5" style="color: var(--lagoon);"></i>
+              <span id="navChatBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white" style="display: none; font-size: 10px; padding: 3px 6px;">
+                0
+              </span>
+            </button>
+            <a href="profile.html" class="d-flex align-items-center justify-content-center text-decoration-none flex-shrink-0" style="width: 38px; height: 38px;" title="Profile">
+              <img src="assets/img/profile-icon.png" alt="Profile" style="width: 32px; height: 32px; object-fit: contain;">
+            </a>
+            <button type="button" id="navLogoutBtn" class="btn position-relative d-flex align-items-center justify-content-center p-0 rounded-circle flex-shrink-0" style="width: 38px; height: 38px; background-color: var(--surface-field); border: 1px solid var(--border-card);" title="Log out">
+              <img src="assets/img/logout.png" alt="Log out" style="width: 22px; height: 22px; object-fit: contain;">
+            </button>
           </div>
         </div>
       </div>
     </nav>
   `;
   $('#navbar-placeholder').html(html);
+  initGlobalChatSystem();
   
   // set active link
   const currentPath = window.location.pathname;
@@ -107,7 +111,7 @@ function renderFooter() {
           </div>
         </div>
         <div class="pt-4 border-top" style="border-color: rgba(255,255,255,0.1) !important;">
-          <p class="small mb-0">&copy; 2026 Tele Tourist. A college project.</p>
+          <p class="small mb-0">&copy; 2026 Tele Tourist.</p>
         </div>
       </div>
     </footer>
@@ -354,3 +358,491 @@ function getInitials(name) {
   }
   return name[0].toUpperCase();
 }
+
+/**
+ * Real-time User-to-User Chat & Notifications System
+ */
+let activeChatContact = null;
+let threadPollTimer = null;
+let unreadBadgeTimer = null;
+
+function getCurrentUser() {
+  try {
+    const raw = localStorage.getItem('user');
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function updateNavChatBadge() {
+  const token = localStorage.getItem('token');
+  const badge = $('#navChatBadge');
+  if (!token) {
+    badge.hide();
+    return;
+  }
+
+  apiCall('/messages/unread-count')
+    .then(res => {
+      const count = res.unread_count || 0;
+      if (count > 0) {
+        badge.text(count > 99 ? '99+' : count).show();
+      } else {
+        badge.hide();
+      }
+    })
+    .catch(() => {
+      badge.hide();
+    });
+}
+
+function formatChatTime(dateStr) {
+  try {
+    const d = new Date(dateStr);
+    const now = new Date();
+    const diffMin = Math.round((now - d) / 60000);
+    if (diffMin < 1) return 'Just now';
+    if (diffMin < 60) return diffMin + 'm ago';
+    const diffHours = Math.round(diffMin / 60);
+    if (diffHours < 24) return diffHours + 'h ago';
+    return d.toLocaleDateString([], { month: 'short', day: 'numeric' });
+  } catch (e) {
+    return 'Recently';
+  }
+}
+
+function initGlobalChatSystem() {
+  updateNavChatBadge();
+  if (!unreadBadgeTimer) {
+    unreadBadgeTimer = setInterval(updateNavChatBadge, 5000);
+  }
+
+  if ($('#globalChatDrawer').length === 0) {
+    const drawerHtml = `
+      <div class="offcanvas offcanvas-end border-0 shadow-lg" tabindex="-1" id="globalChatDrawer" aria-labelledby="globalChatDrawerLabel" style="width: 420px; z-index: 1060; border-radius: 20px 0 0 20px; overflow: hidden;">
+        <!-- Header -->
+        <div class="offcanvas-header py-3 px-4 border-bottom bg-white d-flex align-items-center justify-content-between" style="min-height: 70px;">
+          <div id="chatDrawerHeaderDefault" class="d-flex align-items-center gap-2">
+            <i class="bi bi-chat-dots-fill fs-5" style="color: var(--lagoon);"></i>
+            <h5 class="offcanvas-title fw-bold text-ink mb-0" id="globalChatDrawerLabel" style="font-family: 'Bricolage Grotesque', sans-serif;">Messages</h5>
+          </div>
+          
+          <div id="chatDrawerHeaderThread" class="d-none align-items-center gap-2 flex-grow-1 overflow-hidden me-2">
+            <button type="button" class="btn btn-sm btn-light border-0 rounded-circle d-flex align-items-center justify-content-center p-0 flex-shrink-0" id="btnBackToChatList" style="width: 32px; height: 32px;" title="Back to conversations">
+              <i class="bi bi-chevron-left fs-6"></i>
+            </button>
+            <div id="drawerRecipientAvatar" class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold overflow-hidden flex-shrink-0" style="width: 38px; height: 38px; background-color: var(--lagoon); font-size: 13px;">
+              TR
+            </div>
+            <div class="overflow-hidden flex-grow-1">
+              <h6 class="fw-bold text-ink mb-0 text-truncate" id="drawerRecipientName" style="font-size: 15px;">Traveler</h6>
+              <div class="small text-success d-flex align-items-center gap-1" style="font-size: 11px;">
+                <span style="width: 6px; height: 6px; background-color: #28a745; border-radius: 50%; display: inline-block;"></span> Active traveler
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="btn-close shadow-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+
+        <!-- Body -->
+        <div class="offcanvas-body p-0 d-flex flex-column bg-light" style="position: relative; height: calc(100vh - 70px);">
+          
+          <!-- View 1: Conversations List -->
+          <div id="chatListView" class="d-flex flex-column h-100 p-3 overflow-y-auto">
+            <div class="input-group mb-3 bg-white rounded-pill px-3 py-1 border shadow-sm">
+              <i class="bi bi-search text-muted me-2 align-self-center small"></i>
+              <input type="text" id="chatSearchInput" class="form-control border-0 bg-transparent shadow-none p-0 small" placeholder="Search conversations...">
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+              <span class="text-secondary small fw-bold text-uppercase" style="font-size: 11px; letter-spacing: 0.5px;">Recent Conversations</span>
+            </div>
+
+            <div id="chatConversationsList" class="d-flex flex-column gap-2 mb-4">
+              <!-- Rendered via JS -->
+            </div>
+
+            <div class="mt-auto pt-3 border-top px-1">
+              <span class="text-secondary small fw-bold text-uppercase d-block mb-2" style="font-size: 11px; letter-spacing: 0.5px;">Quick Connect with Travelers</span>
+              <div class="d-flex gap-2 flex-wrap">
+                <button type="button" class="btn btn-sm btn-white bg-white border rounded-pill px-3 py-1 quick-traveler-btn shadow-sm" data-id="a4608179-982d-4308-b1a8-d8d0757bd3b4" data-name="Vatsal Sukhadiya" style="font-size: 12px;">
+                  <span class="me-1">🧭</span> Vatsal Sukhadiya
+                </button>
+                <button type="button" class="btn btn-sm btn-white bg-white border rounded-pill px-3 py-1 quick-traveler-btn shadow-sm" data-id="bd327182-ce1d-43b0-a201-a729070cbf6b" data-name="Aarav Kapadia" style="font-size: 12px;">
+                  <span class="me-1">⛰️</span> Aarav Kapadia
+                </button>
+                <button type="button" class="btn btn-sm btn-white bg-white border rounded-pill px-3 py-1 quick-traveler-btn shadow-sm" data-id="e2f518c9-c108-4922-936a-e1535a6b51a2" data-name="Meera Shah" style="font-size: 12px;">
+                  <span class="me-1">🌊</span> Meera Shah
+                </button>
+                <button type="button" class="btn btn-sm btn-white bg-white border rounded-pill px-3 py-1 quick-traveler-btn shadow-sm" data-id="d8bf942c-bf51-48f1-a27c-270989c74f23" data-name="Dev Patel" style="font-size: 12px;">
+                  <span class="me-1">🏜️</span> Dev Patel
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- View 2: Active Chat Thread -->
+          <div id="chatThreadView" class="d-none flex-column h-100 bg-white">
+            <div id="drawerChatMessages" class="p-3 flex-grow-1 overflow-y-auto d-flex flex-column gap-2" style="background-color: #f8fafc;">
+              <!-- Message bubbles -->
+            </div>
+            
+            <div class="p-2 border-top bg-white">
+              <form id="drawerChatForm" class="d-flex gap-2 align-items-center m-0">
+                <input type="text" id="drawerChatInput" class="form-control border shadow-none" placeholder="Type your reply..." style="border-radius: 24px; font-size: 14px; padding: 10px 16px;" autocomplete="off" required>
+                <button type="submit" id="btnDrawerChatSend" class="btn text-white rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px; background-color: var(--lagoon); border: none;">
+                  <i class="bi bi-send-fill" style="font-size: 14px; margin-left: 2px;"></i>
+                </button>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    `;
+    $('body').append(drawerHtml);
+
+    // Stop thread polling when offcanvas is closed
+    const drawerEl = document.getElementById('globalChatDrawer');
+    if (drawerEl) {
+      drawerEl.addEventListener('hidden.bs.offcanvas', function () {
+        stopThreadPolling();
+        activeChatContact = null;
+      });
+    }
+  }
+}
+
+let cachedConversations = [];
+
+function renderChatConversationsList(filterTerm = '') {
+  const container = $('#chatConversationsList');
+  const token = localStorage.getItem('token');
+  if (!token) {
+    container.html(`
+      <div class="text-center py-5 text-secondary">
+        <i class="bi bi-lock display-5 d-block mb-2 opacity-50"></i>
+        <p class="small mb-2">Please log in to chat with other travelers.</p>
+        <a href="login.html" class="btn btn-sm btn-primary rounded-pill px-3" style="background-color: var(--lagoon); border: none;">Log In</a>
+      </div>
+    `);
+    return;
+  }
+
+  container.html(`
+    <div class="text-center py-4 text-muted">
+      <div class="spinner-border spinner-border-sm text-secondary me-2"></div> Loading messages...
+    </div>
+  `);
+
+  apiCall('/messages/conversations')
+    .then(res => {
+      cachedConversations = res.conversations || [];
+      displayConversationsList(filterTerm);
+    })
+    .catch(err => {
+      container.html(`
+        <div class="text-center py-4 text-secondary small">
+          <p class="mb-0">Unable to load conversations.</p>
+        </div>
+      `);
+    });
+}
+
+function displayConversationsList(filterTerm = '') {
+  const container = $('#chatConversationsList');
+  container.empty();
+
+  let filtered = cachedConversations;
+  if (filterTerm) {
+    const term = filterTerm.toLowerCase();
+    filtered = filtered.filter(item => {
+      const name = item.contact?.name || '';
+      const text = item.lastMessage?.content || '';
+      return name.toLowerCase().includes(term) || text.toLowerCase().includes(term);
+    });
+  }
+
+  if (filtered.length === 0) {
+    container.html(`
+      <div class="text-center py-5 text-secondary">
+        <i class="bi bi-chat-square-text display-5 d-block mb-2 opacity-50"></i>
+        <p class="small mb-1 fw-medium">No messages yet</p>
+        <p class="small text-muted mb-0">Select a traveler below or visit Community to start a real conversation!</p>
+      </div>
+    `);
+    return;
+  }
+
+  const currentUser = getCurrentUser();
+  const currentUserId = currentUser?.id;
+
+  filtered.forEach(item => {
+    const contact = item.contact || {};
+    const lastMsg = item.lastMessage || {};
+    const isUnread = item.unreadCount > 0;
+
+    const avatarHtml = contact.avatar_url
+      ? `<img src="${contact.avatar_url}" style="width:100%;height:100%;object-fit:cover;">`
+      : getInitials(contact.name || 'Traveler');
+
+    const unreadDot = isUnread
+      ? `<span class="badge rounded-pill bg-danger px-2 py-1" style="font-size: 10px;">${item.unreadCount} new</span>`
+      : '';
+
+    const activeBg = isUnread ? 'bg-white border-start border-4 border-primary' : 'bg-white';
+    const isFromMe = lastMsg.sender_id === currentUserId;
+
+    const itemHtml = `
+      <div class="card border-0 p-3 rounded-3 shadow-sm conversation-item ${activeBg}" data-id="${contact.id}" data-name="${contact.name || 'Traveler'}" data-avatar="${contact.avatar_url || ''}" style="cursor: pointer; transition: transform 0.15s ease;">
+        <div class="d-flex align-items-center gap-3">
+          <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold overflow-hidden flex-shrink-0" style="width: 44px; height: 44px; background-color: var(--lagoon); font-size: 14px;">
+            ${avatarHtml}
+          </div>
+          <div class="overflow-hidden flex-grow-1">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <h6 class="fw-bold text-ink mb-0 text-truncate" style="font-size: 14px;">${contact.name || 'Traveler'}</h6>
+              <span class="text-muted small" style="font-size: 11px;">${formatChatTime(lastMsg.created_at)}</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              <p class="text-secondary small mb-0 text-truncate ${isUnread ? 'fw-bold text-ink' : ''}" style="max-width: 230px; font-size: 12px;">
+                ${isFromMe ? '<span class="text-muted">You: </span>' : ''}${lastMsg.content || ''}
+              </p>
+              ${unreadDot}
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    container.append(itemHtml);
+  });
+}
+
+function startThreadPolling(contactId) {
+  stopThreadPolling();
+  threadPollTimer = setInterval(() => {
+    if (activeChatContact && activeChatContact.id === contactId) {
+      refreshActiveThreadMessages(true);
+    }
+  }, 3500);
+}
+
+function stopThreadPolling() {
+  if (threadPollTimer) {
+    clearInterval(threadPollTimer);
+    threadPollTimer = null;
+  }
+}
+
+function refreshActiveThreadMessages(isBackgroundPoll = false) {
+  if (!activeChatContact || !activeChatContact.id) return;
+  const contactId = activeChatContact.id;
+  const msgContainer = $('#drawerChatMessages');
+
+  apiCall('/messages/thread/' + contactId)
+    .then(res => {
+      const messages = res.messages || [];
+      const contact = res.contact || activeChatContact;
+      const currentUser = getCurrentUser();
+      const currentUserId = currentUser?.id;
+
+      // Update header details
+      $('#drawerRecipientName').text(contact.name || 'Traveler');
+      if (contact.avatar_url) {
+        $('#drawerRecipientAvatar').html(`<img src="${contact.avatar_url}" style="width:100%;height:100%;object-fit:cover;">`);
+      } else {
+        $('#drawerRecipientAvatar').css('background-color', 'var(--lagoon)').text(getInitials(contact.name || 'Traveler'));
+      }
+
+      // Check if we need to update DOM (avoid flickering if same length on poll)
+      const currentBubbleCount = msgContainer.find('.chat-bubble-item').length;
+      if (isBackgroundPoll && currentBubbleCount === messages.length) {
+        return;
+      }
+
+      msgContainer.empty();
+
+      if (messages.length === 0) {
+        msgContainer.html(`
+          <div class="text-center py-5 my-auto">
+            <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 text-white fw-bold shadow-sm" style="width: 52px; height: 52px; background-color: var(--lagoon); font-size: 16px;">
+              ${contact.avatar_url ? `<img src="${contact.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">` : getInitials(contact.name || 'Traveler')}
+            </div>
+            <h6 class="fw-bold text-ink mb-1">Chat with ${contact.name || 'Traveler'}</h6>
+            <p class="text-secondary small mb-0 px-4">Send a message to discuss journeys, routes, homestays, and recommendations!</p>
+          </div>
+        `);
+      } else {
+        messages.forEach(msg => {
+          const isMe = msg.sender_id === currentUserId;
+          const bubble = isMe ? `
+            <div class="d-flex justify-content-end mb-2 chat-bubble-item">
+              <div class="p-3 text-white shadow-sm" style="background-color: var(--lagoon); border-radius: 18px 18px 4px 18px; max-width: 82%; font-size: 13px; line-height: 1.45;">
+                <div>${msg.content}</div>
+                <div class="text-end text-white-50 mt-1" style="font-size: 10px;">${formatChatTime(msg.created_at)}</div>
+              </div>
+            </div>
+          ` : `
+            <div class="d-flex justify-content-start mb-2 chat-bubble-item">
+              <div class="p-3 text-ink shadow-sm bg-white" style="border: 1px solid var(--border-card); border-radius: 18px 18px 18px 4px; max-width: 82%; font-size: 13px; line-height: 1.45;">
+                <div>${msg.content}</div>
+                <div class="text-muted mt-1" style="font-size: 10px;">${formatChatTime(msg.created_at)}</div>
+              </div>
+            </div>
+          `;
+          msgContainer.append(bubble);
+        });
+      }
+
+      msgContainer.scrollTop(msgContainer[0].scrollHeight);
+      updateNavChatBadge();
+    })
+    .catch(err => {
+      console.error('Error fetching chat thread:', err);
+    });
+}
+
+function openChatThread(contactId, contactName = '', contactAvatar = '') {
+  if (!contactId) return;
+
+  activeChatContact = {
+    id: contactId,
+    name: contactName || 'Traveler',
+    avatar: contactAvatar || null
+  };
+
+  // Header update
+  $('#chatDrawerHeaderDefault').addClass('d-none');
+  $('#chatDrawerHeaderThread').removeClass('d-none').addClass('d-flex');
+  $('#drawerRecipientName').text(activeChatContact.name);
+  if (activeChatContact.avatar) {
+    $('#drawerRecipientAvatar').html(`<img src="${activeChatContact.avatar}" style="width:100%;height:100%;object-fit:cover;">`);
+  } else {
+    $('#drawerRecipientAvatar').css('background-color', 'var(--lagoon)').text(getInitials(activeChatContact.name));
+  }
+
+  // View switch
+  $('#chatListView').addClass('d-none');
+  $('#chatThreadView').removeClass('d-none').addClass('d-flex');
+
+  // Loading state
+  $('#drawerChatMessages').html(`
+    <div class="text-center py-5 my-auto text-muted">
+      <div class="spinner-border spinner-border-sm text-secondary me-2"></div> Loading messages...
+    </div>
+  `);
+
+  refreshActiveThreadMessages(false);
+  startThreadPolling(contactId);
+
+  setTimeout(() => $('#drawerChatInput').focus(), 250);
+}
+
+// Global hook to open chat with any user
+window.openChatWithUser = function(user) {
+  if (!user || !user.id) return;
+
+  const token = localStorage.getItem('token');
+  if (!token) {
+    alert('Please log in to message travelers.');
+    window.location.href = 'login.html';
+    return;
+  }
+
+  const currentUser = getCurrentUser();
+  if (currentUser && currentUser.id === user.id) {
+    alert('You cannot chat with yourself.');
+    return;
+  }
+
+  const drawerEl = document.getElementById('globalChatDrawer');
+  if (drawerEl) {
+    const offcanvas = bootstrap.Offcanvas.getOrCreateInstance(drawerEl);
+    offcanvas.show();
+    openChatThread(user.id, user.name, user.avatar_url);
+  }
+};
+
+$(document).on('click', '#navChatBtn', function() {
+  const drawerEl = document.getElementById('globalChatDrawer');
+  if (drawerEl) {
+    const offcanvas = bootstrap.Offcanvas.getOrCreateInstance(drawerEl);
+    offcanvas.show();
+    // Default to conversations list
+    stopThreadPolling();
+    activeChatContact = null;
+    $('#chatDrawerHeaderThread').addClass('d-none').removeClass('d-flex');
+    $('#chatDrawerHeaderDefault').removeClass('d-none');
+    $('#chatThreadView').addClass('d-none').removeClass('d-flex');
+    $('#chatListView').removeClass('d-none');
+    renderChatConversationsList();
+  }
+});
+
+$(document).on('click', '.conversation-item', function() {
+  const id = $(this).data('id');
+  const name = $(this).data('name');
+  const avatar = $(this).data('avatar');
+  if (id) openChatThread(id, name, avatar);
+});
+
+$(document).on('click', '#btnBackToChatList', function() {
+  stopThreadPolling();
+  activeChatContact = null;
+  $('#chatDrawerHeaderThread').addClass('d-none').removeClass('d-flex');
+  $('#chatDrawerHeaderDefault').removeClass('d-none');
+  $('#chatThreadView').addClass('d-none').removeClass('d-flex');
+  $('#chatListView').removeClass('d-none');
+  renderChatConversationsList();
+});
+
+$(document).on('input', '#chatSearchInput', function() {
+  const val = $(this).val().trim();
+  displayConversationsList(val);
+});
+
+$(document).on('click', '.quick-traveler-btn', function() {
+  const id = $(this).data('id');
+  const name = $(this).data('name');
+  window.openChatWithUser({ id, name });
+});
+
+$(document).on('submit', '#drawerChatForm', function(e) {
+  e.preventDefault();
+  if (!activeChatContact || !activeChatContact.id) return;
+  const input = $('#drawerChatInput');
+  const text = input.val().trim();
+  if (!text) return;
+
+  const btn = $('#btnDrawerChatSend');
+  btn.prop('disabled', true);
+
+  apiCall('/messages', 'POST', {
+    recipient_id: activeChatContact.id,
+    content: text
+  })
+    .then(res => {
+      input.val('');
+      btn.prop('disabled', false);
+      // Immediately refresh thread to show sent message
+      refreshActiveThreadMessages(false);
+    })
+    .catch(err => {
+      btn.prop('disabled', false);
+      alert(err?.responseJSON?.message || 'Failed to send message. Please try again.');
+    });
+});
+
+$(document).on('click', '#navLogoutBtn', function() {
+  if (typeof logout === 'function') {
+    logout();
+  } else {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    window.location.href = 'login.html';
+  }
+});
+
+

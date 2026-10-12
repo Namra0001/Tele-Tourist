@@ -6,6 +6,7 @@ module.exports = (storyRow, userId = null) => {
     location: storyRow.location,
     rating: storyRow.rating || 5,
     category: storyRow.categories?.name,
+    category_id: storyRow.category_id,
     images: storyRow.story_images ? storyRow.story_images.map(img => img.url || img.image_url).filter(Boolean) : [],
     author: {
       id: storyRow.users?.id,

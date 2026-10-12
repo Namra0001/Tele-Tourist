@@ -19,17 +19,24 @@ function apiCall(endpoint, method = 'GET', data = null) {
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
     }
-    if (data && (method === 'POST' || method === 'PUT')) {
-      headers['Content-Type'] = 'application/json';
-    }
 
-    $.ajax({
+    const ajaxOptions = {
       url: `${CONFIG.API_BASE_URL}${endpoint}`,
       method: method,
       headers: headers,
-      data: data ? JSON.stringify(data) : null,
       success: resolve,
       error: reject
-    });
+    };
+
+    if (data instanceof FormData) {
+      ajaxOptions.data = data;
+      ajaxOptions.processData = false;
+      ajaxOptions.contentType = false;
+    } else if (data && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
+      headers['Content-Type'] = 'application/json';
+      ajaxOptions.data = JSON.stringify(data);
+    }
+
+    $.ajax(ajaxOptions);
   });
 }
